@@ -18,18 +18,39 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.commons.utils;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+import org.apache.log4j.Logger;
 
-public interface FaultToleranceModule {
+public final class LoggerUtil {
 
-    public void init(Level ftLevel) throws SystemException;
+    private static final Logger LOGGER = Logger.getLogger(LoggerUtil.class);
 
-    public void start();
+    private LoggerUtil() {
+        super();
+    }
 
-    public void stop();
+    synchronized public static void error(final Throwable t) {
+        error(t.getMessage(), t);
+    }
 
-    public boolean isTerminated();
+    synchronized public static void error(final Object message, final Throwable t) {
+        LOGGER.error(message, t);
+    }
+
+    synchronized public static void warn(final Object message) {
+        LOGGER.warn(message);
+    }
+
+    synchronized public static void warn(final Object message, final Throwable t) {
+        LOGGER.warn(message, t);
+    }
+
+    synchronized public static void info(final Object message) {
+        LOGGER.info(message);
+    }
+
+    synchronized public static void debug(final Object string) {
+        LOGGER.debug(string);
+    }
 }

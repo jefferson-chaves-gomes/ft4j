@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
+ * Copyright (c) 2017 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,18 +18,20 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.commons.utils;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+import java.util.List;
 
-public interface FaultToleranceModule {
+public class StreamUtil {
 
-    public void init(Level ftLevel) throws SystemException;
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public StreamUtil() {
+        super();
+    }
 
-    public void start();
-
-    public void stop();
-
-    public boolean isTerminated();
+    public static <T> boolean hasDuplicates(final List<T> list, final Class<?> cls) {
+        return list.stream().filter(cls::isInstance).count() > 1;
+    }
 }

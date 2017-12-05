@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
+ * Copyright (c) 2017 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,18 +18,24 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.commons.exceptions;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+public class SystemException extends Exception {
 
-public interface FaultToleranceModule {
+    private static final long serialVersionUID = 4191396029634713794L;
 
-    public void init(Level ftLevel) throws SystemException;
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public SystemException(final Throwable cause) {
+        super(cause);
+    }
 
-    public void start();
+    public SystemException(final String message) {
+        super(message);
+    }
 
-    public void stop();
-
-    public boolean isTerminated();
+    public SystemException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 }

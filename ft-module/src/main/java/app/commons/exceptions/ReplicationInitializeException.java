@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
+ * Copyright (c) 2017 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,18 +18,16 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.commons.exceptions;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+public class ReplicationInitializeException extends SystemException {
 
-public interface FaultToleranceModule {
+    private static final long serialVersionUID = 1812789659441145353L;
 
-    public void init(Level ftLevel) throws SystemException;
-
-    public void start();
-
-    public void stop();
-
-    public boolean isTerminated();
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public ReplicationInitializeException() {
+        super("The replicas size must be greater than 0.");
+    }
 }

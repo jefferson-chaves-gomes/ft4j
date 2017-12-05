@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
+ * Copyright (c) 2017 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,18 +18,39 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+public class Instance {
 
-public interface FaultToleranceModule {
+    private String ip;
+    private Integer port;
 
-    public void init(Level ftLevel) throws SystemException;
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Instance() {
+        super();
+    }
 
-    public void start();
+    public Instance(final String ip, final Integer port) {
+        super();
+        this.ip = ip;
+        this.port = port;
+    }
 
-    public void stop();
+    public String getIp() {
+        return this.ip;
+    }
 
-    public boolean isTerminated();
+    public void setIp(final String ip) {
+        this.ip = ip;
+    }
+
+    public Integer getPort() {
+        return this.port;
+    }
+
+    public void setPort(final Integer port) {
+        this.port = port;
+    }
 }

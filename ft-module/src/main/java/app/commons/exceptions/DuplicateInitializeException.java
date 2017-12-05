@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
+ * Copyright (c) 2017 Contributors to the Eclipse Foundation
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,18 +18,16 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.commons.exceptions;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+public class DuplicateInitializeException extends SystemException {
 
-public interface FaultToleranceModule {
+    private static final long serialVersionUID = -966939474666944402L;
 
-    public void init(Level ftLevel) throws SystemException;
-
-    public void start();
-
-    public void stop();
-
-    public boolean isTerminated();
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public DuplicateInitializeException() {
+        super("Fault tolerance technics can not be duplicated.");
+    }
 }

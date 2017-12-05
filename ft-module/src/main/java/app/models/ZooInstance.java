@@ -18,18 +18,14 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+public class ZooInstance extends Instance {
 
-public interface FaultToleranceModule {
-
-    public void init(Level ftLevel) throws SystemException;
-
-    public void start();
-
-    public void stop();
-
-    public boolean isTerminated();
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public ZooInstance(final String ip, final Integer port) {
+        super(ip, port);
+    }
 }

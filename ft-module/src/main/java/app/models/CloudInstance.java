@@ -18,18 +18,38 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import app.commons.exceptions.SystemException;
-import app.models.Level;
+public class CloudInstance extends Instance {
 
-public interface FaultToleranceModule {
+    private CloudType type;
 
-    public void init(Level ftLevel) throws SystemException;
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public CloudInstance(final String ip, final Integer port) {
+        super(ip, port);
+        this.type = CloudType.LOCAL;
+    }
 
-    public void start();
+    public CloudInstance(final String ip, final Integer port, final CloudType type) {
+        super(ip, port);
+        this.type = type;
+    }
 
-    public void stop();
+    public static enum CloudType {
+        LOCAL,
+        AWS,
+        CGP,
+        AZURE
+    }
 
-    public boolean isTerminated();
+    public CloudType getType() {
+        return this.type;
+    }
+
+    public void setType(final CloudType type) {
+        this.type = type;
+    }
+
 }
