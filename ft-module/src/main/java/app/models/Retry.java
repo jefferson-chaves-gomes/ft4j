@@ -29,4 +29,7 @@ public class Retry extends Technic {
         super();
     }
 
+    public Retry(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+        super(attemptsNumber, delayBetweenAttempts, timeout);
+    }
 }

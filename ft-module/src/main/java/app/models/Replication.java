@@ -15,6 +15,11 @@ public class Replication extends Technic {
         this.lstReplicas = lstReplicas;
     }
 
+    public Replication(final List<CloudInstance> lstReplicas, final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+        super(attemptsNumber, delayBetweenAttempts, timeout);
+        this.lstReplicas = lstReplicas;
+    }
+
     public boolean addReplica(final CloudInstance replica) {
         if (this.getLstReplicas() == null) {
             this.setLstReplicas(new ArrayList<CloudInstance>());

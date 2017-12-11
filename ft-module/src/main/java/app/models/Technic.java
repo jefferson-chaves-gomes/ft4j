@@ -20,47 +20,50 @@
  */
 package app.models;
 
-public class Technic {
+public abstract class Technic {
 
-    private int attemptsNumber = 3;
-    private int delayBetweenAttempts = 1;
-    private int timeout = 10;
+    private AttemptsNumber attemptsNumber;
+    private DelayBetweenAttempts delayBetweenAttempts;
+    private Timeout timeout;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Technic() {
-        super();
+        this(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout());
     }
 
-    public Technic(final int attemptsNumber, final int delayBetweenAttempts, final int timeout) {
+    public Technic(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
         super();
         this.attemptsNumber = attemptsNumber;
         this.delayBetweenAttempts = delayBetweenAttempts;
         this.timeout = timeout;
     }
 
-    public int getAttemptsNumber() {
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public AttemptsNumber getAttemptsNumber() {
         return this.attemptsNumber;
     }
 
-    public void setAttemptsNumber(final int attemptsNumber) {
+    public void setAttemptsNumber(final AttemptsNumber attemptsNumber) {
         this.attemptsNumber = attemptsNumber;
     }
 
-    public int getDelayBetweenAttempts() {
+    public DelayBetweenAttempts getDelayBetweenAttempts() {
         return this.delayBetweenAttempts;
     }
 
-    public void setDelayBetweenAttempts(final int delayBetweenAttempts) {
+    public void setDelayBetweenAttempts(final DelayBetweenAttempts delayBetweenAttempts) {
         this.delayBetweenAttempts = delayBetweenAttempts;
     }
 
-    public int getTimeout() {
+    public Timeout getTimeout() {
         return this.timeout;
     }
 
-    public void setTimeout(final int timeout) {
+    public void setTimeout(final Timeout timeout) {
         this.timeout = timeout;
     }
 }

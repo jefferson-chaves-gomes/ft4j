@@ -20,46 +20,33 @@
  */
 package app.models;
 
-public class Instance {
+import java.util.concurrent.TimeUnit;
 
-    private String ip;
-    private Integer port;
-    private Credentials credentials;
+public class TimeArgument {
+
+    protected final static short DEFAULT_VALUE = 3;
+    protected final static TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
+
+    private final int value;
+    private final TimeUnit unit;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Instance() {
+    public TimeArgument(final int value, final TimeUnit unit) {
         super();
+        this.value = value;
+        this.unit = unit;
     }
 
-    public Instance(final String ip, final Integer port) {
-        super();
-        this.ip = ip;
-        this.port = port;
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public int getValue() {
+        return this.value;
     }
 
-    public String getIp() {
-        return this.ip;
-    }
-
-    public void setIp(final String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getPort() {
-        return this.port;
-    }
-
-    public void setPort(final Integer port) {
-        this.port = port;
-    }
-
-    public Credentials getCredentials() {
-        return this.credentials;
-    }
-
-    public void setCredentials(final Credentials credentials) {
-        this.credentials = credentials;
+    public TimeUnit getUnit() {
+        return this.unit;
     }
 }

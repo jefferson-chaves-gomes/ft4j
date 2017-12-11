@@ -10,7 +10,7 @@ public class Log4jTest extends TestCase {
             LoggerUtil.debug("debug test ");
             LoggerUtil.info("info test ");
             LoggerUtil.warn("warn test");
-            LoggerUtil.error("error test", new Exception("fake exception"));
+            LoggerUtil.error("error test", new Exception("fake exception éàçã"));
         } catch (final Exception e) {
             fail(e.getMessage());
         }

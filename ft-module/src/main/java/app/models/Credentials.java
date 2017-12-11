@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2017 Contributors to the Eclipse Foundation
+ * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -20,46 +20,32 @@
  */
 package app.models;
 
-public class Instance {
+public class Credentials {
 
-    private String ip;
-    private Integer port;
-    private Credentials credentials;
+    private String user;
+    private String pwd;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Instance() {
+    public Credentials() {
         super();
     }
 
-    public Instance(final String ip, final Integer port) {
-        super();
-        this.ip = ip;
-        this.port = port;
+    public String getUser() {
+        return this.user;
     }
 
-    public String getIp() {
-        return this.ip;
+    public void setUser(final String user) {
+        this.user = user;
     }
 
-    public void setIp(final String ip) {
-        this.ip = ip;
+    public String getPwd() {
+        return this.pwd;
     }
 
-    public Integer getPort() {
-        return this.port;
+    public void setPwd(final String pwd) {
+        this.pwd = pwd;
     }
 
-    public void setPort(final Integer port) {
-        this.port = port;
-    }
-
-    public Credentials getCredentials() {
-        return this.credentials;
-    }
-
-    public void setCredentials(final Credentials credentials) {
-        this.credentials = credentials;
-    }
 }

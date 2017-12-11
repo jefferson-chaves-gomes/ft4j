@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2017 Contributors to the Eclipse Foundation
+ * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,48 +18,16 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.models;
+package app.commons.exceptions;
 
-public class Instance {
+public class ArgumentsInitializeException extends SystemException {
 
-    private String ip;
-    private Integer port;
-    private Credentials credentials;
+    private static final long serialVersionUID = -523210290872831014L;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Instance() {
-        super();
-    }
-
-    public Instance(final String ip, final Integer port) {
-        super();
-        this.ip = ip;
-        this.port = port;
-    }
-
-    public String getIp() {
-        return this.ip;
-    }
-
-    public void setIp(final String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getPort() {
-        return this.port;
-    }
-
-    public void setPort(final Integer port) {
-        this.port = port;
-    }
-
-    public Credentials getCredentials() {
-        return this.credentials;
-    }
-
-    public void setCredentials(final Credentials credentials) {
-        this.credentials = credentials;
+    public ArgumentsInitializeException() {
+        super("Invalid arguments initialization. The arguments values must be between 0 and " + Integer.MAX_VALUE);
     }
 }

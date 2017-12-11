@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2017 Contributors to the Eclipse Foundation
+ * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -18,18 +18,17 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.models;
+package app.tasks;
 
-public class TaskResubmission extends Technic {
+import app.commons.utils.LoggerUtil;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Constructors.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public TaskResubmission() {
-        super();
-    }
+public class CommServiceTask implements Runnable {
 
-    public TaskResubmission(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout);
+    public void run() {
+
+        final String threadName = Thread.currentThread().getName();
+        for (int i = 0; i < 10; i++) {
+            LoggerUtil.debug(i + 1 + " - Hello " + threadName);
+        }
     }
 }

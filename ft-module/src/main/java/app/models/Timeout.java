@@ -18,17 +18,24 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.tasks;
+package app.models;
 
-import app.commons.utils.LoggerUtil;
+import java.util.concurrent.TimeUnit;
 
-public class FaultToleranceTask implements Runnable {
+public class Timeout extends TimeArgument {
 
-    public void run() {
+    private final static short DEFAULT_VALUE = 30;
 
-        final String threadName = Thread.currentThread().getName();
-        for (int i = 0; i < 10; i++) {
-            LoggerUtil.debug(i + 1 + " - Hello " + threadName);
-        }
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Timeout() {
+        super(DEFAULT_VALUE, DEFAULT_UNIT);
     }
+
+    public Timeout(final int value, final TimeUnit unit) {
+        super(value, unit);
+
+    }
+
 }

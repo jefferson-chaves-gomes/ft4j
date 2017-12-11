@@ -1,6 +1,6 @@
 /*
  *******************************************************************************
- * Copyright (c) 2017 Contributors to the Eclipse Foundation
+ * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -20,46 +20,18 @@
  */
 package app.models;
 
-public class Instance {
+import java.util.concurrent.TimeUnit;
 
-    private String ip;
-    private Integer port;
-    private Credentials credentials;
+public class AttemptsNumber extends TimeArgument {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Instance() {
-        super();
+    public AttemptsNumber() {
+        super(DEFAULT_VALUE, DEFAULT_UNIT);
     }
 
-    public Instance(final String ip, final Integer port) {
-        super();
-        this.ip = ip;
-        this.port = port;
-    }
-
-    public String getIp() {
-        return this.ip;
-    }
-
-    public void setIp(final String ip) {
-        this.ip = ip;
-    }
-
-    public Integer getPort() {
-        return this.port;
-    }
-
-    public void setPort(final Integer port) {
-        this.port = port;
-    }
-
-    public Credentials getCredentials() {
-        return this.credentials;
-    }
-
-    public void setCredentials(final Credentials credentials) {
-        this.credentials = credentials;
+    public AttemptsNumber(final int value, final TimeUnit unit) {
+        super(value, unit);
     }
 }

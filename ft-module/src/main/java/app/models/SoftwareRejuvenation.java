@@ -28,4 +28,8 @@ public class SoftwareRejuvenation extends Technic {
     public SoftwareRejuvenation() {
         super();
     }
+
+    public SoftwareRejuvenation(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+        super(attemptsNumber, delayBetweenAttempts, timeout);
+    }
 }

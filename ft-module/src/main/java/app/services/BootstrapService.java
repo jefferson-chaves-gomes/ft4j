@@ -26,6 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import app.FaultToleranceModule;
+import app.commons.exceptions.ArgumentsInitializeException;
 import app.commons.exceptions.DuplicateInitializeException;
 import app.commons.exceptions.ReplicationInitializeException;
 import app.commons.exceptions.SystemException;
@@ -37,12 +38,12 @@ import app.models.Retry;
 import app.models.SoftwareRejuvenation;
 import app.models.TaskResubmission;
 import app.models.Technic;
-import app.tasks.FaultToleranceTask;
+import app.tasks.CommServiceTask;
 
 public class BootstrapService implements FaultToleranceModule {
 
     private static BootstrapService service;
-    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+    private static ExecutorService executor;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -53,26 +54,20 @@ public class BootstrapService implements FaultToleranceModule {
 
     public static BootstrapService getInstance() {
         if (service == null) {
-            return new BootstrapService();
+            service = new BootstrapService();
+            executor = Executors.newSingleThreadExecutor();
         }
         return service;
-    }
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // * @see app.FaultToleranceModule#init(app.models.Level)
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    @Override
-    public void init(final Level ftLevel) throws SystemException {
-        this.validate(ftLevel);
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // * @see app.FaultToleranceModule#start()
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
-    public void start() {
-        final FaultToleranceTask task = new FaultToleranceTask();
-        this.executor.submit(task);
+    public void start(final Level ftLevel) throws SystemException {
+        this.validate(ftLevel);
+        final CommServiceTask task = new CommServiceTask();
+        BootstrapService.executor.submit(task);
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,15 +77,15 @@ public class BootstrapService implements FaultToleranceModule {
     public void stop() {
         try {
             LoggerUtil.debug("attempt to shutdown executor");
-            this.executor.shutdown();
-            this.executor.awaitTermination(3, TimeUnit.SECONDS);
+            BootstrapService.executor.shutdown();
+            BootstrapService.executor.awaitTermination(3, TimeUnit.SECONDS);
         } catch (final InterruptedException e) {
             LoggerUtil.debug("tasks interrupted");
         } finally {
-            if (!this.executor.isTerminated()) {
+            if (!BootstrapService.executor.isTerminated()) {
                 LoggerUtil.debug("cancel non-finished tasks");
             }
-            this.executor.shutdownNow();
+            BootstrapService.executor.shutdownNow();
             LoggerUtil.debug("shutdown finished");
         }
     }
@@ -100,24 +95,22 @@ public class BootstrapService implements FaultToleranceModule {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public boolean isTerminated() {
-        return this.executor.isShutdown() && this.executor.isTerminated();
+        return BootstrapService.executor.isShutdown() && BootstrapService.executor.isTerminated();
     }
 
     private void validate(final Level ftLevel) throws SystemException {
         final List<Technic> lstTechnics = ftLevel.getLstTechnics();
-        if (StreamUtil.hasDuplicates(lstTechnics, SoftwareRejuvenation.class) || StreamUtil.hasDuplicates(lstTechnics, Retry.class) || StreamUtil.hasDuplicates(lstTechnics, TaskResubmission.class)
-                || StreamUtil.hasDuplicates(lstTechnics, Replication.class)) {
-            throw new DuplicateInitializeException();
-        }
+        this.validateDuplications(lstTechnics);
+        this.validateArgsInitialization(lstTechnics);
+    }
 
+    private void validateArgsInitialization(final List<Technic> lstTechnics) throws ArgumentsInitializeException, ReplicationInitializeException {
         for (final Technic element : lstTechnics) {
-            if (element instanceof SoftwareRejuvenation) {
-                continue;
-            }
-            if (element instanceof Retry) {
-                continue;
-            }
             if (element instanceof TaskResubmission) {
+                final TaskResubmission technic = (TaskResubmission) element;
+                if (technic.getAttemptsNumber().getValue() < 0 || technic.getDelayBetweenAttempts().getValue() < 0 || technic.getTimeout().getValue() < 0) {
+                    throw new ArgumentsInitializeException();
+                }
                 continue;
             }
             if (element instanceof Replication) {
@@ -127,6 +120,13 @@ public class BootstrapService implements FaultToleranceModule {
                 }
                 continue;
             }
+        }
+    }
+
+    private void validateDuplications(final List<Technic> lstTechnics) throws DuplicateInitializeException {
+        if (StreamUtil.hasDuplicates(lstTechnics, SoftwareRejuvenation.class) || StreamUtil.hasDuplicates(lstTechnics, Retry.class) || StreamUtil.hasDuplicates(lstTechnics, TaskResubmission.class)
+                || StreamUtil.hasDuplicates(lstTechnics, Replication.class)) {
+            throw new DuplicateInitializeException();
         }
     }
 }
