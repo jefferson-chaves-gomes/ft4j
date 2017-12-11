@@ -24,6 +24,7 @@ public class Instance {
 
     private String ip;
     private Integer port;
+    private Credentials credentials;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -52,5 +53,13 @@ public class Instance {
 
     public void setPort(final Integer port) {
         this.port = port;
+    }
+
+    public Credentials getCredentials() {
+        return this.credentials;
+    }
+
+    public void setCredentials(final Credentials credentials) {
+        this.credentials = credentials;
     }
 }
