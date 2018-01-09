@@ -1,5 +1,5 @@
 /*
- *******************************************************************************
+ * ******************************************************************************
  * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************
+ * *****************************************************************************
  */
 package app.services;
 
@@ -76,17 +76,17 @@ public class BootstrapService implements FaultToleranceModule {
     @Override
     public void stop() {
         try {
-            LoggerUtil.debug("attempt to shutdown executor");
+            LoggerUtil.info("attempt to shutdown executor");
             BootstrapService.executor.shutdown();
             BootstrapService.executor.awaitTermination(3, TimeUnit.SECONDS);
         } catch (final InterruptedException e) {
-            LoggerUtil.debug("tasks interrupted");
+            LoggerUtil.error("tasks interrupted", e);
         } finally {
             if (!BootstrapService.executor.isTerminated()) {
-                LoggerUtil.debug("cancel non-finished tasks");
+                LoggerUtil.info("cancel non-finished tasks");
             }
             BootstrapService.executor.shutdownNow();
-            LoggerUtil.debug("shutdown finished");
+            LoggerUtil.info("shutdown finished");
         }
     }
 

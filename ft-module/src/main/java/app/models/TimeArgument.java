@@ -1,6 +1,6 @@
 /*
- *******************************************************************************
- * Copyright (c) 2017 Contributors to the Eclipse Foundation
+ * ******************************************************************************
+ * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information regarding copyright ownership.
@@ -16,7 +16,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************
+ * *****************************************************************************
  */
 package app.models;
 
