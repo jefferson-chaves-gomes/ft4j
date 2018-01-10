@@ -58,7 +58,7 @@ public class RuntimeUtil {
         }
     }
 
-    synchronized public static String runCommand(final Command command, final Map<String, String> env) throws IOException, InterruptedException {
+    synchronized public static String exec(final Command command, final Map<String, String> env) throws IOException, InterruptedException {
 
         final ProcessBuilder builder = new ProcessBuilder(command.getLstCommands());
         final Map<String, String> currentEnv = builder.environment();
@@ -72,8 +72,8 @@ public class RuntimeUtil {
         return getProcessReturn(process);
     }
 
-    synchronized public static String runCommand(final Command command) throws IOException, InterruptedException {
-        return runCommand(command, null);
+    synchronized public static String exec(final Command command) throws IOException, InterruptedException {
+        return exec(command, null);
     }
 
     synchronized private static String getProcessReturn(final Process process) throws InterruptedException {
