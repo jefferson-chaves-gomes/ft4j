@@ -66,7 +66,7 @@ public class BootstrapService implements FaultToleranceModule {
     @Override
     public void start(final Level ftLevel) throws SystemException {
         this.validate(ftLevel);
-        final CommServiceTask task = new CommServiceTask();
+        final CommServiceTask task = new CommServiceTask(ftLevel);
         BootstrapService.executor.submit(task);
     }
 

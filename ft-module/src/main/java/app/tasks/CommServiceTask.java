@@ -20,16 +20,48 @@
  */
 package app.tasks;
 
+import java.io.IOException;
+
 import app.commons.utils.LoggerUtil;
+import app.commons.utils.RuntimeUtil;
+import app.commons.utils.RuntimeUtil.Command;
+import app.models.Level;
 
 public class CommServiceTask implements Runnable {
 
+    private static final String FT_COORDINATOR_STARTUP_COMMAND = "java -jar z-spring-boott-test-0.0.1-SNAPSHOT.jar";
+    private Level ftLevel;
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public CommServiceTask(Level ftLevel) {
+        super();
+        this.ftLevel = ftLevel;
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see java.lang.Runnable#run()
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void run() {
-
-        final String threadName = Thread.currentThread().getName();
-        for (int i = 0; i < 10; i++) {
-            LoggerUtil.debug(i + 1 + " - Hello " + threadName);
+        final Command command = new Command(FT_COORDINATOR_STARTUP_COMMAND);
+        try {
+            final String result = RuntimeUtil.exec(command);
+        } catch (IOException | InterruptedException e) {
+            LoggerUtil.error(e);
         }
     }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Level getFtLevel() {
+        return this.ftLevel;
+    }
+
+    public void setFtLevel(Level ftLevel) {
+        this.ftLevel = ftLevel;
+    }
+
 }

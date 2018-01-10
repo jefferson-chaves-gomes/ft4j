@@ -20,9 +20,6 @@
  */
 package app.services;
 
-public class CommService implements Runnable {
+public class CommService {
 
-    @Override
-    public void run() {
-    }
 }
