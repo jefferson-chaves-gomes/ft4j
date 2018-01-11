@@ -58,7 +58,7 @@ public class RuntimeUtil {
         }
     }
 
-    synchronized public static String exec(final Command command, final Map<String, String> env) throws IOException, InterruptedException {
+    synchronized public static String execAndGetResponseString(final Command command, final Map<String, String> env) throws IOException, InterruptedException {
 
         final ProcessBuilder builder = new ProcessBuilder(command.getLstCommands());
         final Map<String, String> currentEnv = builder.environment();
@@ -67,12 +67,27 @@ public class RuntimeUtil {
                 currentEnv.put(entry.getKey(), entry.getValue());
             }
         }
-
         final Process process = builder.start();
         return getProcessReturn(process);
     }
 
-    synchronized public static String exec(final Command command) throws IOException, InterruptedException {
+    synchronized public static Process exec(final Command command, final Map<String, String> env) throws IOException {
+
+        final ProcessBuilder builder = new ProcessBuilder(command.getLstCommands());
+        final Map<String, String> currentEnv = builder.environment();
+        if (env != null) {
+            for (final Map.Entry<String, String> entry : env.entrySet()) {
+                currentEnv.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return builder.start();
+    }
+
+    synchronized public static String execAndGetResponseString(final Command command) throws IOException, InterruptedException {
+        return execAndGetResponseString(command, null);
+    }
+
+    synchronized public static Process exec(final Command command) throws IOException, InterruptedException {
         return exec(command, null);
     }
 

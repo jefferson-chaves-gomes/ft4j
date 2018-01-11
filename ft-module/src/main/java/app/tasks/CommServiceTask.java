@@ -21,6 +21,7 @@
 package app.tasks;
 
 import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import app.commons.utils.LoggerUtil;
 import app.commons.utils.RuntimeUtil;
@@ -30,14 +31,17 @@ import app.models.Level;
 public class CommServiceTask implements Runnable {
 
     private static final String FT_COORDINATOR_STARTUP_COMMAND = "java -jar z-spring-boott-test-0.0.1-SNAPSHOT.jar";
+    private final Command command = new Command(FT_COORDINATOR_STARTUP_COMMAND);
     private Level ftLevel;
+    private Process commServiceProcess;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public CommServiceTask(Level ftLevel) {
+    public CommServiceTask(final Level ftLevel) {
         super();
         this.ftLevel = ftLevel;
+        this.startFtCoordinator();
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -45,9 +49,22 @@ public class CommServiceTask implements Runnable {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void run() {
-        final Command command = new Command(FT_COORDINATOR_STARTUP_COMMAND);
+        while (true) {
+            try {
+                if (this.commServiceProcess != null && this.commServiceProcess.isAlive()) {
+                    TimeUnit.SECONDS.sleep(60);
+                } else {
+                    this.startFtCoordinator();
+                }
+            } catch (final InterruptedException e) {
+                LoggerUtil.error(e);
+            }
+        }
+    }
+
+    private void startFtCoordinator() {
         try {
-            final String result = RuntimeUtil.exec(command);
+            this.commServiceProcess = RuntimeUtil.exec(this.command);
         } catch (IOException | InterruptedException e) {
             LoggerUtil.error(e);
         }
@@ -60,7 +77,7 @@ public class CommServiceTask implements Runnable {
         return this.ftLevel;
     }
 
-    public void setFtLevel(Level ftLevel) {
+    public void setFtLevel(final Level ftLevel) {
         this.ftLevel = ftLevel;
     }
 
