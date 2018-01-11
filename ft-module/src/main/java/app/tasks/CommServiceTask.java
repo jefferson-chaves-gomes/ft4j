@@ -62,9 +62,7 @@ public class CommServiceTask implements Runnable {
     public Level getFtLevel() {
         return this.ftLevel;
     }
-
     public void setFtLevel(final Level ftLevel) {
         this.ftLevel = ftLevel;
     }
-
 }

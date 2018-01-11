@@ -45,10 +45,10 @@ import app.tasks.CommServiceTask;
 
 public class BootstrapService implements FaultToleranceModule {
 
-    private static BootstrapService service;
-    private static ExecutorService executor;
     private static final String FT_COORDINATOR_STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1.jar";
     private static final Command COORDINATOR_BOOTSTRAP_COMMAND = new Command(FT_COORDINATOR_STARTUP_COMMAND);
+    private static BootstrapService service;
+    private static ExecutorService executor;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -142,7 +142,7 @@ public class BootstrapService implements FaultToleranceModule {
 
     private void startFtCoordinator() {
         try {
-            RuntimeUtil.exec(this.COORDINATOR_BOOTSTRAP_COMMAND);
+            RuntimeUtil.exec(COORDINATOR_BOOTSTRAP_COMMAND);
         } catch (IOException | InterruptedException e) {
             LoggerUtil.error(e);
         }
