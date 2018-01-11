@@ -18,15 +18,24 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.commons.exceptions;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public class SystemException extends Exception {
 
-@SpringBootApplication
-public class App {
+    private static final long serialVersionUID = 4191396029634713794L;
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public SystemException(final Throwable cause) {
+        super(cause);
+    }
+
+    public SystemException(final String message) {
+        super(message);
+    }
+
+    public SystemException(final String message, final Throwable cause) {
+        super(message, cause);
     }
 }

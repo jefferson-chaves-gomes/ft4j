@@ -18,53 +18,52 @@
  * limitations under the License.
  * *****************************************************************************
  */
-package app.tasks;
+package app.models;
 
-import java.lang.management.ManagementFactory;
-import java.util.concurrent.TimeUnit;
+public abstract class Technic {
 
-import app.commons.utils.LoggerUtil;
-import app.models.Level;
-
-public class CommServiceTask implements Runnable {
-
-    private static final int IMALIVE_TIMEOUT = 5;
-    private Level ftLevel;
+    private AttemptsNumber attemptsNumber;
+    private DelayBetweenAttempts delayBetweenAttempts;
+    private Timeout timeout;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public CommServiceTask(final Level ftLevel) {
-        super();
-        this.ftLevel = ftLevel;
+    public Technic() {
+        this(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout());
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // * @see java.lang.Runnable#run()
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                TimeUnit.SECONDS.sleep(IMALIVE_TIMEOUT);
-                final String moduleId = ManagementFactory.getRuntimeMXBean().getName();
-                System.out.println(moduleId);
-                // TODO fazer requisicoes periodicas ao coordenador a fim de avisar que ainda está vivo
-            } catch (final InterruptedException e) {
-                LoggerUtil.error(e);
-            }
-        }
+    public Technic(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+        super();
+        this.attemptsNumber = attemptsNumber;
+        this.delayBetweenAttempts = delayBetweenAttempts;
+        this.timeout = timeout;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // get/set.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Level getFtLevel() {
-        return this.ftLevel;
+    public AttemptsNumber getAttemptsNumber() {
+        return this.attemptsNumber;
     }
 
-    public void setFtLevel(final Level ftLevel) {
-        this.ftLevel = ftLevel;
+    public void setAttemptsNumber(final AttemptsNumber attemptsNumber) {
+        this.attemptsNumber = attemptsNumber;
     }
 
+    public DelayBetweenAttempts getDelayBetweenAttempts() {
+        return this.delayBetweenAttempts;
+    }
+
+    public void setDelayBetweenAttempts(final DelayBetweenAttempts delayBetweenAttempts) {
+        this.delayBetweenAttempts = delayBetweenAttempts;
+    }
+
+    public Timeout getTimeout() {
+        return this.timeout;
+    }
+
+    public void setTimeout(final Timeout timeout) {
+        this.timeout = timeout;
+    }
 }

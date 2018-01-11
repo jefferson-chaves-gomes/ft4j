@@ -20,6 +20,7 @@
  */
 package app.services;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -31,6 +32,8 @@ import app.commons.exceptions.DuplicateInitializeException;
 import app.commons.exceptions.ReplicationInitializeException;
 import app.commons.exceptions.SystemException;
 import app.commons.utils.LoggerUtil;
+import app.commons.utils.RuntimeUtil;
+import app.commons.utils.RuntimeUtil.Command;
 import app.commons.utils.StreamUtil;
 import app.models.Level;
 import app.models.Replication;
@@ -44,6 +47,8 @@ public class BootstrapService implements FaultToleranceModule {
 
     private static BootstrapService service;
     private static ExecutorService executor;
+    private static final String FT_COORDINATOR_STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1.jar";
+    private static final Command COORDINATOR_BOOTSTRAP_COMMAND = new Command(FT_COORDINATOR_STARTUP_COMMAND);
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -66,8 +71,9 @@ public class BootstrapService implements FaultToleranceModule {
     @Override
     public void start(final Level ftLevel) throws SystemException {
         this.validate(ftLevel);
+        this.startFtCoordinator();
         final CommServiceTask task = new CommServiceTask(ftLevel);
-        BootstrapService.executor.submit(task);
+        executor.submit(task);
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -108,7 +114,9 @@ public class BootstrapService implements FaultToleranceModule {
         for (final Technic element : lstTechnics) {
             if (element instanceof TaskResubmission) {
                 final TaskResubmission technic = (TaskResubmission) element;
-                if (technic.getAttemptsNumber().getValue() < 0 || technic.getDelayBetweenAttempts().getValue() < 0 || technic.getTimeout().getValue() < 0) {
+                if (technic.getAttemptsNumber().getValue() < 0
+                        || technic.getDelayBetweenAttempts().getValue() < 0
+                        || technic.getTimeout().getValue() < 0) {
                     throw new ArgumentsInitializeException();
                 }
                 continue;
@@ -124,9 +132,19 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     private void validateDuplications(final List<Technic> lstTechnics) throws DuplicateInitializeException {
-        if (StreamUtil.hasDuplicates(lstTechnics, SoftwareRejuvenation.class) || StreamUtil.hasDuplicates(lstTechnics, Retry.class) || StreamUtil.hasDuplicates(lstTechnics, TaskResubmission.class)
+        if (StreamUtil.hasDuplicates(lstTechnics, SoftwareRejuvenation.class)
+                || StreamUtil.hasDuplicates(lstTechnics, Retry.class)
+                || StreamUtil.hasDuplicates(lstTechnics, TaskResubmission.class)
                 || StreamUtil.hasDuplicates(lstTechnics, Replication.class)) {
             throw new DuplicateInitializeException();
+        }
+    }
+
+    private void startFtCoordinator() {
+        try {
+            RuntimeUtil.exec(this.COORDINATOR_BOOTSTRAP_COMMAND);
+        } catch (IOException | InterruptedException e) {
+            LoggerUtil.error(e);
         }
     }
 }

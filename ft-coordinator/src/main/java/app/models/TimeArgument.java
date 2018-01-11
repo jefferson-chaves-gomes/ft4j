@@ -18,53 +18,35 @@
  * limitations under the License.
  * *****************************************************************************
  */
-package app.tasks;
+package app.models;
 
-import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
-import app.commons.utils.LoggerUtil;
-import app.models.Level;
+public class TimeArgument {
 
-public class CommServiceTask implements Runnable {
+    protected final static short DEFAULT_VALUE = 3;
+    protected final static TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
 
-    private static final int IMALIVE_TIMEOUT = 5;
-    private Level ftLevel;
+    private final int value;
+    private final TimeUnit unit;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public CommServiceTask(final Level ftLevel) {
+    public TimeArgument(final int value, final TimeUnit unit) {
         super();
-        this.ftLevel = ftLevel;
-    }
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // * @see java.lang.Runnable#run()
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    @Override
-    public void run() {
-        while (true) {
-            try {
-                TimeUnit.SECONDS.sleep(IMALIVE_TIMEOUT);
-                final String moduleId = ManagementFactory.getRuntimeMXBean().getName();
-                System.out.println(moduleId);
-                // TODO fazer requisicoes periodicas ao coordenador a fim de avisar que ainda está vivo
-            } catch (final InterruptedException e) {
-                LoggerUtil.error(e);
-            }
-        }
+        this.value = value;
+        this.unit = unit;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // get/set.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Level getFtLevel() {
-        return this.ftLevel;
+    public int getValue() {
+        return this.value;
     }
 
-    public void setFtLevel(final Level ftLevel) {
-        this.ftLevel = ftLevel;
+    public TimeUnit getUnit() {
+        return this.unit;
     }
-
 }

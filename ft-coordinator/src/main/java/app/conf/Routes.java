@@ -18,15 +18,16 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.conf;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public final class Routes {
 
-@SpringBootApplication
-public class App {
+    public static final String IMALIVE = "/imalive/{moduleId}";
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    private Routes() {
+        super();
     }
 }

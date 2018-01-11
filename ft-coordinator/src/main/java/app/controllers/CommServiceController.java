@@ -18,15 +18,20 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.controllers;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import static app.conf.Routes.IMALIVE;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
-@SpringBootApplication
-public class App {
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+@RestController
+public class CommServiceController {
+
+    @RequestMapping(method = GET, value = IMALIVE)
+    public String imalive(@PathVariable(value = "moduleId") final String moduleId) {
+        return String.format("%s still alive", moduleId);
     }
 }

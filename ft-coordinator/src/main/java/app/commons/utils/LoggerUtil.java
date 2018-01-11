@@ -18,15 +18,39 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.commons.utils;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.apache.log4j.Logger;
 
-@SpringBootApplication
-public class App {
+public final class LoggerUtil {
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    private static final Logger LOGGER = Logger.getLogger(LoggerUtil.class);
+
+    private LoggerUtil() {
+        super();
+    }
+
+    synchronized public static void error(final Throwable t) {
+        error(t.getMessage(), t);
+    }
+
+    synchronized public static void error(final Object message, final Throwable t) {
+        LOGGER.error(message, t);
+    }
+
+    synchronized public static void warn(final Object message) {
+        LOGGER.warn(message);
+    }
+
+    synchronized public static void warn(final Object message, final Throwable t) {
+        LOGGER.warn(message, t);
+    }
+
+    synchronized public static void info(final Object message) {
+        LOGGER.info(message);
+    }
+
+    synchronized public static void debug(final Object string) {
+        LOGGER.debug(string);
     }
 }

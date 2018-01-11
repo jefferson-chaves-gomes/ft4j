@@ -18,15 +18,34 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public class Credentials {
 
-@SpringBootApplication
-public class App {
+    private String user;
+    private String pwd;
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Credentials() {
+        super();
     }
+
+    public String getUser() {
+        return this.user;
+    }
+
+    public void setUser(final String user) {
+        this.user = user;
+    }
+
+    public String getPwd() {
+        return this.pwd;
+    }
+
+    public void setPwd(final String pwd) {
+        this.pwd = pwd;
+    }
+
 }

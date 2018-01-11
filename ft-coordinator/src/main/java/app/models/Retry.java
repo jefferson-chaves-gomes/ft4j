@@ -18,15 +18,18 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public class Retry extends Technic {
 
-@SpringBootApplication
-public class App {
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Retry() {
+        super();
+    }
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    public Retry(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+        super(attemptsNumber, delayBetweenAttempts, timeout);
     }
 }

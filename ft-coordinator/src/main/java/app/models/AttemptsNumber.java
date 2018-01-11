@@ -18,15 +18,20 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.util.concurrent.TimeUnit;
 
-@SpringBootApplication
-public class App {
+public class AttemptsNumber extends TimeArgument {
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public AttemptsNumber() {
+        super(DEFAULT_VALUE, DEFAULT_UNIT);
+    }
+
+    public AttemptsNumber(final int value, final TimeUnit unit) {
+        super(value, unit);
     }
 }

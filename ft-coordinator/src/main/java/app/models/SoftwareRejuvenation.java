@@ -1,5 +1,5 @@
 /*
- *******************************************************************************
+ * ******************************************************************************
  * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,17 +16,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************
+ * *****************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public class SoftwareRejuvenation extends Technic {
 
-@SpringBootApplication
-public class App {
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public SoftwareRejuvenation() {
+        super();
+    }
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    public SoftwareRejuvenation(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+        super(attemptsNumber, delayBetweenAttempts, timeout);
     }
 }

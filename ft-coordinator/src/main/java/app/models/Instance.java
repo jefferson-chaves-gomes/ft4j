@@ -18,15 +18,48 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public class Instance {
 
-@SpringBootApplication
-public class App {
+    private String ip;
+    private Integer port;
+    private Credentials credentials;
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Instance() {
+        super();
+    }
+
+    public Instance(final String ip, final Integer port) {
+        super();
+        this.ip = ip;
+        this.port = port;
+    }
+
+    public String getIp() {
+        return this.ip;
+    }
+
+    public void setIp(final String ip) {
+        this.ip = ip;
+    }
+
+    public Integer getPort() {
+        return this.port;
+    }
+
+    public void setPort(final Integer port) {
+        this.port = port;
+    }
+
+    public Credentials getCredentials() {
+        return this.credentials;
+    }
+
+    public void setCredentials(final Credentials credentials) {
+        this.credentials = credentials;
     }
 }

@@ -18,15 +18,38 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public class CloudInstance extends Instance {
 
-@SpringBootApplication
-public class App {
+    private CloudType type;
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public CloudInstance(final String ip, final Integer port) {
+        super(ip, port);
+        this.type = CloudType.LOCAL;
     }
+
+    public CloudInstance(final String ip, final Integer port, final CloudType type) {
+        super(ip, port);
+        this.type = type;
+    }
+
+    public static enum CloudType {
+        LOCAL,
+        AWS,
+        CGP,
+        AZURE
+    }
+
+    public CloudType getType() {
+        return this.type;
+    }
+
+    public void setType(final CloudType type) {
+        this.type = type;
+    }
+
 }

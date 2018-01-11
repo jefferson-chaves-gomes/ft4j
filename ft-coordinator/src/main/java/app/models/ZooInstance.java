@@ -1,5 +1,5 @@
 /*
- *******************************************************************************
+ * ******************************************************************************
  * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,17 +16,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************
+ * *****************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+public class ZooInstance extends Instance {
 
-@SpringBootApplication
-public class App {
-
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public ZooInstance(final String ip, final Integer port) {
+        super(ip, port);
     }
 }

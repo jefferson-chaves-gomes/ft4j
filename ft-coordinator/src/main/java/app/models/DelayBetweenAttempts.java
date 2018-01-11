@@ -18,15 +18,25 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app;
+package app.models;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import java.util.concurrent.TimeUnit;
 
-@SpringBootApplication
-public class App {
+public class DelayBetweenAttempts extends TimeArgument {
 
-    public static void main(final String[] args) {
-        SpringApplication.run(App.class, args);
+    private final static short DEFAULT_VALUE = 10;
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public DelayBetweenAttempts() {
+        super(DEFAULT_VALUE, DEFAULT_UNIT);
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public DelayBetweenAttempts(final int value, final TimeUnit unit) {
+        super(value, unit);
     }
 }
