@@ -25,6 +25,10 @@ public class ZooInstance extends Instance {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public ZooInstance() {
+        super();
+    }
+
     public ZooInstance(final String ip, final Integer port) {
         super(ip, port);
     }

@@ -21,17 +21,29 @@
 package app.controllers;
 
 import static app.conf.Routes.IMALIVE;
+import static app.conf.Routes.REGISTER;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import app.models.Level;
 
 @RestController
 public class CommServiceController {
 
-    @RequestMapping(method = GET, value = IMALIVE)
-    public String imalive(@PathVariable(value = "moduleId") final String moduleId) {
+    @RequestMapping(value = IMALIVE, method = GET)
+    public @ResponseBody String imalive(@PathVariable(value = "moduleId") final String moduleId) {
         return String.format("%s still alive", moduleId);
+    }
+
+    @RequestMapping(value = REGISTER, method = POST)
+    public String register(@RequestBody final Level level) {
+        System.out.println("/POST request, cust: " + level);
+        return "good";
     }
 }

@@ -32,6 +32,10 @@ public class Level {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Level() {
+        super();
+    }
+
     public Level(final ZooInstance zooInstance) {
         super();
         this.zooInstance = zooInstance;
