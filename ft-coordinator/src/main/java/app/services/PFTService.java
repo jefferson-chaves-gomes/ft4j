@@ -18,20 +18,8 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.models;
+package app.services;
 
-import java.util.concurrent.TimeUnit;
+public class PFTService {
 
-public class AttemptsNumber extends TimeArgument {
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Constructors.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public AttemptsNumber() {
-        super(DEFAULT_VALUE, DEFAULT_UNIT);
-    }
-
-    public AttemptsNumber(final int value, final TimeUnit unit) {
-        super(value, unit);
-    }
 }

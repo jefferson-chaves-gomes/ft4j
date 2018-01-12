@@ -21,17 +21,46 @@
 package app.controllers;
 
 import static app.conf.Routes.IMALIVE;
+import static app.conf.Routes.REGISTER;
+import static app.conf.Routes.SHUTDOWN;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController
-public class CommServiceController {
+import app.commons.http.Response;
+import app.models.Level;
+import app.services.CommService;
 
-    @RequestMapping(method = GET, value = IMALIVE)
-    public String imalive(@PathVariable(value = "moduleId") final String moduleId) {
-        return String.format("%s still alive", moduleId);
-    }
+@RestController
+public class CommServiceController implements CommService {
+
+	@Override
+	@RequestMapping(value = IMALIVE, method = GET)
+	public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleid) {
+		return new Response(OK);
+	}
+
+	@Override
+	@RequestMapping(value = REGISTER, method = POST)
+	public @ResponseBody Response register(@RequestBody final Level level) {
+		// try {
+		// todo registrar no zookeeper
+		return new Response(CREATED);
+		// } catch (SystemException e) {
+		// return new Response(INTERNAL_SERVER_ERROR, e.getMessage());
+		// }
+	}
+
+	@Override
+	@RequestMapping(value = SHUTDOWN, method = GET)
+	public @ResponseBody Response shutdown() {
+		return new Response(OK);
+	}
 }

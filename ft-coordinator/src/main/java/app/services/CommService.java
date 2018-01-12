@@ -18,39 +18,16 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.commons.utils;
+package app.services;
 
-import org.apache.log4j.Logger;
+import app.commons.http.Response;
+import app.models.Level;
 
-public final class LoggerUtil {
+public interface CommService {
 
-    private static final Logger LOGGER = Logger.getLogger(LoggerUtil.class);
+	public Response imalive(final String moduleid);
 
-    private LoggerUtil() {
-        super();
-    }
+	public Response register(final Level level) ;
 
-    synchronized public static void error(final Throwable t) {
-        error(t.getMessage(), t);
-    }
-
-    synchronized public static void error(final Object message, final Throwable t) {
-        LOGGER.error(message, t);
-    }
-
-    synchronized public static void warn(final Object message) {
-        LOGGER.warn(message);
-    }
-
-    synchronized public static void warn(final Object message, final Throwable t) {
-        LOGGER.warn(message, t);
-    }
-
-    synchronized public static void info(final Object message) {
-        LOGGER.info(message);
-    }
-
-    synchronized public static void debug(final Object string) {
-        LOGGER.debug(string);
-    }
+	public Response shutdown();
 }

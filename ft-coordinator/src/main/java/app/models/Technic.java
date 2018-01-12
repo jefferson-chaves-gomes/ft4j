@@ -20,7 +20,7 @@
  */
 package app.models;
 
-public abstract class Technic {
+public class Technic {
 
     private AttemptsNumber attemptsNumber;
     private DelayBetweenAttempts delayBetweenAttempts;

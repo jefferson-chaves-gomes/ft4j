@@ -23,6 +23,8 @@ package app.conf;
 public final class Routes {
 
     public static final String IMALIVE = "/imalive/{moduleId}";
+    public static final String REGISTER = "/register";
+    public static final String SHUTDOWN = "/shutdown/";
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -31,4 +33,3 @@ public final class Routes {
         super();
     }
 }
-

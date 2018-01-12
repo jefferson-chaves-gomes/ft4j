@@ -18,18 +18,18 @@
  * limitations under the License.
  * *****************************************************************************
  */
-package app.models;
+package app;
 
-public class TaskResubmission extends Technic {
+import java.time.LocalDateTime;
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Constructors.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public TaskResubmission() {
-        super();
-    }
+import app.models.Level;
 
-    public TaskResubmission(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout);
-    }
+public class FaultToleranceCoordinator {
+
+	public static LocalDateTime aliveTime;
+	private static Level level;
+	
+	public static void register(Level ftLevel) {
+		level = ftLevel;
+	}
 }

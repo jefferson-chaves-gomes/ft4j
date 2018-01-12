@@ -18,24 +18,8 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.commons.exceptions;
+package app.services;
 
-public class SystemException extends Exception {
+public class RFTService {
 
-    private static final long serialVersionUID = 4191396029634713794L;
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Constructors.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public SystemException(final Throwable cause) {
-        super(cause);
-    }
-
-    public SystemException(final String message) {
-        super(message);
-    }
-
-    public SystemException(final String message, final Throwable cause) {
-        super(message, cause);
-    }
 }
