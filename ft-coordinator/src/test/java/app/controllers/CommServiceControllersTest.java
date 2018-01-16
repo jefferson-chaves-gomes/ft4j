@@ -33,7 +33,6 @@ public class CommServiceControllersTest {
 
         final String moduleId = ManagementFactory.getRuntimeMXBean().getName();
         final String path = Routes.IMALIVE.replace("{moduleId}", moduleId);
-
         this.mock.perform(get(path))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -44,7 +43,6 @@ public class CommServiceControllersTest {
 
         final String path = Routes.REGISTER;
         final String expected = "CREATED";
-
         this.mock.perform(post(new URI(path)).contentType(APPLICATION_JSON).content("{}"))
         			.andDo(print())
                 .andExpect(status().isOk())

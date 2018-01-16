@@ -26,6 +26,7 @@ public final class Routes {
     public static final String REGISTER = "/register";
     public static final String SHUTDOWN = "/shutdown/";
 
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

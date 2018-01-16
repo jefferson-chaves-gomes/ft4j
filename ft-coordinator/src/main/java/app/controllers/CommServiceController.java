@@ -50,12 +50,7 @@ public class CommServiceController implements CommService {
 	@Override
 	@RequestMapping(value = REGISTER, method = POST)
 	public @ResponseBody Response register(@RequestBody final Level level) {
-		// try {
-		// todo registrar no zookeeper
 		return new Response(CREATED);
-		// } catch (SystemException e) {
-		// return new Response(INTERNAL_SERVER_ERROR, e.getMessage());
-		// }
 	}
 
 	@Override
