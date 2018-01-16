@@ -38,6 +38,8 @@ import app.commons.http.Response;
 import app.models.Level;
 import app.services.CommService;
 
+import app.models.Level;
+
 @RestController
 public class CommServiceController implements CommService {
 
