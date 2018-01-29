@@ -28,4 +28,8 @@ public class OperatingSystemMXBeanTest {
         System.out.println("Returns the OS version    :  " + threadBean.getVersion());
         System.out.println("ObjectName instance       :  " + threadBean.getObjectName());
     }
+
+//    https://stackoverflow.com/questions/19781087/using-operatingsystemmxbean-to-get-cpu-usage
+//    https://www.programcreek.com/java-api-examples/index.php?api=java.lang.management.OperatingSystemMXBean
+//    https://stackoverflow.com/questions/47177/how-do-i-monitor-the-computers-cpu-memory-and-disk-usage-in-java/27282046
 }
