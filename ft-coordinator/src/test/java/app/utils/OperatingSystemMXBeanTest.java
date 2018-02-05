@@ -1,45 +1,60 @@
 package app.utils;
 
 import java.lang.management.ManagementFactory;
+import java.time.Duration;
 import java.time.Instant;
 
 import org.junit.Test;
 
+import com.sun.management.OperatingSystemMXBean;
+
 import app.commons.exceptions.SystemException;
 
+@SuppressWarnings("restriction")
 public class OperatingSystemMXBeanTest {
+
+    private static final double LOAD = 0.8;
+    private static final int TIME_SECONDS = 60;
+    private static final long DURATION = 1000 * TIME_SECONDS;
 
     @Test
     public void testResourceUsage() throws InterruptedException, SystemException {
 
-        final int numCore = 4;
-        final int numThreadsPerCore = 2;
-        final double load = 0.8;
-        final long duration = 1000 * 60;
-        for (int thread = 0; thread < numCore * numThreadsPerCore; thread++) {
-            new BusyThread("Thread" + thread, load, duration).start();
+        final OperatingSystemMXBean threadBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+
+        final int numCore = threadBean.getAvailableProcessors();
+        final int numThreadsPerCore = 1;
+        for (int i = 0; i < numCore * numThreadsPerCore; i++) {
+            new BusyThread("Thread-" + i, LOAD, DURATION).start();
         }
 
-        final com.sun.management.OperatingSystemMXBean threadBean = (com.sun.management.OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
+        long nanoBefore = System.nanoTime();
+        long cpuBefore = threadBean.getProcessCpuTime();
 
         final long startTime = Instant.now().getEpochSecond();
-        while (Instant.now().getEpochSecond() - startTime < 60) {
-            System.out.println("load: " + threadBean.getProcessCpuLoad() + "     time: " + threadBean.getProcessCpuTime());
+        while (Instant.now().getEpochSecond() - startTime < TIME_SECONDS) {
+            System.out.println("load: " + threadBean.getProcessCpuLoad());
         }
 
-        System.out.println("CPU usage this last minute:  " + threadBean.getSystemLoadAverage());
-        System.out.println("CPU usage this last minute:  " + threadBean.getFreePhysicalMemorySize());
+        long cpuAfter = threadBean.getProcessCpuTime();
+        long nanoAfter = System.nanoTime();
 
-        System.out.println("Available Processors:        " + threadBean.getAvailableProcessors());
+        long percent;
+        if (nanoAfter > nanoBefore)
+            percent = ((cpuAfter - cpuBefore) * 100L) / (nanoAfter - nanoBefore);
+        else
+            percent = 0;
+
+        System.out.println("Cpu usage: " + percent + "%");
+        System.out.println("==============================================================================");
+        System.out.println("CPU usage this last minute:  " + threadBean.getSystemLoadAverage());
+        System.out.println("getFreePhysicalMemorySize:   " + threadBean.getFreePhysicalMemorySize());
+        System.out.println("Available Processors:        " + numCore);
         System.out.println("Return the OS architecture:  " + threadBean.getArch());
         System.out.println("Returns the OS name       :  " + threadBean.getName());
         System.out.println("Returns the OS version    :  " + threadBean.getVersion());
         System.out.println("ObjectName instance       :  " + threadBean.getObjectName());
     }
-
-    //    https://stackoverflow.com/questions/19781087/using-operatingsystemmxbean-to-get-cpu-usage
-    //    https://www.programcreek.com/java-api-examples/index.php?api=java.lang.management.OperatingSystemMXBean
-    //    https://stackoverflow.com/questions/47177/how-do-i-monitor-the-computers-cpu-memory-and-disk-usage-in-java/27282046
 
     private static class BusyThread extends Thread {
 
@@ -57,11 +72,9 @@ public class OperatingSystemMXBeanTest {
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         @Override
         public void run() {
-            final long startTime = System.currentTimeMillis();
+            Instant startTime = Instant.now();
             try {
-                // Loop for the given duration
-                while (System.currentTimeMillis() - startTime < this.duration) {
-                    // Every 100ms, sleep for the percentage of unladen time
+                while (Duration.between(startTime, Instant.now()).toMillis() < this.duration) {
                     if (System.currentTimeMillis() % 100 == 0) {
                         Thread.sleep((long) Math.floor((1 - this.load) * 100));
                     }
