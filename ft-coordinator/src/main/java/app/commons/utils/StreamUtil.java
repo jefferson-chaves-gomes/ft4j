@@ -22,7 +22,7 @@ package app.commons.utils;
 
 import java.util.List;
 
-public class StreamUtil {
+public final class StreamUtil {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.

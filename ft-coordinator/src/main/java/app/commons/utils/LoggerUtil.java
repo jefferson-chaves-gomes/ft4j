@@ -26,6 +26,9 @@ public final class LoggerUtil {
 
     private static final Logger LOGGER = Logger.getLogger(LoggerUtil.class);
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     private LoggerUtil() {
         super();
     }

@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RuntimeUtil {
+public final class RuntimeUtil {
 
     private static final String SPACE_STRING = " ";
     private static final String LINE_BREAK = "\n";

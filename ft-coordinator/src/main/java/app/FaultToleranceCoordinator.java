@@ -26,10 +26,18 @@ import app.models.Level;
 
 public class FaultToleranceCoordinator {
 
-	public static LocalDateTime aliveTime;
-	private static Level level;
-	
-	public static void register(Level ftLevel) {
-		level = ftLevel;
-	}
+    public static LocalDateTime aliveTime;
+    private Level level;
+
+    public Level getLevel() {
+        return this.level;
+    }
+
+    public void setLevel(final Level level) {
+        this.level = level;
+    }
+
+    public void register(final Level ftLevel) {
+        this.level = ftLevel;
+    }
 }

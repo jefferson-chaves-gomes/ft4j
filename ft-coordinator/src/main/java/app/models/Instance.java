@@ -25,6 +25,7 @@ public class Instance {
     private String ip;
     private Integer port;
     private Credentials credentials;
+    private InstanceInfo info;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -61,5 +62,13 @@ public class Instance {
 
     public void setCredentials(final Credentials credentials) {
         this.credentials = credentials;
+    }
+
+    public InstanceInfo getInfo() {
+        return this.info;
+    }
+
+    public void setInfo(final InstanceInfo info) {
+        this.info = info;
     }
 }
