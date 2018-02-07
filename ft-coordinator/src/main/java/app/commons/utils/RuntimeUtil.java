@@ -20,6 +20,9 @@
  */
 package app.commons.utils;
 
+import static app.commons.constants.StringConstants.LINE_BREAK;
+import static app.commons.constants.StringConstants.SPACE_STRING;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,9 +32,6 @@ import java.util.List;
 import java.util.Map;
 
 public final class RuntimeUtil {
-
-    private static final String SPACE_STRING = " ";
-    private static final String LINE_BREAK = "\n";
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.

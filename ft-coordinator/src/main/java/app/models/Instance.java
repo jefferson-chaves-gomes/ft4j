@@ -20,12 +20,14 @@
  */
 package app.models;
 
+import app.commons.utils.HostInfoUtil;
+
 public class Instance {
 
     private String ip;
     private Integer port;
     private Credentials credentials;
-    private InstanceInfo info;
+    private HostInfoUtil info;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -64,11 +66,11 @@ public class Instance {
         this.credentials = credentials;
     }
 
-    public InstanceInfo getInfo() {
+    public HostInfoUtil getInfo() {
         return this.info;
     }
 
-    public void setInfo(final InstanceInfo info) {
+    public void setInfo(final HostInfoUtil info) {
         this.info = info;
     }
 }

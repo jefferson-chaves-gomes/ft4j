@@ -18,11 +18,12 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.commons.monitors;
+package app.commons.constants;
 
-public interface ResourceMonitor {
+public class StringConstants {
 
-    public Float getCpuUsage();
-
-    public Float getMemUsage();
+    public static final String EMPTY_STRING = "";
+    public static final String SPACE_STRING = " ";
+    public static final String LINE_BREAK = "\n";
+    public static final String PERCENT_SIMBOL = "%";
 }
