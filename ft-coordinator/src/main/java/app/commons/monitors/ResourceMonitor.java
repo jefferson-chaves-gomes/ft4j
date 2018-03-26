@@ -22,6 +22,15 @@ package app.commons.monitors;
 
 public interface ResourceMonitor {
 
+    public static final String WIN_CPU_USAGE = "wmic cpu get loadpercentage";
+    public static final String WIN_MEM_USAGE = "shell-scripts/mem-usage-win.cmd";
+    public static final String MAC_CPU_USAGE = "shell-scripts/cpu-usage-macos.sh";
+    public static final String MAC_MEM_USAGE = "";
+    public static final String LNX_CPU_USAGE = "";
+    public static final String LNX_MEM_USAGE = "";
+    public static final String ERROR_READ_CPU_USAGE = "Error attempting to read the CPU usage";
+    public static final String ERROR_READ_MEM_USAGE = "Error attempting to read the MEMORY usage";
+
     public Float getCpuUsage();
 
     public Float getMemUsage();

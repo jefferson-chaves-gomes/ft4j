@@ -26,4 +26,5 @@ public class StringConstants {
     public static final String SPACE_STRING = " ";
     public static final String LINE_BREAK = "\n";
     public static final String PERCENT_SIMBOL = "%";
+    public static final String LOAD_PERCENTAGE = "LoadPercentage";
 }

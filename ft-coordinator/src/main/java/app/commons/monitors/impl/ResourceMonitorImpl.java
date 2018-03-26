@@ -21,6 +21,8 @@
 package app.commons.monitors.impl;
 
 import static app.commons.constants.StringConstants.EMPTY_STRING;
+import static app.commons.constants.StringConstants.LINE_BREAK;
+import static app.commons.constants.StringConstants.LOAD_PERCENTAGE;
 import static app.commons.constants.StringConstants.PERCENT_SIMBOL;
 
 import java.io.IOException;
@@ -34,11 +36,6 @@ import app.commons.utils.RuntimeUtil.Command;
 
 public class ResourceMonitorImpl implements ResourceMonitor {
 
-    private static final String ERROR_ATTEMPTING_TO_READ_THE_CPU_USAGE = "Error attempting to read the CPU usage";
-    private static final String MAC_CPU_USAGE = "shell-scripts/cpu-usage-macos.sh";
-    private static final String WIN_CPU_USAGE = "wmic cpu get loadpercentage";
-    private static final String LNX_CPU_USAGE = "wmic cpu get loadpercentage";
-
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // * @see app.commons.monitors.ResourceMonitor#getCpuUsage()
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -47,13 +44,13 @@ public class ResourceMonitorImpl implements ResourceMonitor {
         try {
             final Command cmd = this.getCpuUsageCommand();
             final String result = RuntimeUtil.execAndGetResponseString(cmd);
-            Float cpuUsage = Float.valueOf(result.replaceAll(PERCENT_SIMBOL, EMPTY_STRING));
+            Float cpuUsage = Float.valueOf(this.cleanResult(result));
             if (OsType.MAC == HostInfoUtil.getOsType()) {
                 cpuUsage = cpuUsage / HostInfoUtil.getCoresNumber();
             }
             return cpuUsage;
         } catch (IOException | InterruptedException e) {
-            LoggerUtil.warn(ERROR_ATTEMPTING_TO_READ_THE_CPU_USAGE, e);
+            LoggerUtil.warn(ERROR_READ_CPU_USAGE, e);
         }
         return null;
     }
@@ -63,6 +60,13 @@ public class ResourceMonitorImpl implements ResourceMonitor {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public Float getMemUsage() {
+        try {
+            final Command cmd = this.getMemUsageCommand();
+            final String result = RuntimeUtil.execAndGetResponseString(cmd);
+            return Float.valueOf(this.cleanResult(result));
+        } catch (IOException | InterruptedException e) {
+            LoggerUtil.warn(ERROR_READ_MEM_USAGE, e);
+        }
         return null;
     }
 
@@ -74,13 +78,37 @@ public class ResourceMonitorImpl implements ResourceMonitor {
                 cmd = new Command(WIN_CPU_USAGE);
                 break;
             case MAC:
-                final String shellScriptFilePath = this.getClass().getClassLoader().getResource(MAC_CPU_USAGE).getPath();
-                cmd = new Command(shellScriptFilePath);
+                cmd = new Command(this.getClass().getClassLoader().getResource(MAC_CPU_USAGE).getPath());
                 break;
             default:
                 cmd = new Command(LNX_CPU_USAGE);
                 break;
         }
         return cmd;
+    }
+
+    private Command getMemUsageCommand() {
+
+        Command cmd = null;
+        switch (HostInfoUtil.getOsType()) {
+            case WINDOWS:
+                cmd = new Command(this.getClass().getClassLoader().getResource(WIN_MEM_USAGE).getPath());
+                break;
+            case MAC:
+                cmd = new Command(this.getClass().getClassLoader().getResource(MAC_MEM_USAGE).getPath());
+                break;
+            default:
+                cmd = new Command(LNX_MEM_USAGE);
+                break;
+        }
+        return cmd;
+    }
+
+    private String cleanResult(final String result) {
+        return result
+                .replaceAll(PERCENT_SIMBOL, EMPTY_STRING)
+                .replaceAll(LOAD_PERCENTAGE, EMPTY_STRING)
+                .replaceAll(LINE_BREAK, EMPTY_STRING)
+                .trim();
     }
 }
