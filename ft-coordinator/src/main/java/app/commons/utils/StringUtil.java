@@ -1,5 +1,5 @@
 /*
- * ******************************************************************************
+ *******************************************************************************
  * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,22 +16,25 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * *****************************************************************************
+ ******************************************************************************
  */
 package app.commons.utils;
 
-import java.util.List;
+import static app.commons.constants.StringConstants.EMPTY_STRING;
+import static app.commons.constants.StringConstants.NON_NUMERIC;
 
-public final class StreamUtil {
+import org.springframework.util.StringUtils;
+
+public final class StringUtil extends StringUtils {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public StreamUtil() {
+    private StringUtil() {
         super();
     }
 
-    public static <T> boolean hasDuplicates(final List<T> list, final Class<?> cls) {
-        return list.stream().filter(cls::isInstance).count() > 1;
+    public static String removeNonNumeric(final String result) {
+        return result.replaceAll(NON_NUMERIC, EMPTY_STRING);
     }
 }

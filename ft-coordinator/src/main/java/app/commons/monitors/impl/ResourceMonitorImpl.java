@@ -1,5 +1,5 @@
 /*
- *******************************************************************************
+ * ******************************************************************************
  * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,14 +16,12 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************
+ * *****************************************************************************
  */
 package app.commons.monitors.impl;
 
-import static app.commons.constants.StringConstants.EMPTY_STRING;
-import static app.commons.constants.StringConstants.LINE_BREAK;
-import static app.commons.constants.StringConstants.LOAD_PERCENTAGE;
-import static app.commons.constants.StringConstants.PERCENT_SIMBOL;
+import static app.commons.constants.ResourceMonitorConstants.ERROR_READ_CPU_USAGE;
+import static app.commons.constants.ResourceMonitorConstants.ERROR_READ_MEM_USAGE;
 
 import java.io.IOException;
 
@@ -31,10 +29,8 @@ import app.commons.monitors.ResourceMonitor;
 import app.commons.utils.EnumUtil.OsType;
 import app.commons.utils.HostInfoUtil;
 import app.commons.utils.LoggerUtil;
-import app.commons.utils.RuntimeUtil;
-import app.commons.utils.RuntimeUtil.Command;
 
-public class ResourceMonitorImpl implements ResourceMonitor {
+public class ResourceMonitorImpl extends ResourceMonitor {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // * @see app.commons.monitors.ResourceMonitor#getCpuUsage()
@@ -42,9 +38,7 @@ public class ResourceMonitorImpl implements ResourceMonitor {
     @Override
     public Float getCpuUsage() {
         try {
-            final Command cmd = this.getCpuUsageCommand();
-            final String result = RuntimeUtil.execAndGetResponseString(cmd);
-            Float cpuUsage = Float.valueOf(this.cleanResult(result));
+            Float cpuUsage = super.getOutputAsFloat(super.getCpuUsageCommand());
             if (OsType.MAC == HostInfoUtil.getOsType()) {
                 cpuUsage = cpuUsage / HostInfoUtil.getCoresNumber();
             }
@@ -61,54 +55,11 @@ public class ResourceMonitorImpl implements ResourceMonitor {
     @Override
     public Float getMemUsage() {
         try {
-            final Command cmd = this.getMemUsageCommand();
-            final String result = RuntimeUtil.execAndGetResponseString(cmd);
-            return Float.valueOf(this.cleanResult(result));
+            return super.getOutputAsFloat(super.getMemUsageCommand());
         } catch (IOException | InterruptedException e) {
             LoggerUtil.warn(ERROR_READ_MEM_USAGE, e);
         }
         return null;
     }
 
-    private Command getCpuUsageCommand() {
-
-        Command cmd = null;
-        switch (HostInfoUtil.getOsType()) {
-            case WINDOWS:
-                cmd = new Command(WIN_CPU_USAGE);
-                break;
-            case MAC:
-                cmd = new Command(this.getClass().getClassLoader().getResource(MAC_CPU_USAGE).getPath());
-                break;
-            default:
-                cmd = new Command(LNX_CPU_USAGE);
-                break;
-        }
-        return cmd;
-    }
-
-    private Command getMemUsageCommand() {
-
-        Command cmd = null;
-        switch (HostInfoUtil.getOsType()) {
-            case WINDOWS:
-                cmd = new Command(this.getClass().getClassLoader().getResource(WIN_MEM_USAGE).getPath());
-                break;
-            case MAC:
-                cmd = new Command(this.getClass().getClassLoader().getResource(MAC_MEM_USAGE).getPath());
-                break;
-            default:
-                cmd = new Command(LNX_MEM_USAGE);
-                break;
-        }
-        return cmd;
-    }
-
-    private String cleanResult(final String result) {
-        return result
-                .replaceAll(PERCENT_SIMBOL, EMPTY_STRING)
-                .replaceAll(LOAD_PERCENTAGE, EMPTY_STRING)
-                .replaceAll(LINE_BREAK, EMPTY_STRING)
-                .trim();
-    }
 }

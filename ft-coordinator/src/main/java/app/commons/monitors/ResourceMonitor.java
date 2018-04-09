@@ -1,5 +1,5 @@
 /*
- *******************************************************************************
+ * ******************************************************************************
  * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,22 +16,64 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- ******************************************************************************
+ * *****************************************************************************
  */
 package app.commons.monitors;
 
-public interface ResourceMonitor {
+import static app.commons.constants.ResourceMonitorConstants.CMD_CPU_USAGE_LNX;
+import static app.commons.constants.ResourceMonitorConstants.CMD_CPU_USAGE_MAC;
+import static app.commons.constants.ResourceMonitorConstants.CMD_CPU_USAGE_WIN;
+import static app.commons.constants.ResourceMonitorConstants.CMD_MEM_USAGE_LNX;
+import static app.commons.constants.ResourceMonitorConstants.CMD_MEM_USAGE_MAC;
+import static app.commons.constants.ResourceMonitorConstants.CMD_MEM_USAGE_WIN;
 
-    public static final String WIN_CPU_USAGE = "wmic cpu get loadpercentage";
-    public static final String WIN_MEM_USAGE = "shell-scripts/mem-usage-win.cmd";
-    public static final String MAC_CPU_USAGE = "shell-scripts/cpu-usage-macos.sh";
-    public static final String MAC_MEM_USAGE = "";
-    public static final String LNX_CPU_USAGE = "";
-    public static final String LNX_MEM_USAGE = "";
-    public static final String ERROR_READ_CPU_USAGE = "Error attempting to read the CPU usage";
-    public static final String ERROR_READ_MEM_USAGE = "Error attempting to read the MEMORY usage";
+import java.io.IOException;
 
-    public Float getCpuUsage();
+import app.commons.utils.HostInfoUtil;
+import app.commons.utils.RuntimeUtil;
+import app.commons.utils.RuntimeUtil.Command;
+import app.commons.utils.StringUtil;
 
-    public Float getMemUsage();
+public abstract class ResourceMonitor {
+    
+    public abstract Float getCpuUsage();
+
+    public abstract Float getMemUsage();
+
+    protected Float getOutputAsFloat(final Command cmd) throws IOException, InterruptedException {
+        final String result = RuntimeUtil.execAndGetResponseString(cmd);
+        return Float.valueOf(StringUtil.removeNonNumeric(result));
+    }
+
+    protected Command getCpuUsageCommand() {
+        Command cmd = null;
+        switch (HostInfoUtil.getOsType()) {
+            case WINDOWS:
+                cmd = CMD_CPU_USAGE_WIN;
+                break;
+            case MAC:
+                cmd = CMD_CPU_USAGE_MAC;
+                break;
+            default:
+                cmd = CMD_CPU_USAGE_LNX;
+                break;
+        }
+        return cmd;
+    }
+
+    protected Command getMemUsageCommand() {
+        Command cmd = null;
+        switch (HostInfoUtil.getOsType()) {
+            case WINDOWS:
+                cmd = CMD_MEM_USAGE_WIN;
+                break;
+            case MAC:
+                cmd = CMD_MEM_USAGE_MAC;
+                break;
+            default:
+                cmd = CMD_MEM_USAGE_LNX;
+                break;
+        }
+        return cmd;
+    }
 }
