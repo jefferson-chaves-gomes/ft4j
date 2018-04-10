@@ -1,5 +1,5 @@
 /*
- * ******************************************************************************
+ *******************************************************************************
  * Copyright 2017 Contributors to Exact Sciences Institute, Department Computer Science, University of Brasília - UnB
  *
  * See the NOTICE file(s) distributed with this work for additional
@@ -16,28 +16,17 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * *****************************************************************************
+ ******************************************************************************
  */
 package app;
 
-import java.time.LocalDateTime;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import app.models.Level;
-
+@SpringBootApplication
 public class FaultToleranceCoordinator {
 
-    public static LocalDateTime aliveTime;
-    private Level level;
-
-    public Level getLevel() {
-        return this.level;
-    }
-
-    public void setLevel(final Level level) {
-        this.level = level;
-    }
-
-    public void register(final Level ftLevel) {
-        this.level = ftLevel;
+    public static void main(final String[] args) {
+        SpringApplication.run(FaultToleranceCoordinator.class, args);
     }
 }

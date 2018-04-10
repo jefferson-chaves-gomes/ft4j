@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 public class AttemptsNumber extends TimeArgument {
 
+    public final static short DEFAULT_VALUE = 3;
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -20,31 +20,23 @@
  */
 package app.commons.constants;
 
-import app.commons.utils.RuntimeUtil.Command;
+public final class MessageConstants {
 
-public final class ResourceMonitorConstants {
-
-    private static final String WIN_CPU_USAGE = "wmic cpu get loadpercentage";
-    private static final String WIN_MEM_USAGE = "shell-scripts/mem-usage-win.cmd";
-    private static final String MAC_CPU_USAGE = "shell-scripts/cpu-usage-macos.sh";
-    private static final String MAC_MEM_USAGE = "echo 0";
-    private static final String LNX_CPU_USAGE = "shell-scripts/cpu-usage-lnx.sh";
-    private static final String LNX_MEM_USAGE = "shell-scripts/mem-usage-lnx.sh";
-
-    public static final Command CMD_MEM_USAGE_LNX = new Command(Command.class.getClassLoader().getResource(LNX_MEM_USAGE).getPath());
-    public static final Command CMD_MEM_USAGE_MAC = new Command(MAC_MEM_USAGE);
-    public static final Command CMD_MEM_USAGE_WIN = new Command(Command.class.getClassLoader().getResource(WIN_MEM_USAGE).getPath());
-    public static final Command CMD_CPU_USAGE_LNX = new Command(Command.class.getClassLoader().getResource(LNX_CPU_USAGE).getPath());
-    public static final Command CMD_CPU_USAGE_MAC = new Command(Command.class.getClassLoader().getResource(MAC_CPU_USAGE).getPath());
-    public static final Command CMD_CPU_USAGE_WIN = new Command(WIN_CPU_USAGE);
-
+    public static final String ERROR_REGISTER_COORDINATOR = "Error attempting to register at FTCoordinator";
     public static final String ERROR_READ_CPU_USAGE = "Error attempting to read the CPU usage";
     public static final String ERROR_READ_MEM_USAGE = "Error attempting to read the MEMORY usage";
+    public static final String SHUTDOWN_FINISHED = "Shutdown finished";
+    public static final String CANCEL_NON_FINISHED_TASKS = "Cancel non-finished tasks";
+    public static final String ERROR_TASKS_INTERRUPTED = "Tasks interrupted";
+    public static final String ATTEMPT_TO_SHUTDOWN_EXECUTOR = "Attempt to shutdown executor";
+    public static final String FT_MODULE_INITIALIZED_SUCCESSFULLY = "FTModule initialized successfully";
+    public static final String TRYING_TO_REGISTER_MODULE_AT_COORDINATOR = "Trying to register module at coordinator";
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private ResourceMonitorConstants() {
+    public MessageConstants() {
         super();
     }
+
 }

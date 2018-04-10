@@ -25,7 +25,7 @@ import app.models.Level;
 
 public interface FaultToleranceModule {
 
-    public void start(Level faultToleranceLevel) throws SystemException;
+    public void start(Level faultToleranceLevel) throws SystemException, InterruptedException;
 
     public void stop();
 

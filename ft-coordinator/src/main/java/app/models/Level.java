@@ -25,6 +25,7 @@ import java.util.List;
 
 public class Level {
 
+    private final String taskStartupCommand;
     private ZooInstance zooInstance;
     private List<Technic> lstTechnics;
     private List<CloudInstance> lstInstances;
@@ -32,17 +33,18 @@ public class Level {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Level() {
+    public Level(final String taskStartupCommand) {
         super();
+        this.taskStartupCommand = taskStartupCommand;
     }
 
-    public Level(final ZooInstance zooInstance) {
-        super();
+    public Level(final String taskStartupCommand, final ZooInstance zooInstance) {
+        this(taskStartupCommand);
         this.zooInstance = zooInstance;
     }
 
-    public Level(final List<Technic> lstTechnics, final List<CloudInstance> lstInstantes, final ZooInstance zooInstance) {
-        super();
+    public Level(final String taskStartupCommand, final List<Technic> lstTechnics, final List<CloudInstance> lstInstantes, final ZooInstance zooInstance) {
+        this(taskStartupCommand);
         this.zooInstance = zooInstance;
         this.lstTechnics = lstTechnics;
         this.lstInstances = lstInstantes;
@@ -91,4 +93,9 @@ public class Level {
     public void setZooInstance(final ZooInstance zooInstance) {
         this.zooInstance = zooInstance;
     }
+
+    public String getTaskStartupCommand() {
+        return this.taskStartupCommand;
+    }
+
 }

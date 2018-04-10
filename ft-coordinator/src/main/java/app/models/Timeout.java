@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Timeout extends TimeArgument {
 
-    private final static short DEFAULT_VALUE = 30;
+    private final static short DEFAULT_VALUE = 10;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -35,7 +35,5 @@ public class Timeout extends TimeArgument {
 
     public Timeout(final int value, final TimeUnit unit) {
         super(value, unit);
-
     }
-
 }

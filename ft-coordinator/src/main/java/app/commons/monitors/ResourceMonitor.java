@@ -20,12 +20,12 @@
  */
 package app.commons.monitors;
 
-import static app.commons.constants.ResourceMonitorConstants.CMD_CPU_USAGE_LNX;
-import static app.commons.constants.ResourceMonitorConstants.CMD_CPU_USAGE_MAC;
-import static app.commons.constants.ResourceMonitorConstants.CMD_CPU_USAGE_WIN;
-import static app.commons.constants.ResourceMonitorConstants.CMD_MEM_USAGE_LNX;
-import static app.commons.constants.ResourceMonitorConstants.CMD_MEM_USAGE_MAC;
-import static app.commons.constants.ResourceMonitorConstants.CMD_MEM_USAGE_WIN;
+import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_LNX;
+import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_MAC;
+import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_WIN;
+import static app.commons.constants.RuntimeConstants.CMD_MEM_USAGE_LNX;
+import static app.commons.constants.RuntimeConstants.CMD_MEM_USAGE_MAC;
+import static app.commons.constants.RuntimeConstants.CMD_MEM_USAGE_WIN;
 
 import java.io.IOException;
 

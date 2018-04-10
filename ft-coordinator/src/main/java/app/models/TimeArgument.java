@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 
 public class TimeArgument {
 
-    protected final static short DEFAULT_VALUE = 3;
     protected final static TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
 
     private final int value;

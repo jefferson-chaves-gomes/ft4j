@@ -20,6 +20,15 @@
  */
 package app.services;
 
+import static app.commons.constants.MessageConstants.ATTEMPT_TO_SHUTDOWN_EXECUTOR;
+import static app.commons.constants.MessageConstants.CANCEL_NON_FINISHED_TASKS;
+import static app.commons.constants.MessageConstants.ERROR_REGISTER_COORDINATOR;
+import static app.commons.constants.MessageConstants.ERROR_TASKS_INTERRUPTED;
+import static app.commons.constants.MessageConstants.FT_MODULE_INITIALIZED_SUCCESSFULLY;
+import static app.commons.constants.MessageConstants.SHUTDOWN_FINISHED;
+import static app.commons.constants.MessageConstants.TRYING_TO_REGISTER_MODULE_AT_COORDINATOR;
+import static app.models.AttemptsNumber.DEFAULT_VALUE;
+
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -41,13 +50,11 @@ import app.models.Retry;
 import app.models.SoftwareRejuvenation;
 import app.models.TaskResubmission;
 import app.models.Technic;
-import app.tasks.CommServiceTask;
+import app.services.CommServiceThread.CommStatus;
 
 public class BootstrapService implements FaultToleranceModule {
 
-    private static final String FT_COORDINATOR_STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1.jar";
-    private static final Command COORDINATOR_BOOTSTRAP_COMMAND = new Command(FT_COORDINATOR_STARTUP_COMMAND);
-    private static BootstrapService service;
+    private static BootstrapService bootstrap;
     private static ExecutorService executor;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,22 +65,31 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     public static BootstrapService getInstance() {
-        if (service == null) {
-            service = new BootstrapService();
+        if (bootstrap == null) {
+            bootstrap = new BootstrapService();
             executor = Executors.newSingleThreadExecutor();
         }
-        return service;
+        return bootstrap;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // * @see app.FaultToleranceModule#start()
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
-    public void start(final Level ftLevel) throws SystemException {
+    public void start(final Level ftLevel) throws SystemException, InterruptedException {
         this.validate(ftLevel);
-        this.startFtCoordinator();
-        final CommServiceTask task = new CommServiceTask(ftLevel);
-        executor.submit(task);
+        this.startFtCoordinator(ftLevel);
+        final CommServiceThread commService = new CommServiceThread(ftLevel);
+        executor.submit(commService);
+        while (CommStatus.STARTED != commService.getStatus() && !this.isTerminated()) {
+            LoggerUtil.info(TRYING_TO_REGISTER_MODULE_AT_COORDINATOR);
+            TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
+        }
+        if (CommStatus.STARTED != commService.getStatus()) {
+            this.stop();
+            throw new SystemException(ERROR_REGISTER_COORDINATOR);
+        }
+        LoggerUtil.info(FT_MODULE_INITIALIZED_SUCCESSFULLY);
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,17 +98,20 @@ public class BootstrapService implements FaultToleranceModule {
     @Override
     public void stop() {
         try {
-            LoggerUtil.info("attempt to shutdown executor");
+
+            //TODO enviar comando de STOP para o FTCoordinator
+
+            LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_EXECUTOR);
             BootstrapService.executor.shutdown();
             BootstrapService.executor.awaitTermination(3, TimeUnit.SECONDS);
         } catch (final InterruptedException e) {
-            LoggerUtil.error("tasks interrupted", e);
+            LoggerUtil.error(ERROR_TASKS_INTERRUPTED, e);
         } finally {
             if (!BootstrapService.executor.isTerminated()) {
-                LoggerUtil.info("cancel non-finished tasks");
+                LoggerUtil.info(CANCEL_NON_FINISHED_TASKS);
             }
             BootstrapService.executor.shutdownNow();
-            LoggerUtil.info("shutdown finished");
+            LoggerUtil.info(SHUTDOWN_FINISHED);
         }
     }
 
@@ -140,11 +159,12 @@ public class BootstrapService implements FaultToleranceModule {
         }
     }
 
-    private void startFtCoordinator() {
+    private void startFtCoordinator(final Level ftLevel) throws SystemException {
         try {
-            RuntimeUtil.exec(COORDINATOR_BOOTSTRAP_COMMAND);
+            RuntimeUtil.exec(new Command(ftLevel.getTaskStartupCommand()));
         } catch (IOException | InterruptedException e) {
             LoggerUtil.error(e);
+            throw new SystemException(e);
         }
     }
 }

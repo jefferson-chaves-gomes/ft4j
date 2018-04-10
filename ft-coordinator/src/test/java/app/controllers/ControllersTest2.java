@@ -6,33 +6,27 @@ import static org.springframework.http.HttpStatus.OK;
 
 import java.lang.management.ManagementFactory;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import app.commons.http.Response;
 import app.conf.Routes;
 import app.models.Level;
 import app.models.ZooInstance;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class CommServiceControllersTest2 {
+// @RunWith(SpringRunner.class)
+// @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+public class ControllersTest2 {
 
     private final static String BASE_URL = "http://localhost:%s/%s";
+    private final static String STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1.jar";
 
-    @LocalServerPort
+    //    @LocalServerPort
     private int port;
-    @Autowired
+    //    @Autowired
     private TestRestTemplate restTemplate;
 
-    @Test
+    //    @Test
     public void imalive() throws Exception {
 
         final String moduleId = ManagementFactory.getRuntimeMXBean().getName();
@@ -43,13 +37,13 @@ public class CommServiceControllersTest2 {
         assertThat(result.getStatus()).isEqualTo(OK);
     }
 
-    @Test
+    //    @Test
     public void register() {
 
         final String path = Routes.REGISTER;
         final String url = String.format(BASE_URL, this.port, path);
 
-        final Level level = new Level(new ZooInstance("0.0.0.0", 7777));
+        final Level level = new Level(STARTUP_COMMAND, new ZooInstance("0.0.0.0", 7777));
         final ResponseEntity<Response> result = this.restTemplate.postForEntity(url, level, Response.class);
         assertThat(result.getStatusCode()).isEqualTo(OK);
         assertThat(result.getBody().getStatus()).isEqualTo(CREATED);

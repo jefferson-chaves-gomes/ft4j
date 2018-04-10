@@ -25,8 +25,9 @@ public class ArgsInitializationTest {
 
     private final static int ZOO_PORT = 2181;
     private final static String ZOO_IP = "0.0.0.0";
+    private final static String STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1.jar --server.port=7777";
     private final ZooInstance zooInstance = new ZooInstance(ZOO_IP, ZOO_PORT);
-    private final Level ftLevel = new Level(this.zooInstance);
+    private final Level ftLevel = new Level(STARTUP_COMMAND, this.zooInstance);
     private final ArrayList<CloudInstance> lstEmptyReplicas = new ArrayList<>();
     private final FaultToleranceModule ftModule = BootstrapService.getInstance();
 

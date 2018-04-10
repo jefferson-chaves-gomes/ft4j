@@ -38,25 +38,32 @@ import app.commons.http.Response;
 import app.models.Level;
 import app.services.CommService;
 
-
 @RestController
 public class CommServiceController implements CommService {
 
-	@Override
-	@RequestMapping(value = IMALIVE, method = GET)
-	public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleid) {
-		return new Response(OK);
-	}
+    private static long lastCommunication;
 
-	@Override
-	@RequestMapping(value = REGISTER, method = POST)
-	public @ResponseBody Response register(@RequestBody final Level level) {
-		return new Response(CREATED);
-	}
+    @Override
+    @RequestMapping(value = IMALIVE, method = GET)
+    public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleid) {
 
-	@Override
-	@RequestMapping(value = SHUTDOWN, method = GET)
-	public @ResponseBody Response shutdown() {
-		return new Response(OK);
-	}
+        final long currentTime = System.currentTimeMillis();
+        if (currentTime - lastCommunication > 50 * 1000) {
+
+        }
+        lastCommunication = currentTime;
+        return new Response(OK);
+    }
+
+    @Override
+    @RequestMapping(value = REGISTER, method = POST)
+    public @ResponseBody Response register(@RequestBody final Level level) {
+        return new Response(CREATED);
+    }
+
+    @Override
+    @RequestMapping(value = SHUTDOWN, method = GET)
+    public @ResponseBody Response shutdown() {
+        return new Response(OK);
+    }
 }

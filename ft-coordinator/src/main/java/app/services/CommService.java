@@ -25,9 +25,9 @@ import app.models.Level;
 
 public interface CommService {
 
-	public Response imalive(final String moduleid);
+    public Response imalive(final String moduleid);
 
-	public Response register(final Level level) ;
+    public Response register(final Level level);
 
-	public Response shutdown();
+    public Response shutdown();
 }
