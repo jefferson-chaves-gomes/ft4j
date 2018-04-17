@@ -23,7 +23,9 @@ package app.models;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Level {
+import app.models.base.BaseModel;
+
+public class Level extends BaseModel {
 
     private final String taskStartupCommand;
     private ZooInstance zooInstance;
@@ -33,6 +35,11 @@ public class Level {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Level() {
+        super();
+        this.taskStartupCommand = "You need pass the taskStartupCommand";
+    }
+
     public Level(final String taskStartupCommand) {
         super();
         this.taskStartupCommand = taskStartupCommand;

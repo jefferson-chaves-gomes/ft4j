@@ -22,7 +22,9 @@ package app.models;
 
 import java.util.concurrent.TimeUnit;
 
-public class TimeArgument {
+import app.models.base.BaseModel;
+
+public class TimeArgument extends BaseModel {
 
     protected final static TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
 

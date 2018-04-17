@@ -20,36 +20,33 @@
  */
 package app.services;
 
+import static app.conf.Routes.IMALIVE;
+import static app.conf.Routes.MODULE_ID;
+import static app.conf.Routes.REGISTER;
 import static app.models.AttemptsNumber.DEFAULT_VALUE;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.lang.management.ManagementFactory;
 import java.util.concurrent.TimeUnit;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestTemplate;
 
 import app.commons.http.Response;
 import app.commons.utils.LoggerUtil;
-import app.conf.Routes;
 import app.models.Level;
 
 public class CommServiceThread implements Runnable {
 
-    private static final String BASE_URL = "http://localhost:%s/%s";
-    private static final String ARG_MODULE_ID = "{moduleId}";
-    private static final String MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
-    @Value("${server.port}")
     private static final int PORT = 7777;
-    private CommStatus status = CommStatus.STOPPED;
+    private static final String BASE_URL = "http://localhost:%s%s";
+    private static final String ARG_MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
+    private final RestTemplate restTemplate = new RestTemplate();
     private Level level;
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+    private CommStatus status = CommStatus.STOPPED;
+    private boolean registered;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -64,20 +61,19 @@ public class CommServiceThread implements Runnable {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void run() {
-
-        int attemptsNumber = 0;
-        while (attemptsNumber++ < DEFAULT_VALUE && !this.register()) {
-            this.status = CommStatus.STARTED;
-        }
+        this.establishCommunication();
         if (CommStatus.STARTED != this.status) {
+            this.status = CommStatus.ERROR;
+            return;
+        }
+        this.regiterFtModule();
+        if (!this.isRegistered()) {
             this.status = CommStatus.ERROR;
             return;
         }
         while (true) {
             try {
-
-                System.out.println("atenção... pingando o FTCoord para o FTModule: " + MODULE_ID);
-
+                this.callRequest(IMALIVE);
                 TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
             } catch (final InterruptedException e) {
                 LoggerUtil.error(e);
@@ -85,18 +81,53 @@ public class CommServiceThread implements Runnable {
         }
     }
 
-    public boolean register() {
-        final String path = Routes.REGISTER.replace(ARG_MODULE_ID, MODULE_ID);
-        final String url = String.format(BASE_URL, PORT, path);
-        final ResponseEntity<Response> response = this.restTemplate.postForEntity(url, this.level, Response.class);
-        return response.getBody().getStatus() == OK;
+    public boolean callRequest(final String route) {
+        try {
+            switch (route) {
+                case REGISTER:
+                    return this.register();
+                case IMALIVE:
+                    return this.imalive();
+                default:
+                    break;
+            }
+        } catch (final RestClientException e) {
+            LoggerUtil.error(e);
+        }
+        return false;
     }
 
-    public void imalive() throws Exception {
-        final String path = Routes.IMALIVE;
+    private void regiterFtModule() {
+        int attemptsNumber = 0;
+        while (attemptsNumber++ < DEFAULT_VALUE) {
+            if (this.callRequest(REGISTER)) {
+                this.registered = true;
+                break;
+            }
+        }
+    }
+
+    private void establishCommunication() {
+        int attemptsNumber = 0;
+        while (attemptsNumber++ < DEFAULT_VALUE) {
+            if (this.callRequest(IMALIVE)) {
+                this.status = CommStatus.STARTED;
+                break;
+            }
+        }
+    }
+
+    private boolean register() {
+        final String url = String.format(BASE_URL, PORT, REGISTER);
+        final ResponseEntity<Response> response = this.restTemplate.postForEntity(url, this.level, Response.class);
+        return response.getBody().getStatus() == CREATED;
+    }
+
+    public boolean imalive() {
+        final String path = IMALIVE.replace(MODULE_ID, ARG_MODULE_ID);
         final String url = String.format(BASE_URL, PORT, path);
         final Response result = this.restTemplate.getForObject(url, Response.class);
-        assertThat(result.getStatus()).isEqualTo(CREATED);
+        return result.getStatus() == OK;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -112,6 +143,10 @@ public class CommServiceThread implements Runnable {
 
     public CommStatus getStatus() {
         return this.status;
+    }
+
+    public boolean isRegistered() {
+        return this.registered;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

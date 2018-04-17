@@ -20,7 +20,9 @@
  */
 package app.models;
 
-public class Technic {
+import app.models.base.BaseModel;
+
+public class Technic extends BaseModel {
 
     private AttemptsNumber attemptsNumber;
     private DelayBetweenAttempts delayBetweenAttempts;

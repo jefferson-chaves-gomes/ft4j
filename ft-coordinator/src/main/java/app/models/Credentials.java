@@ -20,7 +20,9 @@
  */
 package app.models;
 
-public class Credentials {
+import app.models.base.BaseModel;
+
+public class Credentials extends BaseModel {
 
     private String user;
     private String pwd;

@@ -34,7 +34,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import app.commons.http.Response;
+import app.commons.utils.LoggerUtil;
 import app.models.Level;
 import app.services.CommService;
 
@@ -43,24 +46,40 @@ public class CommServiceController implements CommService {
 
     private static long lastCommunication;
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.services.CommService#imalive(java.lang.String)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     @RequestMapping(value = IMALIVE, method = GET)
-    public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleid) {
+    public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleId) {
 
         final long currentTime = System.currentTimeMillis();
         if (currentTime - lastCommunication > 50 * 1000) {
 
         }
         lastCommunication = currentTime;
-        return new Response(OK);
+        return new Response(OK, moduleId);
     }
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.services.CommService#register(app.models.Level)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     @RequestMapping(value = REGISTER, method = POST)
     public @ResponseBody Response register(@RequestBody final Level level) {
+
+        try {
+            LoggerUtil.info(level.toJson());
+        } catch (final JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
         return new Response(CREATED);
     }
 
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.services.CommService#shutdown()
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     @RequestMapping(value = SHUTDOWN, method = GET)
     public @ResponseBody Response shutdown() {

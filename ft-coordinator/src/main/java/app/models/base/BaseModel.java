@@ -18,19 +18,21 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.conf;
+package app.models.base;
 
-public final class Routes {
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-    public static final String MODULE_ID = "{moduleId}";
-    public static final String IMALIVE = "/imalive/" + MODULE_ID;
-    public static final String REGISTER = "/register";
-    public static final String SHUTDOWN = "/shutdown";
+public class BaseModel {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private Routes() {
+    public BaseModel() {
         super();
+    }
+
+    public String toJson() throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(this);
     }
 }

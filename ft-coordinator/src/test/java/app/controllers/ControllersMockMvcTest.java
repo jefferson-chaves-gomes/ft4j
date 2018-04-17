@@ -12,18 +12,23 @@ import java.lang.management.ManagementFactory;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import app.conf.Routes;
 
-// @RunWith(SpringRunner.class)
-// @WebMvcTest
-public class ControllersTest {
+@RunWith(SpringRunner.class)
+@WebMvcTest
+public class ControllersMockMvcTest {
 
-    //    @Autowired
+    @Autowired
     private MockMvc mock;
 
-    //    @Test
+    @Test
     public void imalive() throws Exception {
 
         final String moduleId = ManagementFactory.getRuntimeMXBean().getName();
@@ -33,7 +38,7 @@ public class ControllersTest {
                 .andExpect(status().isOk());
     }
 
-    //    @Test
+    @Test
     public void register() throws URISyntaxException, Exception {
 
         final String path = Routes.REGISTER;

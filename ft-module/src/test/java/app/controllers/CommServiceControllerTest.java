@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
+import org.junit.Test;
 
 import app.FaultToleranceModule;
 import app.models.CloudInstance;
@@ -37,13 +38,13 @@ public class CommServiceControllerTest {
         this.ftLevel.addTechnic(new Replication(this.lstEmptyReplicas));
     }
 
-    //    @Test
+    @Test
     public void testStartFtCoordinator() throws Exception {
 
         this.ftModule.start(this.ftLevel);
-        TimeUnit.SECONDS.sleep(60 * 1000);
+        TimeUnit.SECONDS.sleep(60);
         this.ftModule.stop();
-        TimeUnit.SECONDS.sleep(1);
+        TimeUnit.SECONDS.sleep(10);
         Assert.assertTrue(this.ftModule.isTerminated());
     }
 

@@ -21,8 +21,9 @@
 package app.models;
 
 import app.commons.utils.HostInfoUtil;
+import app.models.base.BaseModel;
 
-public class Instance {
+public class Instance extends BaseModel {
 
     private String ip;
     private Integer port;

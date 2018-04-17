@@ -14,6 +14,7 @@
  */
 package app.commons.utils;
 
+import static app.commons.constants.MessageConstants.ERROR_RUNTIME_EXECUTION;
 import static app.commons.constants.StringConstants.LINE_BREAK;
 import static app.commons.constants.StringConstants.SPACE_STRING;
 
@@ -77,11 +78,11 @@ public final class RuntimeUtil {
         return builder.start();
     }
 
-    synchronized public static String execAndGetResponseString(final Command command) throws IOException, InterruptedException {
+    public static String execAndGetResponseString(final Command command) throws IOException, InterruptedException {
         return execAndGetResponseString(command, null);
     }
 
-    synchronized public static Process exec(final Command command) throws IOException, InterruptedException {
+    public static Process exec(final Command command) throws IOException, InterruptedException {
         return exec(command, null);
     }
 
@@ -108,7 +109,6 @@ public final class RuntimeUtil {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     private class StreamGobblerThread extends Thread {
 
-        private static final String RUNTIME_EXECUTION_ERROR = "Runtime execution error!";
         private final InputStream stream;
         private String outputstream;
 
@@ -137,7 +137,7 @@ public final class RuntimeUtil {
                 }
                 this.outputstream = builder.toString();
             } catch (final IOException e) {
-                LoggerUtil.error(RUNTIME_EXECUTION_ERROR, e);
+                LoggerUtil.error(ERROR_RUNTIME_EXECUTION, e);
             }
         }
 

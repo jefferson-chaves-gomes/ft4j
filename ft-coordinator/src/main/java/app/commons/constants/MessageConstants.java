@@ -25,11 +25,13 @@ public final class MessageConstants {
     public static final String ERROR_REGISTER_COORDINATOR = "Error attempting to register at FTCoordinator";
     public static final String ERROR_READ_CPU_USAGE = "Error attempting to read the CPU usage";
     public static final String ERROR_READ_MEM_USAGE = "Error attempting to read the MEMORY usage";
+    public static final String ERROR_RUNTIME_EXECUTION = "Runtime execution error!";
     public static final String SHUTDOWN_FINISHED = "Shutdown finished";
     public static final String CANCEL_NON_FINISHED_TASKS = "Cancel non-finished tasks";
     public static final String ERROR_TASKS_INTERRUPTED = "Tasks interrupted";
     public static final String ATTEMPT_TO_SHUTDOWN_EXECUTOR = "Attempt to shutdown executor";
     public static final String FT_MODULE_INITIALIZED_SUCCESSFULLY = "FTModule initialized successfully";
+    public static final String TRYING_TO_CONTACT_MODULE_AT_COORDINATOR = "Trying to contact the coordinator";
     public static final String TRYING_TO_REGISTER_MODULE_AT_COORDINATOR = "Trying to register module at coordinator";
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
