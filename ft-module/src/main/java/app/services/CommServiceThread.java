@@ -23,6 +23,7 @@ package app.services;
 import static app.conf.Routes.IMALIVE;
 import static app.conf.Routes.MODULE_ID;
 import static app.conf.Routes.REGISTER;
+import static app.conf.Routes.SHUTDOWN;
 import static app.models.AttemptsNumber.DEFAULT_VALUE;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -66,12 +67,12 @@ public class CommServiceThread implements Runnable {
             this.status = CommStatus.ERROR;
             return;
         }
-        this.regiterFtModule();
+        this.registerFtModule();
         if (!this.isRegistered()) {
             this.status = CommStatus.ERROR;
             return;
         }
-        while (true) {
+        while (CommStatus.STARTED == this.status) {
             try {
                 this.callRequest(IMALIVE);
                 TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
@@ -88,6 +89,8 @@ public class CommServiceThread implements Runnable {
                     return this.register();
                 case IMALIVE:
                     return this.imalive();
+                case SHUTDOWN:
+                    return this.shutdown();
                 default:
                     break;
             }
@@ -97,7 +100,7 @@ public class CommServiceThread implements Runnable {
         return false;
     }
 
-    private void regiterFtModule() {
+    private void registerFtModule() {
         int attemptsNumber = 0;
         while (attemptsNumber++ < DEFAULT_VALUE) {
             if (this.callRequest(REGISTER)) {
@@ -123,11 +126,21 @@ public class CommServiceThread implements Runnable {
         return response.getBody().getStatus() == CREATED;
     }
 
-    public boolean imalive() {
+    private boolean imalive() {
         final String path = IMALIVE.replace(MODULE_ID, ARG_MODULE_ID);
         final String url = String.format(BASE_URL, PORT, path);
         final Response result = this.restTemplate.getForObject(url, Response.class);
         return result.getStatus() == OK;
+    }
+
+    private boolean shutdown() {
+        final String path = SHUTDOWN.replace(MODULE_ID, ARG_MODULE_ID);
+        final String url = String.format(BASE_URL, PORT, path);
+        final Response result = this.restTemplate.getForObject(url, Response.class);
+        if (result.getStatus() == OK) {
+            this.status = CommStatus.STOPPED;
+        }
+        return this.status == CommStatus.STOPPED;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

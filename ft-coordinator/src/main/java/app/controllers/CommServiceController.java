@@ -28,6 +28,9 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -44,6 +47,7 @@ import app.services.CommService;
 @RestController
 public class CommServiceController implements CommService {
 
+    private static final int SHUTDOWN_TIME = 5;
     private static long lastCommunication;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -55,7 +59,7 @@ public class CommServiceController implements CommService {
 
         final long currentTime = System.currentTimeMillis();
         if (currentTime - lastCommunication > 50 * 1000) {
-
+            // TODO se não estiver no ar... iniciar serviço de detecção
         }
         lastCommunication = currentTime;
         return new Response(OK, moduleId);
@@ -82,7 +86,15 @@ public class CommServiceController implements CommService {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     @RequestMapping(value = SHUTDOWN, method = GET)
-    public @ResponseBody Response shutdown() {
+    public @ResponseBody Response shutdown(@PathVariable(value = "moduleId") final String moduleId) {
+        CompletableFuture.runAsync(() -> {
+            try {
+                TimeUnit.SECONDS.sleep(SHUTDOWN_TIME);
+                System.exit(0);
+            } catch (final InterruptedException e) {
+                LoggerUtil.error(e);
+            }
+        });
         return new Response(OK);
     }
 }

@@ -29,6 +29,7 @@ public final class MessageConstants {
     public static final String SHUTDOWN_FINISHED = "Shutdown finished";
     public static final String CANCEL_NON_FINISHED_TASKS = "Cancel non-finished tasks";
     public static final String ERROR_TASKS_INTERRUPTED = "Tasks interrupted";
+    public static final String ATTEMPT_TO_SHUTDOWN_COORDINATOR = "Attempt to shutdown the FTCoordinator";
     public static final String ATTEMPT_TO_SHUTDOWN_EXECUTOR = "Attempt to shutdown executor";
     public static final String FT_MODULE_INITIALIZED_SUCCESSFULLY = "FTModule initialized successfully";
     public static final String TRYING_TO_CONTACT_MODULE_AT_COORDINATOR = "Trying to contact the coordinator";

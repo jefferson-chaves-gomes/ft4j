@@ -29,5 +29,5 @@ public interface CommService {
 
     public Response register(final Level level);
 
-    public Response shutdown();
+    public Response shutdown(final String moduleid);
 }

@@ -20,6 +20,7 @@
  */
 package app.services;
 
+import static app.commons.constants.MessageConstants.ATTEMPT_TO_SHUTDOWN_COORDINATOR;
 import static app.commons.constants.MessageConstants.ATTEMPT_TO_SHUTDOWN_EXECUTOR;
 import static app.commons.constants.MessageConstants.CANCEL_NON_FINISHED_TASKS;
 import static app.commons.constants.MessageConstants.ERROR_REGISTER_COORDINATOR;
@@ -46,6 +47,7 @@ import app.commons.utils.LoggerUtil;
 import app.commons.utils.RuntimeUtil;
 import app.commons.utils.RuntimeUtil.Command;
 import app.commons.utils.StreamUtil;
+import app.conf.Routes;
 import app.models.Level;
 import app.models.Replication;
 import app.models.Retry;
@@ -58,6 +60,7 @@ public class BootstrapService implements FaultToleranceModule {
 
     private static BootstrapService bootstrap;
     private static ExecutorService executor;
+    private static CommServiceThread commService;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -81,7 +84,7 @@ public class BootstrapService implements FaultToleranceModule {
     public void start(final Level ftLevel) throws SystemException, InterruptedException {
         this.validate(ftLevel);
         this.startFtCoordinator(ftLevel);
-        final CommServiceThread commService = new CommServiceThread(ftLevel);
+        commService = new CommServiceThread(ftLevel);
         executor.submit(commService);
         this.waitForCommunication(commService);
         if (CommStatus.STARTED != commService.getStatus() || !commService.isRegistered()) {
@@ -110,11 +113,8 @@ public class BootstrapService implements FaultToleranceModule {
     @Override
     public void stop() {
         try {
-
-            // *********************************************
-            // TODO enviar comando de STOP para o FTCoordinator
-            // *********************************************
-
+            LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_COORDINATOR);
+            commService.callRequest(Routes.SHUTDOWN);
             LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_EXECUTOR);
             BootstrapService.executor.shutdown();
             BootstrapService.executor.awaitTermination(3, TimeUnit.SECONDS);

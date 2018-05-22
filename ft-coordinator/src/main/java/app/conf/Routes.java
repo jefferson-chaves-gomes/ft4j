@@ -25,7 +25,7 @@ public final class Routes {
     public static final String MODULE_ID = "{moduleId}";
     public static final String IMALIVE = "/imalive/" + MODULE_ID;
     public static final String REGISTER = "/register";
-    public static final String SHUTDOWN = "/shutdown";
+    public static final String SHUTDOWN = "/shutdown/" + MODULE_ID;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.

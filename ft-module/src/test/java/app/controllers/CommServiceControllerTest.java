@@ -47,5 +47,4 @@ public class CommServiceControllerTest {
         TimeUnit.SECONDS.sleep(10);
         Assert.assertTrue(this.ftModule.isTerminated());
     }
-
 }
