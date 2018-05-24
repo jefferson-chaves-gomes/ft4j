@@ -20,6 +20,36 @@
  */
 package app.services;
 
-public class PFTService {
+import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
 
+import app.commons.utils.LoggerUtil;
+import app.models.Level;
+
+public class PFTService extends FaultToleranceService implements Runnable {
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public PFTService(final Level ftLevel) {
+        super(ftLevel);
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.services.FaultToleranceService#startServices()
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public void startServices() {
+
+        super.executor.submit(this);
+        status = STARTED;
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see java.lang.Runnable#run()
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public void run() {
+
+        LoggerUtil.info("Proctive Fault Tolerance Service STARTED");
+    }
 }

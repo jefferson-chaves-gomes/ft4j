@@ -25,6 +25,8 @@ import app.models.Level;
 
 public interface CommService {
 
+    public static final int SHUTDOWN_TIME = 5;
+
     public Response imalive(final String moduleid);
 
     public Response register(final Level level);

@@ -20,6 +20,9 @@
  */
 package app.controllers;
 
+import static app.commons.enums.SystemEnums.ExecutionStatus.STOPPED;
+import static app.commons.enums.SystemEnums.FaultToletanceType.PROACTIVE;
+import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
 import static app.conf.Routes.IMALIVE;
 import static app.conf.Routes.REGISTER;
 import static app.conf.Routes.SHUTDOWN;
@@ -37,18 +40,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import app.commons.http.Response;
 import app.commons.utils.LoggerUtil;
+import app.commons.utils.StreamUtil;
 import app.models.Level;
 import app.services.CommService;
+import app.services.FaultToleranceService;
+import app.services.PFTService;
+import app.services.RFTService;
 
 @RestController
 public class CommServiceController implements CommService {
-
-    private static final int SHUTDOWN_TIME = 5;
-    private static long lastCommunication;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // * @see app.services.CommService#imalive(java.lang.String)
@@ -56,12 +58,6 @@ public class CommServiceController implements CommService {
     @Override
     @RequestMapping(value = IMALIVE, method = GET)
     public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleId) {
-
-        final long currentTime = System.currentTimeMillis();
-        if (currentTime - lastCommunication > 50 * 1000) {
-            // TODO se não estiver no ar... iniciar serviço de detecção
-        }
-        lastCommunication = currentTime;
         return new Response(OK, moduleId);
     }
 
@@ -72,12 +68,14 @@ public class CommServiceController implements CommService {
     @RequestMapping(value = REGISTER, method = POST)
     public @ResponseBody Response register(@RequestBody final Level level) {
 
-        try {
-            LoggerUtil.info(level.toJson());
-        } catch (final JsonProcessingException e) {
-            e.printStackTrace();
+        if (STOPPED == FaultToleranceService.getStatus()) {
+            if (StreamUtil.hasFaultToleranceType(level.getLstTechnics(), REACTVE)) {
+                new RFTService(level).startServices();
+            }
+            if (StreamUtil.hasFaultToleranceType(level.getLstTechnics(), PROACTIVE)) {
+                new PFTService(level).startServices();
+            }
         }
-
         return new Response(CREATED);
     }
 

@@ -25,8 +25,8 @@ import static app.commons.constants.MessageConstants.ERROR_READ_MEM_USAGE;
 
 import java.io.IOException;
 
+import app.commons.enums.SystemEnums.OsType;
 import app.commons.monitors.ResourceMonitor;
-import app.commons.utils.EnumUtil.OsType;
 import app.commons.utils.HostInfoUtil;
 import app.commons.utils.LoggerUtil;
 

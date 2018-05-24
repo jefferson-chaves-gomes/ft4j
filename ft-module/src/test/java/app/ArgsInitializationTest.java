@@ -3,12 +3,15 @@ package app;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.Assert;
 import org.junit.Test;
 
+import app.commons.enums.SystemEnums.FaultToletanceType;
 import app.commons.exceptions.ArgumentsInitializeException;
 import app.commons.exceptions.DuplicateInitializeException;
 import app.commons.exceptions.ReplicationInitializeException;
 import app.commons.exceptions.SystemException;
+import app.commons.utils.StreamUtil;
 import app.models.AttemptsNumber;
 import app.models.CloudInstance;
 import app.models.DelayBetweenAttempts;
@@ -34,6 +37,8 @@ public class ArgsInitializationTest {
     @Test(expected = ReplicationInitializeException.class)
     public void testValidateReplicationInitialize() throws InterruptedException, SystemException {
         this.ftLevel.addTechnic(new Replication(this.lstEmptyReplicas));
+        Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.REACTVE));
+        Assert.assertFalse(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.PROACTIVE));
         this.ftModule.start(this.ftLevel);
     }
 
@@ -41,6 +46,8 @@ public class ArgsInitializationTest {
     public void testValidateDuplicateInitialize01() throws InterruptedException, SystemException {
         this.ftLevel.addTechnic(new SoftwareRejuvenation());
         this.ftLevel.addTechnic(new SoftwareRejuvenation());
+        Assert.assertFalse(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.REACTVE));
+        Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.PROACTIVE));
         this.ftModule.start(this.ftLevel);
     }
 
@@ -48,6 +55,8 @@ public class ArgsInitializationTest {
     public void testValidateDuplicateInitialize02() throws InterruptedException, SystemException {
         this.ftLevel.addTechnic(new Retry());
         this.ftLevel.addTechnic(new Retry());
+        Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.REACTVE));
+        Assert.assertFalse(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.PROACTIVE));
         this.ftModule.start(this.ftLevel);
     }
 
@@ -55,6 +64,8 @@ public class ArgsInitializationTest {
     public void testValidateDuplicateInitialize03() throws InterruptedException, SystemException {
         this.ftLevel.addTechnic(new TaskResubmission());
         this.ftLevel.addTechnic(new TaskResubmission());
+        Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.REACTVE));
+        Assert.assertFalse(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.PROACTIVE));
         this.ftModule.start(this.ftLevel);
     }
 
@@ -62,6 +73,8 @@ public class ArgsInitializationTest {
     public void testValidateDuplicateInitialize04() throws InterruptedException, SystemException {
         this.ftLevel.addTechnic(new Replication(this.lstEmptyReplicas));
         this.ftLevel.addTechnic(new Replication(this.lstEmptyReplicas));
+        Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.REACTVE));
+        Assert.assertFalse(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.PROACTIVE));
         this.ftModule.start(this.ftLevel);
     }
 
@@ -75,7 +88,8 @@ public class ArgsInitializationTest {
         this.ftLevel.addTechnic(new Retry(attemptsNumber, delayBetweenAttempts, timeout));
         this.ftLevel.addTechnic(new TaskResubmission(attemptsNumber, delayBetweenAttempts, timeout));
         this.ftLevel.addTechnic(new SoftwareRejuvenation(attemptsNumber, delayBetweenAttempts, timeout));
-
+        Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.REACTVE));
+        Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.PROACTIVE));
         this.ftModule.start(this.ftLevel);
     }
 }

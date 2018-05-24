@@ -20,6 +20,9 @@
  */
 package app.services;
 
+import static app.commons.enums.SystemEnums.ExecutionStatus.ERROR;
+import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
+import static app.commons.enums.SystemEnums.ExecutionStatus.STOPPED;
 import static app.conf.Routes.IMALIVE;
 import static app.conf.Routes.MODULE_ID;
 import static app.conf.Routes.REGISTER;
@@ -35,6 +38,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import app.commons.enums.SystemEnums.ExecutionStatus;
 import app.commons.http.Response;
 import app.commons.utils.LoggerUtil;
 import app.models.Level;
@@ -46,7 +50,7 @@ public class CommServiceThread implements Runnable {
     private static final String ARG_MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
     private final RestTemplate restTemplate = new RestTemplate();
     private Level level;
-    private CommStatus status = CommStatus.STOPPED;
+    private ExecutionStatus status = STOPPED;
     private boolean registered;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -63,16 +67,16 @@ public class CommServiceThread implements Runnable {
     @Override
     public void run() {
         this.establishCommunication();
-        if (CommStatus.STARTED != this.status) {
-            this.status = CommStatus.ERROR;
+        if (STARTED != this.status) {
+            this.status = ERROR;
             return;
         }
         this.registerFtModule();
         if (!this.isRegistered()) {
-            this.status = CommStatus.ERROR;
+            this.status = ERROR;
             return;
         }
-        while (CommStatus.STARTED == this.status) {
+        while (STARTED == this.status) {
             try {
                 this.callRequest(IMALIVE);
                 TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
@@ -114,7 +118,7 @@ public class CommServiceThread implements Runnable {
         int attemptsNumber = 0;
         while (attemptsNumber++ < DEFAULT_VALUE) {
             if (this.callRequest(IMALIVE)) {
-                this.status = CommStatus.STARTED;
+                this.status = STARTED;
                 break;
             }
         }
@@ -138,9 +142,9 @@ public class CommServiceThread implements Runnable {
         final String url = String.format(BASE_URL, PORT, path);
         final Response result = this.restTemplate.getForObject(url, Response.class);
         if (result.getStatus() == OK) {
-            this.status = CommStatus.STOPPED;
+            this.status = STOPPED;
         }
-        return this.status == CommStatus.STOPPED;
+        return this.status == STOPPED;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -154,7 +158,7 @@ public class CommServiceThread implements Runnable {
         this.level = ftLevel;
     }
 
-    public CommStatus getStatus() {
+    public ExecutionStatus getStatus() {
         return this.status;
     }
 
@@ -162,12 +166,4 @@ public class CommServiceThread implements Runnable {
         return this.registered;
     }
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // Inner Enums.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public enum CommStatus {
-        ERROR,
-        STOPPED,
-        STARTED
-    }
 }

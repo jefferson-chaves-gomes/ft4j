@@ -22,6 +22,9 @@ package app.commons.utils;
 
 import java.util.List;
 
+import app.commons.enums.SystemEnums.FaultToletanceType;
+import app.models.Technic;
+
 public final class StreamUtil {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,6 +35,14 @@ public final class StreamUtil {
     }
 
     public static <T> boolean hasDuplicates(final List<T> list, final Class<?> cls) {
-        return list.stream().filter(cls::isInstance).count() > 1;
+        return list.stream()
+                .filter(cls::isInstance)
+                .count() > 1;
+    }
+
+    public static boolean hasFaultToleranceType(final List<Technic> list, final FaultToletanceType ftType) {
+        return list.stream()
+                .filter(x -> x.getFtType() == ftType)
+                .count() > 0;
     }
 }

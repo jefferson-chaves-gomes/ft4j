@@ -20,6 +20,8 @@
  */
 package app.models;
 
+import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class Replication extends Technic {
     }
 
     public Replication(final List<CloudInstance> lstReplicas, final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout);
+        super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
         this.lstReplicas = lstReplicas;
     }
 

@@ -22,7 +22,7 @@ package app.commons.utils;
 
 import java.lang.management.ManagementFactory;
 
-import app.commons.utils.EnumUtil.OsType;
+import app.commons.enums.SystemEnums.OsType;
 
 public final class HostInfoUtil {
 

@@ -20,6 +20,9 @@
  */
 package app.models;
 
+import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
+
+import app.commons.enums.SystemEnums.FaultToletanceType;
 import app.models.base.BaseModel;
 
 public class Technic extends BaseModel {
@@ -27,19 +30,21 @@ public class Technic extends BaseModel {
     private AttemptsNumber attemptsNumber;
     private DelayBetweenAttempts delayBetweenAttempts;
     private Timeout timeout;
+    private FaultToletanceType ftType;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Technic() {
-        this(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout());
+        this(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(), REACTVE);
     }
 
-    public Technic(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+    public Technic(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout, final FaultToletanceType ftType) {
         super();
         this.attemptsNumber = attemptsNumber;
         this.delayBetweenAttempts = delayBetweenAttempts;
         this.timeout = timeout;
+        this.ftType = ftType;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -67,5 +72,13 @@ public class Technic extends BaseModel {
 
     public void setTimeout(final Timeout timeout) {
         this.timeout = timeout;
+    }
+
+    public FaultToletanceType getFtType() {
+        return this.ftType;
+    }
+
+    public void setFtType(final FaultToletanceType ftType) {
+        this.ftType = ftType;
     }
 }

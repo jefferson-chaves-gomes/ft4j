@@ -68,7 +68,18 @@ public class ControllersRestTemplateTest {
     }
 
     @Test
-    public void register() {
+    public void register1() {
+
+        final String path = Routes.REGISTER;
+        final String url = String.format(BASE_URL, this.port, path);
+
+        final ResponseEntity<Response> result = this.restTemplate.postForEntity(url, this.level, Response.class);
+        assertThat(result.getStatusCode()).isEqualTo(OK);
+        assertThat(result.getBody().getStatus()).isEqualTo(CREATED);
+    }
+
+    @Test
+    public void register2() {
 
         final String path = Routes.REGISTER;
         final String url = String.format(BASE_URL, this.port, path);

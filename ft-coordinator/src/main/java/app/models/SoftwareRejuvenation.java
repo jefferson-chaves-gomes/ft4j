@@ -20,16 +20,18 @@
  */
 package app.models;
 
+import static app.commons.enums.SystemEnums.FaultToletanceType.PROACTIVE;
+
 public class SoftwareRejuvenation extends Technic {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public SoftwareRejuvenation() {
-        super();
+        super(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(), PROACTIVE);
     }
 
     public SoftwareRejuvenation(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout);
+        super(attemptsNumber, delayBetweenAttempts, timeout, PROACTIVE);
     }
 }

@@ -27,8 +27,11 @@ import static app.commons.constants.MessageConstants.ERROR_REGISTER_COORDINATOR;
 import static app.commons.constants.MessageConstants.ERROR_TASKS_INTERRUPTED;
 import static app.commons.constants.MessageConstants.FT_MODULE_INITIALIZED_SUCCESSFULLY;
 import static app.commons.constants.MessageConstants.SHUTDOWN_FINISHED;
+import static app.commons.constants.MessageConstants.START_FT_COORDINATOR_CALLED;
 import static app.commons.constants.MessageConstants.TRYING_TO_CONTACT_MODULE_AT_COORDINATOR;
 import static app.commons.constants.MessageConstants.TRYING_TO_REGISTER_MODULE_AT_COORDINATOR;
+import static app.commons.constants.MessageConstants.WAITING_START_FT_COORDINATOR_START;
+import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
 import static app.models.AttemptsNumber.DEFAULT_VALUE;
 
 import java.io.IOException;
@@ -54,7 +57,6 @@ import app.models.Retry;
 import app.models.SoftwareRejuvenation;
 import app.models.TaskResubmission;
 import app.models.Technic;
-import app.services.CommServiceThread.CommStatus;
 
 public class BootstrapService implements FaultToleranceModule {
 
@@ -87,7 +89,7 @@ public class BootstrapService implements FaultToleranceModule {
         commService = new CommServiceThread(ftLevel);
         executor.submit(commService);
         this.waitForCommunication(commService);
-        if (CommStatus.STARTED != commService.getStatus() || !commService.isRegistered()) {
+        if (STARTED != commService.getStatus() || !commService.isRegistered()) {
             this.stop();
             throw new SystemException(ERROR_REGISTER_COORDINATOR);
         }
@@ -96,7 +98,7 @@ public class BootstrapService implements FaultToleranceModule {
 
     private void waitForCommunication(final CommServiceThread commService) throws InterruptedException {
         int attemptsNumber = 0;
-        while (CommStatus.STARTED != commService.getStatus() && attemptsNumber++ < DEFAULT_VALUE) {
+        while (STARTED != commService.getStatus() && attemptsNumber++ < DEFAULT_VALUE) {
             LoggerUtil.info(TRYING_TO_CONTACT_MODULE_AT_COORDINATOR);
             TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
         }
@@ -176,11 +178,14 @@ public class BootstrapService implements FaultToleranceModule {
     private void startFtCoordinator(final Level ftLevel) throws SystemException, InterruptedException {
         CompletableFuture.runAsync(() -> {
             try {
+                LoggerUtil.info(START_FT_COORDINATOR_CALLED + ftLevel.getTaskStartupCommand());
                 RuntimeUtil.execAndGetResponseString(new Command(ftLevel.getTaskStartupCommand()));
+                TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
             } catch (IOException | InterruptedException e) {
                 LoggerUtil.error(e);
             }
         });
-        TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
+        LoggerUtil.info(WAITING_START_FT_COORDINATOR_START);
+        TimeUnit.SECONDS.sleep(DEFAULT_VALUE * 3);
     }
 }

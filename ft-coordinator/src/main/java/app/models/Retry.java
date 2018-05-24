@@ -20,6 +20,8 @@
  */
 package app.models;
 
+import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
+
 public class Retry extends Technic {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -30,6 +32,6 @@ public class Retry extends Technic {
     }
 
     public Retry(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout);
+        super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
     }
 }

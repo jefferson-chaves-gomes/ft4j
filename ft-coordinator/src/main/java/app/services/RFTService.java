@@ -20,6 +20,64 @@
  */
 package app.services;
 
-public class RFTService {
+import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
+
+import app.commons.utils.LoggerUtil;
+import app.models.Level;
+
+public class RFTService extends FaultToleranceService {
+
+    protected FDServiceThread faultDetectionService;
+    protected RecoveryServiceThread recoveryService;
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public RFTService(final Level ftLevel) {
+        super(ftLevel);
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.services.FaultToleranceService#startServices()
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public void startServices() {
+
+        this.faultDetectionService = new FDServiceThread();
+        super.executor.submit(this.faultDetectionService);
+
+        this.recoveryService = new RecoveryServiceThread();
+        super.executor.submit(this.recoveryService);
+
+        status = STARTED;
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // inner classes
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    class FDServiceThread implements Runnable {
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // * @see java.lang.Runnable#run()
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        @Override
+        public void run() {
+
+            LoggerUtil.info("Fault Detecttion Service STARTED");
+        }
+
+    }
+
+    class RecoveryServiceThread implements Runnable {
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // * @see java.lang.Runnable#run()
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        @Override
+        public void run() {
+
+            LoggerUtil.info("Recovery Service STARTED");
+        }
+    }
 
 }

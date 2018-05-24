@@ -18,14 +18,14 @@
  * limitations under the License.
  ******************************************************************************
  */
-package app.commons.utils;
+package app.commons.enums;
 
-public final class EnumUtil {
+public final class SystemEnums {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private EnumUtil() {
+    private SystemEnums() {
         super();
     }
 
@@ -48,5 +48,16 @@ public final class EnumUtil {
         public void setVersion(final String version) {
             this.version = version;
         }
+    }
+
+    public enum ExecutionStatus {
+        ERROR,
+        STOPPED,
+        STARTED
+    }
+
+    public enum FaultToletanceType {
+        REACTVE,
+        PROACTIVE;
     }
 }
