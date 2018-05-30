@@ -42,7 +42,7 @@ public class CommServiceControllerTest {
     public void testStartFtCoordinator() throws Exception {
 
         this.ftModule.start(this.ftLevel);
-        TimeUnit.SECONDS.sleep(20);
+        TimeUnit.SECONDS.sleep(120);
         this.ftModule.stop();
         TimeUnit.SECONDS.sleep(10);
         Assert.assertTrue(this.ftModule.isTerminated());

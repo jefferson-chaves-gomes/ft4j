@@ -28,8 +28,7 @@ import java.time.Instant;
 import org.junit.Test;
 
 import app.commons.exceptions.SystemException;
-import app.commons.monitors.ResourceMonitor;
-import app.commons.monitors.impl.ResourceMonitorImpl;
+import app.commons.utils.ResourceMonitorUtil;
 
 public class ResourceMonitorTest {
 
@@ -50,15 +49,14 @@ public class ResourceMonitorTest {
     public void testResourceMonitor() throws InterruptedException, SystemException {
 
         this.startStress();
-        final ResourceMonitor monitor = new ResourceMonitorImpl();
         final long startTime = Instant.now().getEpochSecond();
         while (Instant.now().getEpochSecond() - startTime < TIME_SECONDS) {
-            System.out.println("CPU Usage: " + monitor.getCpuUsage());
-            System.out.println("MEM Usage: " + monitor.getMemUsage());
+            System.out.println("CPU Usage: " + ResourceMonitorUtil.getCpuUsage());
+            System.out.println("MEM Usage: " + ResourceMonitorUtil.getMemUsage());
         }
         System.out.println("======================================================");
-        System.out.println("CPU Usage: " + monitor.getCpuUsage());
-        System.out.println("MEM Usage: " + monitor.getMemUsage());
+        System.out.println("CPU Usage: " + ResourceMonitorUtil.getCpuUsage());
+        System.out.println("MEM Usage: " + ResourceMonitorUtil.getMemUsage());
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

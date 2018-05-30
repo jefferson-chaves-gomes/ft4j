@@ -2,8 +2,8 @@ package app.services;
 
 import static app.commons.enums.SystemEnums.ExecutionStatus.STOPPED;
 
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import app.commons.enums.SystemEnums.ExecutionStatus;
 import app.models.Level;
@@ -11,7 +11,7 @@ import app.models.Level;
 public abstract class FaultToleranceService {
 
     protected Level level;
-    protected ExecutorService executor = Executors.newSingleThreadExecutor();
+    protected ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
     protected static ExecutionStatus status = STOPPED;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

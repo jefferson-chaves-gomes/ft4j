@@ -20,6 +20,7 @@
  */
 package app.services;
 
+import static app.commons.constants.TimeConstants.DEFAULT_TIME_UNIT;
 import static app.commons.enums.SystemEnums.ExecutionStatus.ERROR;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STOPPED;
@@ -32,7 +33,6 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.lang.management.ManagementFactory;
-import java.util.concurrent.TimeUnit;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -79,7 +79,7 @@ public class CommServiceThread implements Runnable {
         while (STARTED == this.status) {
             try {
                 this.callRequest(IMALIVE);
-                TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
+                DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
             } catch (final InterruptedException e) {
                 LoggerUtil.error(e);
             }

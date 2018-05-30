@@ -20,7 +20,11 @@
  */
 package app.services;
 
+import static app.commons.constants.TimeConstants.DEFAULT_EXECTUTION_TIME;
+import static app.commons.constants.TimeConstants.DEFAULT_INITIAL_DELAY;
+import static app.commons.constants.TimeConstants.DEFAULT_TIME_UNIT;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
+import static app.commons.enums.SystemEnums.ExecutionStatus.STOPPED;
 
 import app.commons.utils.LoggerUtil;
 import app.models.Level;
@@ -43,13 +47,17 @@ public class RFTService extends FaultToleranceService {
     @Override
     public void startServices() {
 
-        this.faultDetectionService = new FDServiceThread();
-        super.executor.submit(this.faultDetectionService);
+        if (STOPPED == status) {
+            this.faultDetectionService = new FDServiceThread();
+            super.executor.scheduleAtFixedRate(this.faultDetectionService, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
 
-        this.recoveryService = new RecoveryServiceThread();
-        super.executor.submit(this.recoveryService);
-
-        status = STARTED;
+            this.recoveryService = new RecoveryServiceThread();
+            super.executor.scheduleAtFixedRate(this.recoveryService, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
+            status = STARTED;
+            LoggerUtil.info("Service - Reactive Fault Tolerance STARTED");
+        } else {
+            LoggerUtil.info("Service - Reactive Fault Tolerance ALREADY STARTED");
+        }
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,8 +70,7 @@ public class RFTService extends FaultToleranceService {
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         @Override
         public void run() {
-
-            LoggerUtil.info("Fault Detecttion Service STARTED");
+            LoggerUtil.info("Service - Running Fault Detection...");
         }
 
     }
@@ -75,8 +82,7 @@ public class RFTService extends FaultToleranceService {
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         @Override
         public void run() {
-
-            LoggerUtil.info("Recovery Service STARTED");
+            LoggerUtil.info("Service - Running Recovery...");
         }
     }
 
