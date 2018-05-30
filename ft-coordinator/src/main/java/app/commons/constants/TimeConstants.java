@@ -18,36 +18,20 @@
  * limitations under the License.
  * *****************************************************************************
  */
-package app.models;
+package app.commons.constants;
 
 import java.util.concurrent.TimeUnit;
 
-import app.models.base.BaseModel;
+public final class TimeConstants {
 
-public class TimeArgument extends BaseModel {
-
-    public final static TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
-
-    private final int value;
-    private final TimeUnit unit;
+    public final static long DEFAULT_INITIAL_DELAY = 0;
+    public final static long DEFAULT_EXECTUTION_TIME = 30;
+    public final static TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public TimeArgument(final int value, final TimeUnit unit) {
+    public TimeConstants() {
         super();
-        this.value = value;
-        this.unit = unit;
-    }
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // get/set.
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public int getValue() {
-        return this.value;
-    }
-
-    public TimeUnit getUnit() {
-        return this.unit;
     }
 }

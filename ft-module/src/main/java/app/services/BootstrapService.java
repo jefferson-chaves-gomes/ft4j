@@ -31,6 +31,7 @@ import static app.commons.constants.MessageConstants.START_FT_COORDINATOR_CALLED
 import static app.commons.constants.MessageConstants.TRYING_TO_CONTACT_MODULE_AT_COORDINATOR;
 import static app.commons.constants.MessageConstants.TRYING_TO_REGISTER_MODULE_AT_COORDINATOR;
 import static app.commons.constants.MessageConstants.WAITING_START_FT_COORDINATOR_START;
+import static app.commons.constants.TimeConstants.DEFAULT_TIME_UNIT;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
 import static app.models.AttemptsNumber.DEFAULT_VALUE;
 
@@ -39,7 +40,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import app.FaultToleranceModule;
 import app.commons.exceptions.ArgumentsInitializeException;
@@ -74,7 +74,7 @@ public class BootstrapService implements FaultToleranceModule {
     public static BootstrapService getInstance() {
         if (bootstrap == null) {
             bootstrap = new BootstrapService();
-            executor = Executors.newSingleThreadExecutor();
+            executor = Executors.newSingleThreadScheduledExecutor();
         }
         return bootstrap;
     }
@@ -100,12 +100,12 @@ public class BootstrapService implements FaultToleranceModule {
         int attemptsNumber = 0;
         while (STARTED != commService.getStatus() && attemptsNumber++ < DEFAULT_VALUE) {
             LoggerUtil.info(TRYING_TO_CONTACT_MODULE_AT_COORDINATOR);
-            TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
+            DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
         }
         attemptsNumber = 0;
         while (!commService.isRegistered() && attemptsNumber++ < DEFAULT_VALUE) {
             LoggerUtil.info(TRYING_TO_REGISTER_MODULE_AT_COORDINATOR);
-            TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
+            DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
         }
     }
 
@@ -118,15 +118,15 @@ public class BootstrapService implements FaultToleranceModule {
             LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_COORDINATOR);
             commService.callRequest(Routes.SHUTDOWN);
             LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_EXECUTOR);
-            BootstrapService.executor.shutdown();
-            BootstrapService.executor.awaitTermination(3, TimeUnit.SECONDS);
+            executor.shutdown();
+            executor.awaitTermination(DEFAULT_VALUE, DEFAULT_TIME_UNIT);
         } catch (final InterruptedException e) {
             LoggerUtil.error(ERROR_TASKS_INTERRUPTED, e);
         } finally {
-            if (!BootstrapService.executor.isTerminated()) {
+            if (!executor.isTerminated()) {
                 LoggerUtil.info(CANCEL_NON_FINISHED_TASKS);
             }
-            BootstrapService.executor.shutdownNow();
+            executor.shutdownNow();
             LoggerUtil.info(SHUTDOWN_FINISHED);
         }
     }
@@ -136,7 +136,7 @@ public class BootstrapService implements FaultToleranceModule {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public boolean isTerminated() {
-        return BootstrapService.executor.isShutdown() && BootstrapService.executor.isTerminated();
+        return executor.isShutdown() && executor.isTerminated();
     }
 
     private void validate(final Level ftLevel) throws SystemException {
@@ -180,12 +180,12 @@ public class BootstrapService implements FaultToleranceModule {
             try {
                 LoggerUtil.info(START_FT_COORDINATOR_CALLED + ftLevel.getTaskStartupCommand());
                 RuntimeUtil.execAndGetResponseString(new Command(ftLevel.getTaskStartupCommand()));
-                TimeUnit.SECONDS.sleep(DEFAULT_VALUE);
+                DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
             } catch (IOException | InterruptedException e) {
                 LoggerUtil.error(e);
             }
         });
         LoggerUtil.info(WAITING_START_FT_COORDINATOR_START);
-        TimeUnit.SECONDS.sleep(DEFAULT_VALUE * 3);
+        DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE * 3);
     }
 }

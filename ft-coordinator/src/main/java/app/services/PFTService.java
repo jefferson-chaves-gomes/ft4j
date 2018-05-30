@@ -20,6 +20,9 @@
  */
 package app.services;
 
+import static app.commons.constants.TimeConstants.DEFAULT_EXECTUTION_TIME;
+import static app.commons.constants.TimeConstants.DEFAULT_INITIAL_DELAY;
+import static app.commons.constants.TimeConstants.DEFAULT_TIME_UNIT;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
 
 import app.commons.utils.LoggerUtil;
@@ -39,9 +42,11 @@ public class PFTService extends FaultToleranceService implements Runnable {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void startServices() {
-
-        super.executor.submit(this);
-        status = STARTED;
+        if (STARTED == status) {
+            super.executor.scheduleAtFixedRate(this, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
+            status = STARTED;
+        }
+        LoggerUtil.info("Service - Proctive Fault Tolerance STARTED");
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -49,7 +54,6 @@ public class PFTService extends FaultToleranceService implements Runnable {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void run() {
-        LoggerUtil.info("Proctive Fault Tolerance Service STARTED");
-
+        LoggerUtil.info("Service - Running Proctive Fault Tolerance...");
     }
 }

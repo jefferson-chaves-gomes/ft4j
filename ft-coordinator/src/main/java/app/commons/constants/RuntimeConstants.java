@@ -20,6 +20,12 @@
  */
 package app.commons.constants;
 
+import java.io.IOException;
+
+import app.commons.enums.SystemEnums.OsType;
+import app.commons.utils.HostInfoUtil;
+import app.commons.utils.LoggerUtil;
+import app.commons.utils.RuntimeUtil;
 import app.commons.utils.RuntimeUtil.Command;
 
 public final class RuntimeConstants {
@@ -39,9 +45,32 @@ public final class RuntimeConstants {
     public static final Command CMD_CPU_USAGE_WIN = new Command(WIN_CPU_USAGE);
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // static block.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    static {
+        final String execPermission = "chmod 755 ";
+        try {
+            if (OsType.WINDOWS != HostInfoUtil.getOsType()) {
+                final String[] shellScriptArray = new String[] {
+                        MAC_CPU_USAGE,
+                        LNX_CPU_USAGE,
+                        LNX_MEM_USAGE
+                };
+                for (final String string : shellScriptArray) {
+                    final String shellScritpPath = Command.class.getClassLoader().getResource(string).getPath();
+                    final Command command = new Command(execPermission + shellScritpPath);
+                    RuntimeUtil.execAndGetResponseString(command);
+                }
+            }
+        } catch (IOException | InterruptedException e) {
+            LoggerUtil.error(e);
+        }
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    private RuntimeConstants() {
+    private RuntimeConstants() throws IOException, InterruptedException {
         super();
     }
 }

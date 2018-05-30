@@ -18,8 +18,10 @@
  * limitations under the License.
  * *****************************************************************************
  */
-package app.commons.monitors;
+package app.commons.utils;
 
+import static app.commons.constants.MessageConstants.ERROR_READ_CPU_USAGE;
+import static app.commons.constants.MessageConstants.ERROR_READ_MEM_USAGE;
 import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_LNX;
 import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_MAC;
 import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_WIN;
@@ -29,23 +31,46 @@ import static app.commons.constants.RuntimeConstants.CMD_MEM_USAGE_WIN;
 
 import java.io.IOException;
 
-import app.commons.utils.HostInfoUtil;
-import app.commons.utils.RuntimeUtil;
+import app.commons.enums.SystemEnums.OsType;
 import app.commons.utils.RuntimeUtil.Command;
-import app.commons.utils.StringUtil;
 
-public abstract class ResourceMonitor {
-    
-    public abstract Float getCpuUsage();
+public final class ResourceMonitorUtil {
 
-    public abstract Float getMemUsage();
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // Constructors.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    private ResourceMonitorUtil() {
+        super();
+    }
 
-    protected Float getOutputAsFloat(final Command cmd) throws IOException, InterruptedException {
+    public static Float getCpuUsage() {
+        try {
+            Float cpuUsage = getOutputAsFloat(getCpuUsageCommand());
+            if (OsType.MAC == HostInfoUtil.getOsType()) {
+                cpuUsage = cpuUsage / HostInfoUtil.getCoresNumber();
+            }
+            return cpuUsage;
+        } catch (IOException | InterruptedException e) {
+            LoggerUtil.warn(ERROR_READ_CPU_USAGE, e);
+        }
+        return null;
+    }
+
+    public static Float getMemUsage() {
+        try {
+            return getOutputAsFloat(getMemUsageCommand());
+        } catch (IOException | InterruptedException e) {
+            LoggerUtil.warn(ERROR_READ_MEM_USAGE, e);
+        }
+        return null;
+    }
+
+    private static Float getOutputAsFloat(final Command cmd) throws IOException, InterruptedException {
         final String result = RuntimeUtil.execAndGetResponseString(cmd);
         return Float.valueOf(StringUtil.removeNonNumeric(result));
     }
 
-    protected Command getCpuUsageCommand() {
+    private static Command getCpuUsageCommand() {
         Command cmd = null;
         switch (HostInfoUtil.getOsType()) {
             case WINDOWS:
@@ -61,7 +86,7 @@ public abstract class ResourceMonitor {
         return cmd;
     }
 
-    protected Command getMemUsageCommand() {
+    private static Command getMemUsageCommand() {
         Command cmd = null;
         switch (HostInfoUtil.getOsType()) {
             case WINDOWS:
