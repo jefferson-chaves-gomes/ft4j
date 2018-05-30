@@ -87,7 +87,7 @@ public class ArgsInitializationTest {
 
         this.ftLevel.addTechnic(new Retry(attemptsNumber, delayBetweenAttempts, timeout));
         this.ftLevel.addTechnic(new TaskResubmission(attemptsNumber, delayBetweenAttempts, timeout));
-        this.ftLevel.addTechnic(new SoftwareRejuvenation(attemptsNumber, delayBetweenAttempts, timeout));
+        this.ftLevel.addTechnic(new SoftwareRejuvenation(attemptsNumber, delayBetweenAttempts, timeout, 0, 0));
         Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.REACTVE));
         Assert.assertTrue(StreamUtil.hasFaultToleranceType(this.ftLevel.getLstTechnics(), FaultToletanceType.PROACTIVE));
         this.ftModule.start(this.ftLevel);

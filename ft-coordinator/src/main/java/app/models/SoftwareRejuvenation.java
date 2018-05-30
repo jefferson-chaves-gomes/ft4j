@@ -24,6 +24,9 @@ import static app.commons.enums.SystemEnums.FaultToletanceType.PROACTIVE;
 
 public class SoftwareRejuvenation extends Technic {
 
+    private float maxCpuUsage = 0;
+    private float maxMemoryUsage = 0;
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -31,7 +34,29 @@ public class SoftwareRejuvenation extends Technic {
         super(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(), PROACTIVE);
     }
 
-    public SoftwareRejuvenation(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
+    public SoftwareRejuvenation(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout, final float maxCpuUsage, final float maxuMemoryUsage) {
         super(attemptsNumber, delayBetweenAttempts, timeout, PROACTIVE);
+        this.maxCpuUsage = maxCpuUsage;
+        this.maxMemoryUsage = maxuMemoryUsage;
     }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public float getMaxCpuUsage() {
+        return this.maxCpuUsage;
+    }
+
+    public void setMaxCpuUsage(final float maxCpuUsage) {
+        this.maxCpuUsage = maxCpuUsage;
+    }
+
+    public float getMaxMemoryUsage() {
+        return this.maxMemoryUsage;
+    }
+
+    public void setMaxMemoryUsage(final float maxMemoryUsage) {
+        this.maxMemoryUsage = maxMemoryUsage;
+    }
+
 }

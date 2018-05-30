@@ -35,12 +35,18 @@ public final class StreamUtil {
     }
 
     public static <T> boolean hasDuplicates(final List<T> list, final Class<?> cls) {
+        if (list == null) {
+            return false;
+        }
         return list.stream()
                 .filter(cls::isInstance)
                 .count() > 1;
     }
 
     public static boolean hasFaultToleranceType(final List<Technic> list, final FaultToletanceType ftType) {
+        if (list == null) {
+            return false;
+        }
         return list.stream()
                 .filter(x -> x.getFtType() == ftType)
                 .count() > 0;

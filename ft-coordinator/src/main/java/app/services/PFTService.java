@@ -49,7 +49,7 @@ public class PFTService extends FaultToleranceService implements Runnable {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void run() {
-
         LoggerUtil.info("Proctive Fault Tolerance Service STARTED");
+
     }
 }
