@@ -24,66 +24,30 @@ import static app.commons.constants.TimeConstants.DEFAULT_EXECTUTION_TIME;
 import static app.commons.constants.TimeConstants.DEFAULT_INITIAL_DELAY;
 import static app.commons.constants.TimeConstants.DEFAULT_TIME_UNIT;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
-import static app.commons.enums.SystemEnums.ExecutionStatus.STOPPED;
 
 import app.commons.utils.LoggerUtil;
 import app.models.Level;
 
-public class RFTService extends FaultToleranceService {
-
-    protected FDServiceThread faultDetectionService;
-    protected RecoveryServiceThread recoveryService;
+public class RFTService extends FaultToleranceService implements Runnable {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public RFTService(final Level ftLevel) {
-        super(ftLevel);
+        super();
+    }
+
+    public void startService() {
+        FaultToleranceService.reactiveService = FaultToleranceService.scheduledExecutors.scheduleAtFixedRate(this, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
+        FaultToleranceService.status = STARTED;
+        LoggerUtil.info(SERVICE_NAME_STARTED + ": " + this.getClass().getName());
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // * @see app.services.FaultToleranceService#startServices()
+    // * @see java.lang.Runnable#run()
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
-    public void startServices() {
-
-        if (STOPPED == status) {
-            this.faultDetectionService = new FDServiceThread();
-            super.executor.scheduleAtFixedRate(this.faultDetectionService, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
-
-            this.recoveryService = new RecoveryServiceThread();
-            super.executor.scheduleAtFixedRate(this.recoveryService, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
-            status = STARTED;
-            LoggerUtil.info("Service - Reactive Fault Tolerance STARTED");
-        } else {
-            LoggerUtil.info("Service - Reactive Fault Tolerance ALREADY STARTED");
-        }
+    public void run() {
+        // TODO
     }
-
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // inner classes
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    class FDServiceThread implements Runnable {
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // * @see java.lang.Runnable#run()
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        @Override
-        public void run() {
-            LoggerUtil.info("Service - Running Fault Detection...");
-        }
-
-    }
-
-    class RecoveryServiceThread implements Runnable {
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // * @see java.lang.Runnable#run()
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        @Override
-        public void run() {
-            LoggerUtil.info("Service - Running Recovery...");
-        }
-    }
-
 }

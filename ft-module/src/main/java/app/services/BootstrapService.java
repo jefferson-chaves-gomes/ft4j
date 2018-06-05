@@ -56,10 +56,11 @@ import app.models.Replication;
 import app.models.Retry;
 import app.models.SoftwareRejuvenation;
 import app.models.TaskResubmission;
-import app.models.Technic;
+import app.models.Technique;
 
 public class BootstrapService implements FaultToleranceModule {
 
+    private final static String STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1.jar";
     private static BootstrapService bootstrap;
     private static ExecutorService executor;
     private static CommServiceThread commService;
@@ -140,13 +141,13 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     private void validate(final Level ftLevel) throws SystemException {
-        final List<Technic> lstTechnics = ftLevel.getLstTechnics();
+        final List<Technique> lstTechnics = ftLevel.getLstTechniques();
         this.validateDuplications(lstTechnics);
         this.validateArgsInitialization(lstTechnics);
     }
 
-    private void validateArgsInitialization(final List<Technic> lstTechnics) throws ArgumentsInitializeException, ReplicationInitializeException {
-        for (final Technic element : lstTechnics) {
+    private void validateArgsInitialization(final List<Technique> lstTechnics) throws ArgumentsInitializeException, ReplicationInitializeException {
+        for (final Object element : lstTechnics) {
             if (element instanceof TaskResubmission) {
                 final TaskResubmission technic = (TaskResubmission) element;
                 if (technic.getAttemptsNumber().getValue() < 0
@@ -166,7 +167,7 @@ public class BootstrapService implements FaultToleranceModule {
         }
     }
 
-    private void validateDuplications(final List<Technic> lstTechnics) throws DuplicateInitializeException {
+    private void validateDuplications(final List<Technique> lstTechnics) throws DuplicateInitializeException {
         if (StreamUtil.hasDuplicates(lstTechnics, SoftwareRejuvenation.class)
                 || StreamUtil.hasDuplicates(lstTechnics, Retry.class)
                 || StreamUtil.hasDuplicates(lstTechnics, TaskResubmission.class)
@@ -178,8 +179,8 @@ public class BootstrapService implements FaultToleranceModule {
     private void startFtCoordinator(final Level ftLevel) throws SystemException, InterruptedException {
         CompletableFuture.runAsync(() -> {
             try {
-                LoggerUtil.info(START_FT_COORDINATOR_CALLED + ftLevel.getTaskStartupCommand());
-                RuntimeUtil.execAndGetResponseString(new Command(ftLevel.getTaskStartupCommand()));
+                LoggerUtil.info(START_FT_COORDINATOR_CALLED + STARTUP_COMMAND);
+                RuntimeUtil.execAndGetResponseString(new Command(STARTUP_COMMAND));
                 DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
             } catch (IOException | InterruptedException e) {
                 LoggerUtil.error(e);

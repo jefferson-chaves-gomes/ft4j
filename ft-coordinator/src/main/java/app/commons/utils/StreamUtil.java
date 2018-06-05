@@ -22,8 +22,8 @@ package app.commons.utils;
 
 import java.util.List;
 
-import app.commons.enums.SystemEnums.FaultToletanceType;
-import app.models.Technic;
+import app.commons.enums.SystemEnums.FaultToletancePolicy;
+import app.models.Technique;
 
 public final class StreamUtil {
 
@@ -43,7 +43,7 @@ public final class StreamUtil {
                 .count() > 1;
     }
 
-    public static boolean hasFaultToleranceType(final List<Technic> list, final FaultToletanceType ftType) {
+    public static boolean hasFaultToleranceType(final List<Technique> list, final FaultToletancePolicy ftType) {
         if (list == null) {
             return false;
         }

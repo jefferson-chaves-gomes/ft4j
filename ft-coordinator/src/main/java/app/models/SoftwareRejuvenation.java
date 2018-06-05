@@ -20,9 +20,11 @@
  */
 package app.models;
 
-import static app.commons.enums.SystemEnums.FaultToletanceType.PROACTIVE;
+import static app.commons.enums.SystemEnums.FaultToletancePolicy.PROACTIVE;
 
-public class SoftwareRejuvenation extends Technic {
+import app.commons.utils.LoggerUtil;
+
+public class SoftwareRejuvenation extends Technique {
 
     private float maxCpuUsage = 0;
     private float maxMemoryUsage = 0;
@@ -32,6 +34,14 @@ public class SoftwareRejuvenation extends Technic {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public SoftwareRejuvenation() {
         super(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(), PROACTIVE);
+        this.maxCpuUsage = 95;
+        this.maxMemoryUsage = 95;
+    }
+
+    public SoftwareRejuvenation(final float maxCpuUsage, final float maxuMemoryUsage) {
+        this();
+        this.maxCpuUsage = maxCpuUsage <= 0 ? 100 : maxCpuUsage;
+        this.maxMemoryUsage = maxuMemoryUsage <= 0 ? 100 : maxCpuUsage;
     }
 
     public SoftwareRejuvenation(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout, final float maxCpuUsage, final float maxuMemoryUsage) {
@@ -41,7 +51,19 @@ public class SoftwareRejuvenation extends Technic {
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    // get/set.
+    // * @see app.models.Technique#execute(java.lang.String, java.lang.String)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public void execute(final String moduleId, final String taskStartupCommand) {
+
+        LoggerUtil.info("Killing the PID: " + moduleId);
+        // TODO kill -9 moduleId
+        LoggerUtil.info("Starting the Partner with command: " + taskStartupCommand);
+        // TODO java -jar
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public float getMaxCpuUsage() {
         return this.maxCpuUsage;

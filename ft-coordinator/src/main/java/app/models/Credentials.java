@@ -34,6 +34,12 @@ public class Credentials extends BaseModel {
         super();
     }
 
+    public Credentials(final String user, final String pwd) {
+        super();
+        this.user = user;
+        this.pwd = pwd;
+    }
+
     public String getUser() {
         return this.user;
     }

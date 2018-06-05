@@ -27,17 +27,19 @@ import app.models.base.BaseModel;
 
 public class Level extends BaseModel {
 
+    private static final String YOU_NEED_PASS_THE_TASK_STARTUP_COMMAND = "You need pass the taskStartupCommand";
+
     private final String taskStartupCommand;
+    private String moduleId;
     private ZooInstance zooInstance;
-    private List<Technic> lstTechnics;
-    private List<CloudInstance> lstInstances;
+    private List<Technique> lstTechniques;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Level() {
         super();
-        this.taskStartupCommand = "You need pass the taskStartupCommand";
+        this.taskStartupCommand = YOU_NEED_PASS_THE_TASK_STARTUP_COMMAND;
     }
 
     public Level(final String taskStartupCommand) {
@@ -50,47 +52,28 @@ public class Level extends BaseModel {
         this.zooInstance = zooInstance;
     }
 
-    public Level(final String taskStartupCommand, final List<Technic> lstTechnics, final List<CloudInstance> lstInstantes, final ZooInstance zooInstance) {
+    public Level(final String taskStartupCommand, final List<Technique> lstTechnics, final ZooInstance zooInstance) {
         this(taskStartupCommand);
         this.zooInstance = zooInstance;
-        this.lstTechnics = lstTechnics;
-        this.lstInstances = lstInstantes;
+        this.lstTechniques = lstTechnics;
     }
 
-    public boolean addTechnic(final Technic technic) {
-        if (this.getLstTechnics() == null) {
-            this.lstTechnics = new ArrayList<>();
+    public boolean addTechnique(final Technique technique) {
+        if (this.getLstTechniques() == null) {
+            this.lstTechniques = new ArrayList<>();
         }
-        return this.getLstTechnics().add(technic);
+        return this.getLstTechniques().add(technique);
     }
 
-    public boolean removeTechnic(final Technic technic) {
-        if (this.getLstTechnics() != null) {
-            return this.getLstTechnics().remove(technic);
-        }
-        return false;
-    }
-
-    public boolean addInstance(final CloudInstance instance) {
-        if (this.getLstInstances() == null) {
-            this.lstInstances = new ArrayList<>();
-        }
-        return this.getLstInstances().add(instance);
-    }
-
-    public boolean removeInstance(final CloudInstance instance) {
-        if (this.getLstInstances() != null) {
-            return this.getLstInstances().remove(instance);
+    public boolean removeTechnique(final Technique technique) {
+        if (this.getLstTechniques() != null) {
+            return this.getLstTechniques().remove(technique);
         }
         return false;
     }
 
-    public List<Technic> getLstTechnics() {
-        return this.lstTechnics;
-    }
-
-    public List<CloudInstance> getLstInstances() {
-        return this.lstInstances;
+    public List<Technique> getLstTechniques() {
+        return this.lstTechniques;
     }
 
     public ZooInstance getZooInstance() {
@@ -105,4 +88,15 @@ public class Level extends BaseModel {
         return this.taskStartupCommand;
     }
 
+    public String getModuleId() {
+        return this.moduleId;
+    }
+
+    public void setModuleId(final String moduleId) {
+        this.moduleId = moduleId;
+    }
+
+    public void setLstTechniques(final List<Technique> lstTechniques) {
+        this.lstTechniques = lstTechniques;
+    }
 }

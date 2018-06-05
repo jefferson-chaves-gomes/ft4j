@@ -20,6 +20,8 @@
  */
 package app.services;
 
+import java.lang.reflect.InvocationTargetException;
+
 import app.commons.http.Response;
 import app.models.Level;
 
@@ -29,7 +31,7 @@ public interface CommService {
 
     public Response imalive(final String moduleid);
 
-    public Response register(final Level level);
+    public Response register(final Level level) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
     public Response shutdown(final String moduleid);
 }

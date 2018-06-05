@@ -32,7 +32,8 @@ public final class MessageConstants {
     public static final String START_FT_COORDINATOR_CALLED = "startFtCoordinator() called: ";
     public static final String WAITING_START_FT_COORDINATOR_START = "Waiting startFtCoordinator() start...";
     public static final String ATTEMPT_TO_SHUTDOWN_COORDINATOR = "Attempt to shutdown the FTCoordinator";
-    public static final String ATTEMPT_TO_SHUTDOWN_EXECUTOR = "Attempt to shutdown executor";
+    public static final String ATTEMPT_TO_SHUTDOWN_EXECUTOR = "Attempt to shutdown scheduledExecutors";
+    public static final String ATTEMPT_TO_SHUTDOWN_FT_DETECTION_EXECUTORS = "Attempt to shutdown the Fault Tolerance Detection Executors";
     public static final String FT_MODULE_INITIALIZED_SUCCESSFULLY = "Communication was initialized successfully";
     public static final String TRYING_TO_CONTACT_MODULE_AT_COORDINATOR = "Trying to contact the coordinator";
     public static final String TRYING_TO_REGISTER_MODULE_AT_COORDINATOR = "Trying to register module at coordinator";

@@ -20,18 +20,22 @@
  */
 package app.models;
 
-import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
+import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Replication extends Technic {
+public class Replication extends Technique {
 
-    private List<CloudInstance> lstReplicas;
+    protected List<CloudInstance> lstReplicas;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public Replication() {
+        super();
+    }
+
     public Replication(final List<CloudInstance> lstReplicas) {
         super();
         this.lstReplicas = lstReplicas;
@@ -39,6 +43,25 @@ public class Replication extends Technic {
 
     public Replication(final List<CloudInstance> lstReplicas, final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
         super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
+        this.lstReplicas = lstReplicas;
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.models.Technique#execute(java.lang.String, java.lang.String)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public void execute(final String moduleId, final String taskStartupCommand) {
+        // TODO
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public List<CloudInstance> getLstReplicas() {
+        return this.lstReplicas;
+    }
+
+    public void setLstReplicas(final List<CloudInstance> lstReplicas) {
         this.lstReplicas = lstReplicas;
     }
 
@@ -54,13 +77,5 @@ public class Replication extends Technic {
             return this.getLstReplicas().remove(replica);
         }
         return false;
-    }
-
-    public List<CloudInstance> getLstReplicas() {
-        return this.lstReplicas;
-    }
-
-    public void setLstReplicas(final List<CloudInstance> lstReplicas) {
-        this.lstReplicas = lstReplicas;
     }
 }

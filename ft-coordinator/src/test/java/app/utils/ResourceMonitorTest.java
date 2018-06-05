@@ -33,7 +33,7 @@ import app.commons.utils.ResourceMonitorUtil;
 public class ResourceMonitorTest {
 
     private static final double LOAD = 0.8;
-    private static final int TIME_SECONDS = 10;
+    private static final int TIME_SECONDS = 5;
     private static final long DURATION = 1000 * TIME_SECONDS;
     private final OperatingSystemMXBean threadBean = ManagementFactory.getOperatingSystemMXBean();
 

@@ -29,7 +29,7 @@ public class ZooInstance extends Instance {
         super();
     }
 
-    public ZooInstance(final String ip, final Integer port) {
-        super(ip, port);
+    public ZooInstance(final String ip, final Integer port, final Credentials credentials) {
+        super(ip, port, credentials);
     }
 }

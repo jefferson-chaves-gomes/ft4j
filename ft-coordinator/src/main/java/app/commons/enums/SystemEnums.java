@@ -53,11 +53,19 @@ public final class SystemEnums {
     public enum ExecutionStatus {
         ERROR,
         STOPPED,
-        STARTED
+        STARTED,
+        RECOVERY_MODE
     }
 
-    public enum FaultToletanceType {
+    public enum FaultToletancePolicy {
         REACTVE,
         PROACTIVE;
+    }
+
+    public static enum CloudType {
+        LOCAL,
+        AWS,
+        CGP,
+        AZURE
     }
 }

@@ -20,7 +20,6 @@
  */
 package app.models;
 
-import app.commons.utils.HostInfoUtil;
 import app.models.base.BaseModel;
 
 public class Instance extends BaseModel {
@@ -28,7 +27,6 @@ public class Instance extends BaseModel {
     private String ip;
     private Integer port;
     private Credentials credentials;
-    private HostInfoUtil info;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -37,10 +35,11 @@ public class Instance extends BaseModel {
         super();
     }
 
-    public Instance(final String ip, final Integer port) {
+    public Instance(final String ip, final Integer port, final Credentials credentials) {
         super();
         this.ip = ip;
         this.port = port;
+        this.credentials = credentials;
     }
 
     public String getIp() {
@@ -65,13 +64,5 @@ public class Instance extends BaseModel {
 
     public void setCredentials(final Credentials credentials) {
         this.credentials = credentials;
-    }
-
-    public HostInfoUtil getInfo() {
-        return this.info;
-    }
-
-    public void setInfo(final HostInfoUtil info) {
-        this.info = info;
     }
 }

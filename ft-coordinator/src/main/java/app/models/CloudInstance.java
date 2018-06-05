@@ -20,6 +20,10 @@
  */
 package app.models;
 
+import static app.commons.enums.SystemEnums.CloudType.LOCAL;
+
+import app.commons.enums.SystemEnums.CloudType;
+
 public class CloudInstance extends Instance {
 
     private CloudType type;
@@ -27,21 +31,19 @@ public class CloudInstance extends Instance {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public CloudInstance(final String ip, final Integer port) {
-        super(ip, port);
-        this.type = CloudType.LOCAL;
+    public CloudInstance() {
+        super();
+        this.type = LOCAL;
     }
 
-    public CloudInstance(final String ip, final Integer port, final CloudType type) {
-        super(ip, port);
+    public CloudInstance(final String ip, final Integer port, final Credentials credentials) {
+        super(ip, port, credentials);
+        this.type = LOCAL;
+    }
+
+    public CloudInstance(final String ip, final Integer port, final Credentials credentials, final CloudType type) {
+        super(ip, port, credentials);
         this.type = type;
-    }
-
-    public static enum CloudType {
-        LOCAL,
-        AWS,
-        CGP,
-        AZURE
     }
 
     public CloudType getType() {
@@ -51,5 +53,4 @@ public class CloudInstance extends Instance {
     public void setType(final CloudType type) {
         this.type = type;
     }
-
 }

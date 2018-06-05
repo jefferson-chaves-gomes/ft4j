@@ -20,9 +20,14 @@
  */
 package app.models;
 
-import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
+import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
 
-public class TaskResubmission extends Technic {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TaskResubmission extends Technique {
+
+    protected List<CloudInstance> lstInstances;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -31,7 +36,45 @@ public class TaskResubmission extends Technic {
         super();
     }
 
+    public TaskResubmission(final List<CloudInstance> lstInstances) {
+        super();
+        this.lstInstances = lstInstances;
+    }
+
     public TaskResubmission(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
         super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.models.Technique#execute(java.lang.String, java.lang.String)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public void execute(final String moduleId, final String taskStartupCommand) {
+        // TODO
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public List<CloudInstance> getLstInstances() {
+        return this.lstInstances;
+    }
+
+    public void setLstInstances(final List<CloudInstance> lstReplicas) {
+        this.lstInstances = lstReplicas;
+    }
+
+    public boolean addReplica(final CloudInstance replica) {
+        if (this.getLstInstances() == null) {
+            this.setLstInstances(new ArrayList<CloudInstance>());
+        }
+        return this.getLstInstances().add(replica);
+    }
+
+    public boolean removeReplica(final CloudInstance replica) {
+        if (this.getLstInstances() != null) {
+            return this.getLstInstances().remove(replica);
+        }
+        return false;
     }
 }

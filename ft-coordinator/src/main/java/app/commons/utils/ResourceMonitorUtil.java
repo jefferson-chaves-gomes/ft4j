@@ -51,7 +51,7 @@ public final class ResourceMonitorUtil {
             }
             return cpuUsage;
         } catch (IOException | InterruptedException e) {
-            LoggerUtil.warn(ERROR_READ_CPU_USAGE, e);
+            LoggerUtil.error(ERROR_READ_CPU_USAGE, e);
         }
         return null;
     }
@@ -60,7 +60,7 @@ public final class ResourceMonitorUtil {
         try {
             return getOutputAsFloat(getMemUsageCommand());
         } catch (IOException | InterruptedException e) {
-            LoggerUtil.warn(ERROR_READ_MEM_USAGE, e);
+            LoggerUtil.error(ERROR_READ_MEM_USAGE, e);
         }
         return null;
     }

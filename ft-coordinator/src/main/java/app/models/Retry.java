@@ -20,9 +20,9 @@
  */
 package app.models;
 
-import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
+import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
 
-public class Retry extends Technic {
+public class Retry extends Technique {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -33,5 +33,13 @@ public class Retry extends Technic {
 
     public Retry(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
         super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // * @see app.models.Technique#execute(java.lang.String, java.lang.String)
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    @Override
+    public void execute(final String moduleId, final String taskStartupCommand) {
+        // TODO
     }
 }

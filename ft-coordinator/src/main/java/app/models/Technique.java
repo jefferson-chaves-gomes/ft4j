@@ -20,32 +20,49 @@
  */
 package app.models;
 
-import static app.commons.enums.SystemEnums.FaultToletanceType.REACTVE;
+import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
 
-import app.commons.enums.SystemEnums.FaultToletanceType;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
+import app.commons.enums.SystemEnums.FaultToletancePolicy;
 import app.models.base.BaseModel;
 
-public class Technic extends BaseModel {
+@JsonTypeInfo(use = Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
+@JsonSubTypes({
+        @Type(value = SoftwareRejuvenation.class),
+        @Type(value = Retry.class),
+        @Type(value = TaskResubmission.class),
+        @Type(value = Replication.class),
+})
+public abstract class Technique extends BaseModel {
 
     private AttemptsNumber attemptsNumber;
     private DelayBetweenAttempts delayBetweenAttempts;
     private Timeout timeout;
-    private FaultToletanceType ftType;
+    private FaultToletancePolicy ftType;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public Technic() {
+    public Technique() {
         this(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(), REACTVE);
     }
 
-    public Technic(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout, final FaultToletanceType ftType) {
+    public Technique(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout, final FaultToletancePolicy ftType) {
         super();
         this.attemptsNumber = attemptsNumber;
         this.delayBetweenAttempts = delayBetweenAttempts;
         this.timeout = timeout;
         this.ftType = ftType;
     }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // abstract methods.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    abstract public void execute(final String moduleId, final String taskStartupCommand);
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // get/set.
@@ -74,11 +91,11 @@ public class Technic extends BaseModel {
         this.timeout = timeout;
     }
 
-    public FaultToletanceType getFtType() {
+    public FaultToletancePolicy getFtType() {
         return this.ftType;
     }
 
-    public void setFtType(final FaultToletanceType ftType) {
+    public void setFtType(final FaultToletancePolicy ftType) {
         this.ftType = ftType;
     }
 }
