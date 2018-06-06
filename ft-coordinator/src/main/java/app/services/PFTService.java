@@ -38,9 +38,9 @@ public class PFTService extends FaultToleranceService implements Runnable {
 
     private static final String SERVICE_NAME_VIOLATION_OF_RULE = SERVICE_NAME + "- rule violation: [cpuUsage, memUsage] > [maxCpuUsage, maxMemoryUsage], usage[{%f}, {%f}] > maxUsage[{%f}, {%f}]";
     private static final String SERVICE_NAME_VALIDATION_OF_RULE = SERVICE_NAME + "- rule validation: [cpuUsage, memUsage] < [maxCpuUsage, maxMemoryUsage], usage[{%f}, {%f}] < maxUsage[{%f}, {%f}]";
-    private static final String SOFTWARE_REJUVENATION_WAITING_TIMEOUT = "   Software Rejuvenation: waiting %s minutes for timeout";
+    private static final String SOFTWARE_REJUVENATION_WAITING_TIMEOUT = "Software Rejuvenation: waiting %s minutes for timeout";
     private static final String RUNNING_SERVICE = "Running " + PFTService.class.getName();
-    private static final String SERVICE_STATUS = "   FaultToleranceService is " + FaultToleranceService.status;
+    private static final String SERVICE_STATUS = "FaultToleranceService is " + FaultToleranceService.status;
     private final SoftwareRejuvenation softwareRejuvenation;
     private final Level level;
     private Instant start;

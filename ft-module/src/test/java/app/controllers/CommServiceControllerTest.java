@@ -38,7 +38,7 @@ public class CommServiceControllerTest {
         this.lstFakeNodes.add(new CloudInstance("10.0.0.2", 22, new Credentials("user02", "pass02")));
         this.lstFakeNodes.add(new CloudInstance("10.0.0.3", 23, new Credentials("user03", "pass03")));
         this.ftLevel.setModuleId(MODULE_ID);
-        this.ftLevel.addTechnique(new SoftwareRejuvenation(90, 90));
+        this.ftLevel.addTechnique(new SoftwareRejuvenation(93, 93));
         this.ftLevel.addTechnique(new Retry());
         this.ftLevel.addTechnique(new TaskResubmission());
         this.ftLevel.addTechnique(new Replication(this.lstFakeNodes));

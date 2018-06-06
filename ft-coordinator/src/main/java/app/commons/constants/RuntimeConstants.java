@@ -20,9 +20,13 @@
  */
 package app.commons.constants;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 
+import app.FaultToleranceCoordinator;
 import app.commons.enums.SystemEnums.OsType;
+import app.commons.utils.FileUtil;
 import app.commons.utils.HostInfoUtil;
 import app.commons.utils.LoggerUtil;
 import app.commons.utils.RuntimeUtil;
@@ -37,31 +41,27 @@ public final class RuntimeConstants {
     private static final String LNX_CPU_USAGE = "shell-scripts/cpu-usage-lnx.sh";
     private static final String LNX_MEM_USAGE = "shell-scripts/mem-usage-lnx.sh";
 
-    public static final Command CMD_MEM_USAGE_LNX = new Command(Command.class.getClassLoader().getResource(LNX_MEM_USAGE).getPath());
-    public static final Command CMD_MEM_USAGE_MAC = new Command(MAC_MEM_USAGE);
-    public static final Command CMD_MEM_USAGE_WIN = new Command(Command.class.getClassLoader().getResource(WIN_MEM_USAGE).getPath());
-    public static final Command CMD_CPU_USAGE_LNX = new Command(Command.class.getClassLoader().getResource(LNX_CPU_USAGE).getPath());
-    public static final Command CMD_CPU_USAGE_MAC = new Command(Command.class.getClassLoader().getResource(MAC_CPU_USAGE).getPath());
-    public static final Command CMD_CPU_USAGE_WIN = new Command(WIN_CPU_USAGE);
+    public static Command CMD_MEM_USAGE_LNX;
+    public static Command CMD_MEM_USAGE_MAC;
+    public static Command CMD_MEM_USAGE_WIN;
+    public static Command CMD_CPU_USAGE_LNX;
+    public static Command CMD_CPU_USAGE_MAC;
+    public static Command CMD_CPU_USAGE_WIN;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // static block.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     static {
-        final String execPermission = "chmod 755 ";
         try {
-            if (OsType.WINDOWS != HostInfoUtil.getOsType()) {
-                final String[] shellScriptArray = new String[] {
-                        MAC_CPU_USAGE,
-                        LNX_CPU_USAGE,
-                        LNX_MEM_USAGE
-                };
-                for (final String string : shellScriptArray) {
-                    final String shellScritpPath = Command.class.getClassLoader().getResource(string).getPath();
-                    final Command command = new Command(execPermission + shellScritpPath);
-                    RuntimeUtil.execAndGetResponseString(command);
-                }
-            }
+            CMD_MEM_USAGE_LNX = new Command(createAuxFileAndGetPath(LNX_MEM_USAGE));
+            CMD_MEM_USAGE_MAC = new Command(MAC_MEM_USAGE);
+            CMD_MEM_USAGE_WIN = new Command(createAuxFileAndGetPath(WIN_MEM_USAGE));
+            CMD_CPU_USAGE_LNX = new Command(createAuxFileAndGetPath(LNX_CPU_USAGE));
+            CMD_CPU_USAGE_MAC = new Command(createAuxFileAndGetPath(MAC_CPU_USAGE));
+            CMD_CPU_USAGE_WIN = new Command(WIN_CPU_USAGE);
+
+            configFilesPermisstion();
+
         } catch (IOException | InterruptedException e) {
             LoggerUtil.error(e);
         }
@@ -72,5 +72,31 @@ public final class RuntimeConstants {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     private RuntimeConstants() throws IOException, InterruptedException {
         super();
+    }
+
+    private static String createAuxFileAndGetPath(final String zippedPath) throws IOException {
+
+        final File file = new File(FaultToleranceCoordinator.properties.getShellScriptsPath() + zippedPath);
+        try (
+             InputStream inputStream = Command.class.getClassLoader().getResource(zippedPath).openStream();) {
+            FileUtil.write(inputStream, file);
+        }
+        return file.getAbsolutePath();
+    }
+
+    private static void configFilesPermisstion() throws IOException, InterruptedException {
+
+        final String execPermission = "chmod 755 ";
+        if (OsType.WINDOWS != HostInfoUtil.getOsType()) {
+            final String[] shellScriptArray = new String[] {
+                    CMD_CPU_USAGE_MAC.toString(),
+                    CMD_CPU_USAGE_LNX.toString(),
+                    CMD_MEM_USAGE_LNX.toString()
+            };
+            for (final String shellScritpPath : shellScriptArray) {
+                final Command command = new Command(execPermission + shellScritpPath);
+                RuntimeUtil.execAndGetResponseString(command);
+            }
+        }
     }
 }

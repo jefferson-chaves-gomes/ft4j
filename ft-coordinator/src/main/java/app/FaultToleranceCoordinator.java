@@ -20,11 +20,19 @@
  */
 package app;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 public class FaultToleranceCoordinator {
+
+    public static FaultToleranceProperties properties;
+
+    @Autowired
+    public void setFaultToleranceProperties(final FaultToleranceProperties props) {
+        properties = props;
+    }
 
     public static void main(final String[] args) {
         SpringApplication.run(FaultToleranceCoordinator.class, args);

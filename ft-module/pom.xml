@@ -73,7 +73,8 @@
             <groupId>br.unb.cic.ft4j</groupId>
             <artifactId>ft-coordinator</artifactId>
             <version>0.0.1</version>
-            <!-- <scope>compile</scope> -->
+           <!--  <scope>compile</scope> -->
+            <!-- <type>jar</type> -->
             <!-- <systemPath>${project.basedir}/../ft-coordinator/target/ft-coordinator-0.0.1.jar</systemPath> -->
         </dependency>
     </dependencies>

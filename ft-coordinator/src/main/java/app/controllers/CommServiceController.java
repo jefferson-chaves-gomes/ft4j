@@ -60,8 +60,11 @@ public class CommServiceController implements CommService {
     @RequestMapping(value = IMALIVE, method = GET)
     public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleId) {
 
+        LoggerUtil.info(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
         LoggerUtil.info(" imalive called for: " + moduleId);
         LoggerUtil.info(" my PID is: " + ManagementFactory.getRuntimeMXBean().getName());
+        LoggerUtil.info(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
+
         return new Response(OK, moduleId);
     }
 

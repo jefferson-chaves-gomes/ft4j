@@ -21,6 +21,7 @@
 package app.commons.utils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import app.commons.enums.SystemEnums.FaultToletancePolicy;
 import app.models.Technique;
@@ -50,5 +51,9 @@ public final class StreamUtil {
         return list.stream()
                 .filter(x -> x.getFtType() == ftType)
                 .count() > 0;
+    }
+
+    public static String toString(final List<String> lstCommands) {
+        return lstCommands.stream().collect(Collectors.joining());
     }
 }

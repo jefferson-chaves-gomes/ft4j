@@ -41,27 +41,6 @@ public final class RuntimeUtil {
         super();
     }
 
-    public static class Command {
-
-        private final List<String> lstCommands = new ArrayList<>();
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        // Constructors.
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        public Command(final String... command) {
-            for (final String arg : command) {
-                final String[] split = arg.split(SPACE_STRING);
-                for (final String args : split) {
-                    this.lstCommands.add(args);
-                }
-            }
-        }
-
-        public List<String> getLstCommands() {
-            return this.lstCommands;
-        }
-    }
-
     synchronized public static String execAndGetResponseString(final Command command, final Map<String, String> env) throws IOException, InterruptedException {
 
         final ProcessBuilder builder = new ProcessBuilder(command.getLstCommands());
@@ -116,6 +95,35 @@ public final class RuntimeUtil {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Inner Class.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public static class Command {
+
+        private final List<String> lstCommands = new ArrayList<>();
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Constructors.
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        public Command(final String... command) {
+            for (final String arg : command) {
+                final String[] split = arg.split(SPACE_STRING);
+                for (final String args : split) {
+                    this.lstCommands.add(args);
+                }
+            }
+        }
+
+        public List<String> getLstCommands() {
+            return this.lstCommands;
+        }
+
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // * @see java.lang.Object#toString()
+        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        @Override
+        public String toString() {
+            return StreamUtil.toString(this.lstCommands);
+        }
+    }
+
     private class StreamGobblerThread extends Thread {
 
         private final InputStream stream;
