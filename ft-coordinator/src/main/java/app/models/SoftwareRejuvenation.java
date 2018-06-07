@@ -20,9 +20,16 @@
  */
 package app.models;
 
+import static app.commons.constants.MessageConstants.KILLING_THE_PARTNER_PID;
+import static app.commons.constants.MessageConstants.STARTING_THE_PARTNER_WITH_COMMAND;
+import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_KILLED;
+import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_STARTED_AGAIN;
 import static app.commons.enums.SystemEnums.FaultToletancePolicy.PROACTIVE;
 
+import java.util.concurrent.CompletableFuture;
+
 import app.commons.utils.LoggerUtil;
+import app.commons.utils.ResourceMonitorUtil;
 
 public class SoftwareRejuvenation extends Technique {
 
@@ -56,10 +63,27 @@ public class SoftwareRejuvenation extends Technique {
     @Override
     public void execute(final String moduleId, final String taskStartupCommand) {
 
-        LoggerUtil.info("Killing the PID: " + moduleId);
-        // TODO kill -9 moduleId
-        LoggerUtil.info("Starting the Partner with command: " + taskStartupCommand);
-        // TODO java -jar
+        try {
+            final String moduleIdDelimiter = "@";
+            final Integer modulePID = Integer.parseInt(moduleId.substring(0, moduleId.indexOf(moduleIdDelimiter)));
+            LoggerUtil.info(String.format(KILLING_THE_PARTNER_PID, modulePID));
+            if (ResourceMonitorUtil.kill(modulePID)) {
+                LoggerUtil.info(THE_PARTNER_WAS_KILLED);
+            }
+
+            LoggerUtil.info(String.format(STARTING_THE_PARTNER_WITH_COMMAND, taskStartupCommand));
+            CompletableFuture.runAsync(() -> {
+                try {
+                    if (ResourceMonitorUtil.start(taskStartupCommand)) {
+                        LoggerUtil.info(THE_PARTNER_WAS_STARTED_AGAIN);
+                    }
+                } catch (final Exception e) {
+                    LoggerUtil.error(e);
+                }
+            });
+        } catch (final Exception e) {
+            LoggerUtil.error(e);
+        }
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

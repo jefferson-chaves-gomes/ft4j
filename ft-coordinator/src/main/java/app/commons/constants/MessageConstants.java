@@ -25,6 +25,7 @@ public final class MessageConstants {
     public static final String ERROR_REGISTER_COORDINATOR = "Error attempting to register at FTCoordinator";
     public static final String ERROR_READ_CPU_USAGE = "Error attempting to read the CPU usage";
     public static final String ERROR_READ_MEM_USAGE = "Error attempting to read the MEMORY usage";
+    public static final String ERROR_KILL_PID = "Error attempting to kill Process PID";
     public static final String ERROR_RUNTIME_EXECUTION = "Runtime execution error!";
     public static final String SHUTDOWN_FINISHED = "Shutdown finished";
     public static final String CANCEL_NON_FINISHED_TASKS = "Cancel non-finished tasks";
@@ -37,6 +38,10 @@ public final class MessageConstants {
     public static final String FT_MODULE_INITIALIZED_SUCCESSFULLY = "Communication was initialized successfully";
     public static final String TRYING_TO_CONTACT_MODULE_AT_COORDINATOR = "Trying to contact the coordinator";
     public static final String TRYING_TO_REGISTER_MODULE_AT_COORDINATOR = "Trying to register module at coordinator";
+    public static final String THE_PARTNER_WAS_STARTED_AGAIN = "The Partner was started again";
+    public static final String STARTING_THE_PARTNER_WITH_COMMAND = "Starting the Partner with command: %s";
+    public static final String THE_PARTNER_WAS_KILLED = "The Partner was killed";
+    public static final String KILLING_THE_PARTNER_PID = "Killing the Partner - PID: %d";
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.

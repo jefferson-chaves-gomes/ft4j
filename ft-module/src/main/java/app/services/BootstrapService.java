@@ -33,6 +33,8 @@ import static app.commons.constants.MessageConstants.TRYING_TO_REGISTER_MODULE_A
 import static app.commons.constants.MessageConstants.WAITING_START_FT_COORDINATOR_START;
 import static app.commons.constants.TimeConstants.DEFAULT_TIME_UNIT;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
+import static app.conf.Routes.IMALIVE;
+import static app.conf.Routes.SHUTDOWN;
 import static app.models.AttemptsNumber.DEFAULT_VALUE;
 
 import java.io.IOException;
@@ -50,7 +52,6 @@ import app.commons.utils.LoggerUtil;
 import app.commons.utils.RuntimeUtil;
 import app.commons.utils.RuntimeUtil.Command;
 import app.commons.utils.StreamUtil;
-import app.conf.Routes;
 import app.models.Level;
 import app.models.Replication;
 import app.models.Retry;
@@ -60,7 +61,7 @@ import app.models.Technique;
 
 public class BootstrapService implements FaultToleranceModule {
 
-    private final static String STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1.jar";
+    private final static String STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1-exec.jar";
     private static BootstrapService bootstrap;
     private static ExecutorService executor;
     private static CommServiceThread commService;
@@ -86,8 +87,10 @@ public class BootstrapService implements FaultToleranceModule {
     @Override
     public void start(final Level ftLevel) throws SystemException, InterruptedException {
         this.validate(ftLevel);
-        this.startFtCoordinator(ftLevel);
         commService = new CommServiceThread(ftLevel);
+        if (!commService.callRequest(IMALIVE, true)) {
+            this.startFtCoordinator();
+        }
         executor.submit(commService);
         this.waitForCommunication(commService);
         if (STARTED != commService.getStatus() || !commService.isRegistered()) {
@@ -117,7 +120,7 @@ public class BootstrapService implements FaultToleranceModule {
     public void stop() {
         try {
             LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_COORDINATOR);
-            commService.callRequest(Routes.SHUTDOWN);
+            commService.callRequest(SHUTDOWN);
             LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_EXECUTOR);
             executor.shutdown();
             executor.awaitTermination(DEFAULT_VALUE, DEFAULT_TIME_UNIT);
@@ -176,7 +179,7 @@ public class BootstrapService implements FaultToleranceModule {
         }
     }
 
-    private void startFtCoordinator(final Level ftLevel) throws SystemException, InterruptedException {
+    private void startFtCoordinator() throws SystemException, InterruptedException {
         CompletableFuture.runAsync(() -> {
             try {
                 LoggerUtil.info(START_FT_COORDINATOR_CALLED + STARTUP_COMMAND);

@@ -20,14 +20,18 @@
  */
 package app.commons.utils;
 
+import static app.commons.constants.MessageConstants.ERROR_KILL_PID;
 import static app.commons.constants.MessageConstants.ERROR_READ_CPU_USAGE;
 import static app.commons.constants.MessageConstants.ERROR_READ_MEM_USAGE;
-import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_LNX;
-import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_MAC;
-import static app.commons.constants.RuntimeConstants.CMD_CPU_USAGE_WIN;
-import static app.commons.constants.RuntimeConstants.CMD_MEM_USAGE_LNX;
-import static app.commons.constants.RuntimeConstants.CMD_MEM_USAGE_MAC;
-import static app.commons.constants.RuntimeConstants.CMD_MEM_USAGE_WIN;
+import static app.commons.constants.RuntimeConstants.CMD_LNX_CPU_USAGE;
+import static app.commons.constants.RuntimeConstants.CMD_LNX_MEM_USAGE;
+import static app.commons.constants.RuntimeConstants.CMD_MAC_CPU_USAGE;
+import static app.commons.constants.RuntimeConstants.CMD_MAC_MEM_USAGE;
+import static app.commons.constants.RuntimeConstants.CMD_WIN_CPU_USAGE;
+import static app.commons.constants.RuntimeConstants.CMD_WIN_MEM_USAGE;
+import static app.commons.constants.RuntimeConstants.LNX_KILL_PID;
+import static app.commons.constants.RuntimeConstants.MAC_KILL_PID;
+import static app.commons.constants.RuntimeConstants.WIN_KILL_PID;
 
 import java.io.IOException;
 
@@ -65,6 +69,25 @@ public final class ResourceMonitorUtil {
         return null;
     }
 
+    public static boolean kill(final Integer pid) {
+        try {
+            RuntimeUtil.exec(getKillCommand(pid));
+        } catch (IOException | InterruptedException e) {
+            LoggerUtil.error(ERROR_KILL_PID, e);
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean start(final String startupCommand) {
+        try {
+            RuntimeUtil.exec(new Command(startupCommand));
+        } catch (IOException | InterruptedException e) {
+            return false;
+        }
+        return true;
+    }
+
     private static Float getOutputAsFloat(final Command cmd) throws IOException, InterruptedException {
         final String result = RuntimeUtil.execAndGetResponseString(cmd);
         return Float.valueOf(StringUtil.removeNonNumeric(result));
@@ -74,13 +97,13 @@ public final class ResourceMonitorUtil {
         Command cmd = null;
         switch (HostInfoUtil.getOsType()) {
             case WINDOWS:
-                cmd = CMD_CPU_USAGE_WIN;
+                cmd = CMD_WIN_CPU_USAGE;
                 break;
             case MAC:
-                cmd = CMD_CPU_USAGE_MAC;
+                cmd = CMD_MAC_CPU_USAGE;
                 break;
             default:
-                cmd = CMD_CPU_USAGE_LNX;
+                cmd = CMD_LNX_CPU_USAGE;
                 break;
         }
         return cmd;
@@ -90,13 +113,29 @@ public final class ResourceMonitorUtil {
         Command cmd = null;
         switch (HostInfoUtil.getOsType()) {
             case WINDOWS:
-                cmd = CMD_MEM_USAGE_WIN;
+                cmd = CMD_WIN_MEM_USAGE;
                 break;
             case MAC:
-                cmd = CMD_MEM_USAGE_MAC;
+                cmd = CMD_MAC_MEM_USAGE;
                 break;
             default:
-                cmd = CMD_MEM_USAGE_LNX;
+                cmd = CMD_LNX_MEM_USAGE;
+                break;
+        }
+        return cmd;
+    }
+
+    private static Command getKillCommand(final Integer pid) {
+        Command cmd = null;
+        switch (HostInfoUtil.getOsType()) {
+            case WINDOWS:
+                cmd = new Command(String.format(WIN_KILL_PID, pid));
+                break;
+            case MAC:
+                cmd = new Command(String.format(MAC_KILL_PID, pid));
+                break;
+            default:
+                cmd = new Command(String.format(LNX_KILL_PID, pid));
                 break;
         }
         return cmd;

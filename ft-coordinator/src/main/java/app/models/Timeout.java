@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Timeout extends TimeArgument {
 
-    private final static short DEFAULT_VALUE = 30 * 1; // ONE HOUR
+    private final static short DEFAULT_VALUE = 60 * 60; // ONE HOUR
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.

@@ -6,6 +6,7 @@ import static org.springframework.http.HttpStatus.OK;
 
 import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,13 +20,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import app.commons.http.Response;
 import app.conf.Routes;
+import app.models.AttemptsNumber;
 import app.models.CloudInstance;
 import app.models.Credentials;
+import app.models.DelayBetweenAttempts;
 import app.models.Level;
 import app.models.Replication;
 import app.models.Retry;
 import app.models.SoftwareRejuvenation;
 import app.models.TaskResubmission;
+import app.models.Timeout;
 import app.models.ZooInstance;
 
 @RunWith(SpringRunner.class)
@@ -50,7 +54,7 @@ public class ControllersRestTemplateTest {
         this.lstFakeNodes.add(new CloudInstance("10.0.0.2", 22, new Credentials("user02", "pass02")));
         this.lstFakeNodes.add(new CloudInstance("10.0.0.3", 23, new Credentials("user03", "pass03")));
         this.level.setModuleId(MODULE_ID);
-        this.level.addTechnique(new SoftwareRejuvenation());
+        this.level.addTechnique(new SoftwareRejuvenation(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(30, TimeUnit.SECONDS), 97, 90));
         this.level.addTechnique(new Retry());
         this.level.addTechnique(new TaskResubmission());
         this.level.addTechnique(new Replication(this.lstFakeNodes));

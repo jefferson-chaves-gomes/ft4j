@@ -41,6 +41,14 @@ public final class RuntimeUtil {
         super();
     }
 
+    public static String execAndGetResponseString(final Command command) throws IOException, InterruptedException {
+        return execAndGetResponseString(command, null);
+    }
+
+    public static Process exec(final Command command) throws IOException, InterruptedException {
+        return exec(command, null);
+    }
+
     synchronized public static String execAndGetResponseString(final Command command, final Map<String, String> env) throws IOException, InterruptedException {
 
         final ProcessBuilder builder = new ProcessBuilder(command.getLstCommands());
@@ -64,14 +72,6 @@ public final class RuntimeUtil {
             }
         }
         return builder.start();
-    }
-
-    public static String execAndGetResponseString(final Command command) throws IOException, InterruptedException {
-        return execAndGetResponseString(command, null);
-    }
-
-    public static Process exec(final Command command) throws IOException, InterruptedException {
-        return exec(command, null);
     }
 
     synchronized private static String getProcessReturn(final Process process) throws InterruptedException {

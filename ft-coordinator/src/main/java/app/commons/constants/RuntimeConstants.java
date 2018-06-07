@@ -41,24 +41,28 @@ public final class RuntimeConstants {
     private static final String LNX_CPU_USAGE = "shell-scripts/cpu-usage-lnx.sh";
     private static final String LNX_MEM_USAGE = "shell-scripts/mem-usage-lnx.sh";
 
-    public static Command CMD_MEM_USAGE_LNX;
-    public static Command CMD_MEM_USAGE_MAC;
-    public static Command CMD_MEM_USAGE_WIN;
-    public static Command CMD_CPU_USAGE_LNX;
-    public static Command CMD_CPU_USAGE_MAC;
-    public static Command CMD_CPU_USAGE_WIN;
+    public static final String WIN_KILL_PID = "tskill %d";
+    public static final String MAC_KILL_PID = "kill -9 %d";
+    public static final String LNX_KILL_PID = MAC_MEM_USAGE;
+
+    public static Command CMD_LNX_MEM_USAGE;
+    public static Command CMD_MAC_MEM_USAGE;
+    public static Command CMD_WIN_MEM_USAGE;
+    public static Command CMD_LNX_CPU_USAGE;
+    public static Command CMD_MAC_CPU_USAGE;
+    public static Command CMD_WIN_CPU_USAGE;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // static block.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     static {
         try {
-            CMD_MEM_USAGE_LNX = new Command(createAuxFileAndGetPath(LNX_MEM_USAGE));
-            CMD_MEM_USAGE_MAC = new Command(MAC_MEM_USAGE);
-            CMD_MEM_USAGE_WIN = new Command(createAuxFileAndGetPath(WIN_MEM_USAGE));
-            CMD_CPU_USAGE_LNX = new Command(createAuxFileAndGetPath(LNX_CPU_USAGE));
-            CMD_CPU_USAGE_MAC = new Command(createAuxFileAndGetPath(MAC_CPU_USAGE));
-            CMD_CPU_USAGE_WIN = new Command(WIN_CPU_USAGE);
+            CMD_LNX_MEM_USAGE = new Command(createAuxFileAndGetPath(LNX_MEM_USAGE));
+            CMD_MAC_MEM_USAGE = new Command(MAC_MEM_USAGE);
+            CMD_WIN_MEM_USAGE = new Command(createAuxFileAndGetPath(WIN_MEM_USAGE));
+            CMD_LNX_CPU_USAGE = new Command(createAuxFileAndGetPath(LNX_CPU_USAGE));
+            CMD_MAC_CPU_USAGE = new Command(createAuxFileAndGetPath(MAC_CPU_USAGE));
+            CMD_WIN_CPU_USAGE = new Command(WIN_CPU_USAGE);
 
             configFilesPermisstion();
 
@@ -89,9 +93,9 @@ public final class RuntimeConstants {
         final String execPermission = "chmod 755 ";
         if (OsType.WINDOWS != HostInfoUtil.getOsType()) {
             final String[] shellScriptArray = new String[] {
-                    CMD_CPU_USAGE_MAC.toString(),
-                    CMD_CPU_USAGE_LNX.toString(),
-                    CMD_MEM_USAGE_LNX.toString()
+                    CMD_MAC_CPU_USAGE.toString(),
+                    CMD_LNX_CPU_USAGE.toString(),
+                    CMD_LNX_MEM_USAGE.toString()
             };
             for (final String shellScritpPath : shellScriptArray) {
                 final Command command = new Command(execPermission + shellScritpPath);

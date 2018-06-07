@@ -68,6 +68,7 @@ public class RecoveryService extends FaultToleranceService implements Runnable {
     @Override
     public void run() {
 
+        LoggerUtil.info("Performing recovery... " + this.technique.getClass().getName());
         this.technique.execute(this.moduleId, this.taskStartupCommand);
         FaultToleranceService.status = STOPPED;
     }

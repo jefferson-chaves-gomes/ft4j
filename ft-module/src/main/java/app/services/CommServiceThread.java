@@ -87,6 +87,10 @@ public class CommServiceThread implements Runnable {
     }
 
     public boolean callRequest(final String route) {
+        return this.callRequest(route, false);
+    }
+
+    public boolean callRequest(final String route, final boolean skipErrorLog) {
         try {
             switch (route) {
                 case REGISTER:
@@ -99,7 +103,9 @@ public class CommServiceThread implements Runnable {
                     break;
             }
         } catch (final RestClientException e) {
-            LoggerUtil.error(e);
+            if (!skipErrorLog) {
+                LoggerUtil.error(e);
+            }
         }
         return false;
     }
