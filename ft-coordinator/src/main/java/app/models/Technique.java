@@ -64,6 +64,12 @@ public abstract class Technique extends BaseModel {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     abstract public void execute(final String moduleId, final String taskStartupCommand);
 
+    protected Integer getModulePID(final String moduleId) {
+        final String moduleIdDelimiter = "@";
+        final Integer modulePID = Integer.parseInt(moduleId.substring(0, moduleId.indexOf(moduleIdDelimiter)));
+        return modulePID;
+    }
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // get/set.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

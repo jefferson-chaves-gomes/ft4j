@@ -64,8 +64,7 @@ public class SoftwareRejuvenation extends Technique {
     public void execute(final String moduleId, final String taskStartupCommand) {
 
         try {
-            final String moduleIdDelimiter = "@";
-            final Integer modulePID = Integer.parseInt(moduleId.substring(0, moduleId.indexOf(moduleIdDelimiter)));
+            final Integer modulePID = super.getModulePID(moduleId);
             LoggerUtil.info(String.format(KILLING_THE_PARTNER_PID, modulePID));
             if (ResourceMonitorUtil.kill(modulePID)) {
                 LoggerUtil.info(THE_PARTNER_WAS_KILLED);
