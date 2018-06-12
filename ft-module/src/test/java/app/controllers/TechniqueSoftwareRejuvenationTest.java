@@ -1,35 +1,35 @@
 package app.controllers;
 
+import java.time.Instant;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
 
-import app.models.AttemptsNumber;
-import app.models.DelayBetweenAttempts;
 import app.models.Level;
 import app.models.SoftwareRejuvenation;
 import app.models.Timeout;
 
 public class TechniqueSoftwareRejuvenationTest extends BaseIntegrationTest {
 
-    private final static String STARTUP_COMMAND = "touch zzz-createdBy-SoftwareRejuvenation.txt";
-    private final Level ftLevel = new Level(STARTUP_COMMAND, super.zooInstance);
+    private final static String STARTUP_COMMAND = String.format("touch zzz-createdBy-SoftwareRejuvenation_%s.txt", Instant.now());
+    private final Level ftLevel;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public TechniqueSoftwareRejuvenationTest() {
         super();
-        this.ftLevel.setModuleId(MODULE_ID);
-        this.ftLevel.addTechnique(new SoftwareRejuvenation(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(30, TimeUnit.SECONDS), 97, 95));
+        this.ftLevel = new Level(STARTUP_COMMAND);
+        this.ftLevel.setModuleId(RUNTIME_MODULE_ID);
+        this.ftLevel.addTechnique(new SoftwareRejuvenation(new Timeout(30L, TimeUnit.SECONDS), 97, 95));
     }
 
     @Test
     public void testSoftwareRejuvenation() throws Exception {
 
         super.ftModule.start(this.ftLevel);
-        TimeUnit.SECONDS.sleep(120);
+        TimeUnit.SECONDS.sleep(60);
 
         super.ftModule.stop();
         TimeUnit.SECONDS.sleep(10);

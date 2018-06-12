@@ -11,13 +11,12 @@ import app.services.BootstrapService;
 
 public class BaseIntegrationTest {
 
-    protected final static int ZOO_PORT = 2181;
-    protected final static String ZOO_IP = "0.0.0.0";
-    protected final static String MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
-    protected final ZooInstance zooInstance = new ZooInstance(ZOO_IP, ZOO_PORT, new Credentials("userZoo", "passZoo01"));
-    protected final ArrayList<CloudInstance> lstFakeNodes = new ArrayList<>();
-
+    protected static final int ZOO_PORT = 2181;
+    protected static final String ZOO_IP = "0.0.0.0";
+    protected static final String RUNTIME_MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
     protected final FaultToleranceModule ftModule = BootstrapService.getInstance();
+    protected final ArrayList<CloudInstance> lstFakeNodes = new ArrayList<>();
+    protected final ZooInstance zooInstance = new ZooInstance(ZOO_IP, ZOO_PORT, new Credentials("userZoo", "passZoo01"));
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.

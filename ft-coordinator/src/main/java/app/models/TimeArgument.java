@@ -26,15 +26,13 @@ import app.models.base.BaseModel;
 
 public class TimeArgument extends BaseModel {
 
-    public final static TimeUnit DEFAULT_UNIT = TimeUnit.SECONDS;
-
-    private final int value;
+    private final Long value;
     private final TimeUnit unit;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public TimeArgument(final int value, final TimeUnit unit) {
+    public TimeArgument(final Long value, final TimeUnit unit) {
         super();
         this.value = value;
         this.unit = unit;
@@ -43,7 +41,7 @@ public class TimeArgument extends BaseModel {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // get/set.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public int getValue() {
+    public Long getValue() {
         return this.value;
     }
 

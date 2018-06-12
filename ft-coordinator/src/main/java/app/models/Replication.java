@@ -21,6 +21,7 @@
 package app.models;
 
 import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
+import static app.commons.enums.SystemEnums.Priority.MAX_PRIORITY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,16 +34,11 @@ public class Replication extends Technique {
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Replication() {
-        super();
+        this(new ArrayList<>());
     }
 
     public Replication(final List<CloudInstance> lstReplicas) {
-        super();
-        this.lstReplicas = lstReplicas;
-    }
-
-    public Replication(final List<CloudInstance> lstReplicas, final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
+        super(REACTVE, MAX_PRIORITY);
         this.lstReplicas = lstReplicas;
     }
 

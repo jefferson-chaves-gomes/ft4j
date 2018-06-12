@@ -20,20 +20,33 @@
  */
 package app.models;
 
-import java.util.concurrent.TimeUnit;
+import app.models.base.BaseModel;
 
-public class AttemptsNumber extends TimeArgument {
+public class AttemptsNumber extends BaseModel {
 
-    public final static short DEFAULT_VALUE = 3;
+    public final static long DEFAULT_VALUE = 3L;
+    private long value;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public AttemptsNumber() {
-        super(DEFAULT_VALUE, DEFAULT_UNIT);
+        this(DEFAULT_VALUE);
     }
 
-    public AttemptsNumber(final int value, final TimeUnit unit) {
-        super(value, unit);
+    public AttemptsNumber(final long value) {
+        super();
+        this.value = value;
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    public long getValue() {
+        return this.value;
+    }
+
+    public void setValue(final long value) {
+        this.value = value;
     }
 }

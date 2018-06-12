@@ -83,6 +83,8 @@
                 <configuration>
                     <excludes>
                         <exclude>**/TechniqueSoftwareRejuvenationTest.java</exclude>
+                        <exclude>**/TechniqueRetryTest.java</exclude>
+                        <exclude>**/TechniqueTaskResubmissionTest.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>

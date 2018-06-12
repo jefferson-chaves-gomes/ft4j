@@ -68,4 +68,11 @@ public final class SystemEnums {
         CGP,
         AZURE
     }
+
+    public static enum Priority {
+        MAX_PRIORITY,
+        HIGH_PRIORITY,
+        NORM_PRIORITY,
+        MIN_PRIORITY;
+    }
 }

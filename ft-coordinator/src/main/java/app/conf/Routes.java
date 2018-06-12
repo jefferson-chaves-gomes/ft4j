@@ -23,7 +23,8 @@ package app.conf;
 public final class Routes {
 
     public static final String MODULE_ID = "{moduleId}";
-    public static final String IMALIVE = "/imalive/" + MODULE_ID;
+    public static final String LATENCY_MILLES = "{latencyMilles}";
+    public static final String IMALIVE = "/imalive/" + MODULE_ID + "/" + LATENCY_MILLES;
     public static final String REGISTER = "/register";
     public static final String SHUTDOWN = "/shutdown/" + MODULE_ID;
 

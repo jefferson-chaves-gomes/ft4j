@@ -20,20 +20,22 @@
  */
 package app.models;
 
+import static app.commons.constants.TimeConstants.DEFAULT_TIME_UNIT;
+
 import java.util.concurrent.TimeUnit;
 
 public class Timeout extends TimeArgument {
 
-    private final static short DEFAULT_VALUE = 60 * 60; // ONE HOUR
+    private final static long DEFAULT_TIMEOUT_VALUE = 60 * 60; // ONE HOUR
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Timeout() {
-        super(DEFAULT_VALUE, DEFAULT_UNIT);
+        super(DEFAULT_TIMEOUT_VALUE, DEFAULT_TIME_UNIT);
     }
 
-    public Timeout(final int value, final TimeUnit unit) {
+    public Timeout(final Long value, final TimeUnit unit) {
         super(value, unit);
     }
 }

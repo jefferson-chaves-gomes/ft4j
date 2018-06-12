@@ -24,8 +24,10 @@ import java.util.concurrent.TimeUnit;
 
 public final class TimeConstants {
 
-    public final static long DEFAULT_INITIAL_DELAY = 3;
-    public final static long DEFAULT_EXECTUTION_TIME = 10;
+    public static final long SHUTDOWN_TIME = 2;
+    public static final long DEFAULT_HEARTBEAT_TIME = 3;
+    public static final long DEFAULT_INITIAL_DELAY = 3;
+    public static final long DEFAULT_EXECTUTION_TIME = 10;
     public final static TimeUnit DEFAULT_TIME_UNIT = TimeUnit.SECONDS;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

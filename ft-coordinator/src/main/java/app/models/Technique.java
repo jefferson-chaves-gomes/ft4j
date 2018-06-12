@@ -20,7 +20,14 @@
  */
 package app.models;
 
+import static app.commons.constants.MessageConstants.KILLING_THE_PARTNER_PID;
+import static app.commons.constants.MessageConstants.STARTING_THE_PARTNER_WITH_COMMAND;
+import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_KILLED;
+import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_STARTED_AGAIN;
 import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
+import static app.commons.enums.SystemEnums.Priority.NORM_PRIORITY;
+
+import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
@@ -28,6 +35,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import app.commons.enums.SystemEnums.FaultToletancePolicy;
+import app.commons.enums.SystemEnums.Priority;
+import app.commons.utils.LoggerUtil;
+import app.commons.utils.ResourceMonitorUtil;
 import app.models.base.BaseModel;
 
 @JsonTypeInfo(use = Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "type")
@@ -39,24 +49,24 @@ import app.models.base.BaseModel;
 })
 public abstract class Technique extends BaseModel {
 
-    private AttemptsNumber attemptsNumber;
-    private DelayBetweenAttempts delayBetweenAttempts;
-    private Timeout timeout;
     private FaultToletancePolicy ftType;
+    private Priority priority;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Technique() {
-        this(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(), REACTVE);
+        this(REACTVE, NORM_PRIORITY);
     }
 
-    public Technique(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout, final FaultToletancePolicy ftType) {
+    public Technique(final FaultToletancePolicy ftType) {
+        this(ftType, NORM_PRIORITY);
+    }
+
+    public Technique(final FaultToletancePolicy ftType, final Priority priority) {
         super();
-        this.attemptsNumber = attemptsNumber;
-        this.delayBetweenAttempts = delayBetweenAttempts;
-        this.timeout = timeout;
         this.ftType = ftType;
+        this.priority = priority;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -65,43 +75,66 @@ public abstract class Technique extends BaseModel {
     abstract public void execute(final String moduleId, final String taskStartupCommand);
 
     protected Integer getModulePID(final String moduleId) {
+
+        final int startIndex = 0;
         final String moduleIdDelimiter = "@";
-        final Integer modulePID = Integer.parseInt(moduleId.substring(0, moduleId.indexOf(moduleIdDelimiter)));
-        return modulePID;
+        final String substring = moduleId.substring(startIndex, moduleId.indexOf(moduleIdDelimiter));
+        return Integer.parseInt(substring);
+    }
+
+    protected void stopStartLocal(final String moduleId, final String taskStartupCommand) {
+
+        this.stopLocal(moduleId);
+        this.startLocal(taskStartupCommand);
+    }
+
+    protected void stopLocal(final String moduleId) {
+
+        try {
+            final Integer modulePID = this.getModulePID(moduleId);
+            LoggerUtil.info(String.format(KILLING_THE_PARTNER_PID, modulePID));
+            if (ResourceMonitorUtil.kill(modulePID)) {
+                LoggerUtil.info(THE_PARTNER_WAS_KILLED);
+            }
+        } catch (final Exception e) {
+            LoggerUtil.error(e);
+        }
+    }
+
+    protected void startLocal(final String taskStartupCommand) {
+
+        try {
+            LoggerUtil.info(String.format(STARTING_THE_PARTNER_WITH_COMMAND, taskStartupCommand));
+            CompletableFuture.runAsync(() -> {
+                try {
+                    if (ResourceMonitorUtil.start(taskStartupCommand)) {
+                        LoggerUtil.info(THE_PARTNER_WAS_STARTED_AGAIN);
+                    }
+                } catch (final Exception e) {
+                    LoggerUtil.error(e);
+                }
+            });
+        } catch (final Exception e) {
+            LoggerUtil.error(e);
+        }
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // get/set.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public AttemptsNumber getAttemptsNumber() {
-        return this.attemptsNumber;
-    }
-
-    public void setAttemptsNumber(final AttemptsNumber attemptsNumber) {
-        this.attemptsNumber = attemptsNumber;
-    }
-
-    public DelayBetweenAttempts getDelayBetweenAttempts() {
-        return this.delayBetweenAttempts;
-    }
-
-    public void setDelayBetweenAttempts(final DelayBetweenAttempts delayBetweenAttempts) {
-        this.delayBetweenAttempts = delayBetweenAttempts;
-    }
-
-    public Timeout getTimeout() {
-        return this.timeout;
-    }
-
-    public void setTimeout(final Timeout timeout) {
-        this.timeout = timeout;
-    }
-
     public FaultToletancePolicy getFtType() {
         return this.ftType;
     }
 
     public void setFtType(final FaultToletancePolicy ftType) {
         this.ftType = ftType;
+    }
+
+    public Priority getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(final Priority priority) {
+        this.priority = priority;
     }
 }

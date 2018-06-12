@@ -27,11 +27,10 @@ import app.models.Level;
 
 public interface CommService {
 
-    public static final int SHUTDOWN_TIME = 5;
-
-    public Response imalive(final String moduleid);
+    public Response imalive(final String moduleid, final long latencyMilles);
 
     public Response register(final Level level) throws NoSuchMethodException, SecurityException, InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException;
 
     public Response shutdown(final String moduleid);
+
 }

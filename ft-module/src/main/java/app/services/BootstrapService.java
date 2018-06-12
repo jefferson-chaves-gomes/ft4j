@@ -52,6 +52,7 @@ import app.commons.utils.LoggerUtil;
 import app.commons.utils.RuntimeUtil;
 import app.commons.utils.RuntimeUtil.Command;
 import app.commons.utils.StreamUtil;
+import app.commons.utils.StringUtil;
 import app.models.Level;
 import app.models.Replication;
 import app.models.Retry;
@@ -61,7 +62,7 @@ import app.models.Technique;
 
 public class BootstrapService implements FaultToleranceModule {
 
-    private final static String STARTUP_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1-exec.jar";
+    private final static String STARTUP_COORDINATOR_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1-exec.jar";
     private static BootstrapService bootstrap;
     private static ExecutorService executor;
     private static CommServiceThread commService;
@@ -74,6 +75,7 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     public static BootstrapService getInstance() {
+
         if (bootstrap == null) {
             bootstrap = new BootstrapService();
             executor = Executors.newSingleThreadScheduledExecutor();
@@ -86,6 +88,7 @@ public class BootstrapService implements FaultToleranceModule {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void start(final Level ftLevel) throws SystemException, InterruptedException {
+
         this.validate(ftLevel);
         commService = new CommServiceThread(ftLevel);
         if (!commService.callRequest(IMALIVE, true)) {
@@ -101,6 +104,7 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     private void waitForCommunication(final CommServiceThread commService) throws InterruptedException {
+
         int attemptsNumber = 0;
         while (STARTED != commService.getStatus() && attemptsNumber++ < DEFAULT_VALUE) {
             LoggerUtil.info(TRYING_TO_CONTACT_MODULE_AT_COORDINATOR);
@@ -118,6 +122,7 @@ public class BootstrapService implements FaultToleranceModule {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void stop() {
+
         try {
             LoggerUtil.info(ATTEMPT_TO_SHUTDOWN_COORDINATOR);
             commService.callRequest(SHUTDOWN);
@@ -144,22 +149,29 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     private void validate(final Level ftLevel) throws SystemException {
+
         final List<Technique> lstTechnics = ftLevel.getLstTechniques();
         this.validateDuplications(lstTechnics);
-        this.validateArgsInitialization(lstTechnics);
+        this.validateArgsInitialization(ftLevel);
     }
 
-    private void validateArgsInitialization(final List<Technique> lstTechnics) throws ArgumentsInitializeException, ReplicationInitializeException {
-        for (final Object element : lstTechnics) {
-            if (element instanceof TaskResubmission) {
-                final TaskResubmission technic = (TaskResubmission) element;
-                if (technic.getAttemptsNumber().getValue() < 0
-                        || technic.getDelayBetweenAttempts().getValue() < 0
-                        || technic.getTimeout().getValue() < 0) {
-                    throw new ArgumentsInitializeException();
-                }
-                continue;
+    private void validateArgsInitialization(final Level level) throws ArgumentsInitializeException, ReplicationInitializeException {
+
+        if (level.getLstTechniques() == null || level.getLstTechniques().isEmpty()) {
+            throw new ArgumentsInitializeException();
+        }
+        if (StringUtil.isEmpty(level.getTaskStartupCommand())) {
+            throw new ArgumentsInitializeException();
+        }
+
+        if (level.getHeartbeatTimeInSeconds() == null || level.getHeartbeatTimeInSeconds() <= 0) {
+            if (StreamUtil.hasFaultToleranceTechinique(level.getLstTechniques(), Retry.class)
+                    || StreamUtil.hasFaultToleranceTechinique(level.getLstTechniques(), TaskResubmission.class)) {
+                throw new ArgumentsInitializeException();
             }
+        }
+
+        for (final Object element : level.getLstTechniques()) {
             if (element instanceof Replication) {
                 final Replication technic = (Replication) element;
                 if (technic.getLstReplicas() == null || technic.getLstReplicas().isEmpty()) {
@@ -171,6 +183,7 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     private void validateDuplications(final List<Technique> lstTechnics) throws DuplicateInitializeException {
+
         if (StreamUtil.hasDuplicates(lstTechnics, SoftwareRejuvenation.class)
                 || StreamUtil.hasDuplicates(lstTechnics, Retry.class)
                 || StreamUtil.hasDuplicates(lstTechnics, TaskResubmission.class)
@@ -180,10 +193,11 @@ public class BootstrapService implements FaultToleranceModule {
     }
 
     private void startFtCoordinator() throws SystemException, InterruptedException {
+
         CompletableFuture.runAsync(() -> {
             try {
-                LoggerUtil.info(START_FT_COORDINATOR_CALLED + STARTUP_COMMAND);
-                RuntimeUtil.execAndGetResponseString(new Command(STARTUP_COMMAND));
+                LoggerUtil.info(START_FT_COORDINATOR_CALLED + STARTUP_COORDINATOR_COMMAND);
+                RuntimeUtil.execAndGetResponseString(new Command(STARTUP_COORDINATOR_COMMAND));
                 DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
             } catch (IOException | InterruptedException e) {
                 LoggerUtil.error(e);

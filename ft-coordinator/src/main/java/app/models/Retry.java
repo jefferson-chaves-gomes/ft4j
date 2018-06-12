@@ -20,9 +20,11 @@
  */
 package app.models;
 
-import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
+import static app.commons.enums.SystemEnums.Priority.NORM_PRIORITY;
 
-public class Retry extends Technique {
+import app.commons.enums.SystemEnums.Priority;
+
+public class Retry extends HeartbeatStrategy {
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -31,8 +33,16 @@ public class Retry extends Technique {
         super();
     }
 
-    public Retry(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
+    public Retry(final Timeout timeout) {
+        this(timeout, new AttemptsNumber());
+    }
+
+    public Retry(final Timeout timeout, final AttemptsNumber attemptsNumber) {
+        this(timeout, attemptsNumber, NORM_PRIORITY);
+    }
+
+    public Retry(final Timeout timeout, final AttemptsNumber attemptsNumber, final Priority priority) {
+        super(timeout, attemptsNumber, priority);
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,6 +50,6 @@ public class Retry extends Technique {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void execute(final String moduleId, final String taskStartupCommand) {
-        // TODO
+        super.stopStartLocal(moduleId, taskStartupCommand);
     }
 }

@@ -25,6 +25,7 @@ import static app.commons.enums.SystemEnums.ExecutionStatus.ERROR;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STOPPED;
 import static app.conf.Routes.IMALIVE;
+import static app.conf.Routes.LATENCY_MILLES;
 import static app.conf.Routes.MODULE_ID;
 import static app.conf.Routes.REGISTER;
 import static app.conf.Routes.SHUTDOWN;
@@ -33,6 +34,8 @@ import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
 
 import java.lang.management.ManagementFactory;
+import java.time.Duration;
+import java.time.Instant;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClientException;
@@ -47,7 +50,8 @@ public class CommServiceThread implements Runnable {
 
     private static final int PORT = 7777;
     private static final String BASE_URL = "http://localhost:%s%s";
-    private static final String ARG_MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
+    private static final String RUNTIME_MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
+    private static Long latencyMilles = 0L;
     private final RestTemplate restTemplate = new RestTemplate();
     private Level level;
     private ExecutionStatus status = STOPPED;
@@ -76,12 +80,16 @@ public class CommServiceThread implements Runnable {
             this.status = ERROR;
             return;
         }
-        while (STARTED == this.status) {
-            try {
-                this.callRequest(IMALIVE);
-                DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
-            } catch (final InterruptedException e) {
-                LoggerUtil.error(e);
+        if (this.level.getHeartbeatTimeInSeconds() != null) {
+            while (STARTED == this.status) {
+                try {
+                    final Instant start = Instant.now();
+                    this.callRequest(IMALIVE);
+                    latencyMilles = Duration.between(start, Instant.now()).toMillis();
+                    DEFAULT_TIME_UNIT.sleep(this.level.getHeartbeatTimeInSeconds());
+                } catch (final InterruptedException e) {
+                    LoggerUtil.error(e);
+                }
             }
         }
     }
@@ -137,14 +145,14 @@ public class CommServiceThread implements Runnable {
     }
 
     private boolean imalive() {
-        final String path = IMALIVE.replace(MODULE_ID, ARG_MODULE_ID);
+        final String path = IMALIVE.replace(MODULE_ID, RUNTIME_MODULE_ID).replace(LATENCY_MILLES, latencyMilles.toString());
         final String url = String.format(BASE_URL, PORT, path);
         final Response result = this.restTemplate.getForObject(url, Response.class);
         return result.getStatus() == OK;
     }
 
     private boolean shutdown() {
-        final String path = SHUTDOWN.replace(MODULE_ID, ARG_MODULE_ID);
+        final String path = SHUTDOWN.replace(MODULE_ID, RUNTIME_MODULE_ID);
         final String url = String.format(BASE_URL, PORT, path);
         final Response result = this.restTemplate.getForObject(url, Response.class);
         if (result.getStatus() == OK) {

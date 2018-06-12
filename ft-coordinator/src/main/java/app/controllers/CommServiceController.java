@@ -20,11 +20,13 @@
  */
 package app.controllers;
 
+import static app.commons.constants.TimeConstants.SHUTDOWN_TIME;
 import static app.commons.enums.SystemEnums.ExecutionStatus.RECOVERY_MODE;
 import static app.commons.enums.SystemEnums.ExecutionStatus.STARTED;
 import static app.conf.Routes.IMALIVE;
 import static app.conf.Routes.REGISTER;
 import static app.conf.Routes.SHUTDOWN;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
 import static org.springframework.http.HttpStatus.OK;
@@ -32,6 +34,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 import java.lang.management.ManagementFactory;
+import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 
@@ -58,13 +61,18 @@ public class CommServiceController implements CommService {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     @RequestMapping(value = IMALIVE, method = GET)
-    public @ResponseBody Response imalive(@PathVariable(value = "moduleId") final String moduleId) {
+    public @ResponseBody Response imalive(
+            @PathVariable(value = "moduleId") final String moduleId,
+            @PathVariable(value = "latencyMilles") final long latencyMilles) {
 
         LoggerUtil.info(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
         LoggerUtil.info(" imalive called for: " + moduleId);
+        LoggerUtil.info(" imalive latency: " + latencyMilles);
         LoggerUtil.info(" my PID is: " + ManagementFactory.getRuntimeMXBean().getName());
         LoggerUtil.info(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
 
+        FaultToleranceService.setLastCommunication(Instant.now());
+        FaultToleranceService.setLatencyMilles(latencyMilles);
         return new Response(OK, moduleId);
     }
 
@@ -75,6 +83,10 @@ public class CommServiceController implements CommService {
     @RequestMapping(value = REGISTER, method = POST)
     public @ResponseBody Response register(@RequestBody final Level level) {
 
+        if (level.getLstTechniques() == null || level.getLstTechniques().isEmpty()) {
+            return new Response(BAD_REQUEST);
+        }
+        FaultToleranceService.setLastCommunication(Instant.now());
         final ExecutionStatus serviceStatus = FaultToleranceService.getStatus();
         if (STARTED != serviceStatus && RECOVERY_MODE != serviceStatus) {
             FaultToleranceService.startDetectionServices(level);

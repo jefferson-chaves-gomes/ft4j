@@ -20,41 +20,42 @@
  */
 package app.models;
 
-import static app.commons.constants.MessageConstants.KILLING_THE_PARTNER_PID;
-import static app.commons.constants.MessageConstants.STARTING_THE_PARTNER_WITH_COMMAND;
-import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_KILLED;
-import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_STARTED_AGAIN;
 import static app.commons.enums.SystemEnums.FaultToletancePolicy.PROACTIVE;
+import static app.commons.enums.SystemEnums.Priority.NORM_PRIORITY;
 
-import java.util.concurrent.CompletableFuture;
-
-import app.commons.utils.LoggerUtil;
-import app.commons.utils.ResourceMonitorUtil;
+import app.commons.enums.SystemEnums.Priority;
 
 public class SoftwareRejuvenation extends Technique {
 
-    private float maxCpuUsage = 0;
-    private float maxMemoryUsage = 0;
+    private static final int DEFAULT_MAX_USAGE = 95;
+    private Timeout timeout;
+    private float maxCpuUsage;
+    private float maxMemoryUsage;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public SoftwareRejuvenation() {
-        super(new AttemptsNumber(), new DelayBetweenAttempts(), new Timeout(), PROACTIVE);
-        this.maxCpuUsage = 95;
-        this.maxMemoryUsage = 95;
+        this(new Timeout());
     }
 
-    public SoftwareRejuvenation(final float maxCpuUsage, final float maxuMemoryUsage) {
-        this();
+    public SoftwareRejuvenation(final Timeout timeout) {
+        this(timeout, DEFAULT_MAX_USAGE, DEFAULT_MAX_USAGE);
+    }
+
+    public SoftwareRejuvenation(final float maxCpuUsage, final float maxMemoryUsage) {
+        this(new Timeout(), maxCpuUsage, maxMemoryUsage);
+    }
+
+    public SoftwareRejuvenation(final Timeout timeout, final float maxCpuUsage, final float maxuMemoryUsage) {
+        this(timeout, maxCpuUsage, maxuMemoryUsage, NORM_PRIORITY);
+    }
+
+    public SoftwareRejuvenation(final Timeout timeout, final float maxCpuUsage, final float maxuMemoryUsage, final Priority priority) {
+        super(PROACTIVE, priority);
+        this.timeout = timeout;
         this.maxCpuUsage = maxCpuUsage <= 0 ? 100 : maxCpuUsage;
         this.maxMemoryUsage = maxuMemoryUsage <= 0 ? 100 : maxCpuUsage;
-    }
-
-    public SoftwareRejuvenation(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout, final float maxCpuUsage, final float maxuMemoryUsage) {
-        super(attemptsNumber, delayBetweenAttempts, timeout, PROACTIVE);
-        this.maxCpuUsage = maxCpuUsage;
-        this.maxMemoryUsage = maxuMemoryUsage;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -62,27 +63,7 @@ public class SoftwareRejuvenation extends Technique {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void execute(final String moduleId, final String taskStartupCommand) {
-
-        try {
-            final Integer modulePID = super.getModulePID(moduleId);
-            LoggerUtil.info(String.format(KILLING_THE_PARTNER_PID, modulePID));
-            if (ResourceMonitorUtil.kill(modulePID)) {
-                LoggerUtil.info(THE_PARTNER_WAS_KILLED);
-            }
-
-            LoggerUtil.info(String.format(STARTING_THE_PARTNER_WITH_COMMAND, taskStartupCommand));
-            CompletableFuture.runAsync(() -> {
-                try {
-                    if (ResourceMonitorUtil.start(taskStartupCommand)) {
-                        LoggerUtil.info(THE_PARTNER_WAS_STARTED_AGAIN);
-                    }
-                } catch (final Exception e) {
-                    LoggerUtil.error(e);
-                }
-            });
-        } catch (final Exception e) {
-            LoggerUtil.error(e);
-        }
+        super.stopStartLocal(moduleId, taskStartupCommand);
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -102,6 +83,14 @@ public class SoftwareRejuvenation extends Technique {
 
     public void setMaxMemoryUsage(final float maxMemoryUsage) {
         this.maxMemoryUsage = maxMemoryUsage;
+    }
+
+    public Timeout getTimeout() {
+        return this.timeout;
+    }
+
+    public void setTimeout(final Timeout timeout) {
+        this.timeout = timeout;
     }
 
 }

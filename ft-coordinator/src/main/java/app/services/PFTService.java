@@ -39,8 +39,6 @@ public class PFTService extends FaultToleranceService implements Runnable {
     private static final String SERVICE_NAME_VIOLATION_OF_RULE = SERVICE_NAME + "- rule violation: [cpuUsage, memUsage] > [maxCpuUsage, maxMemoryUsage], usage[{%f}, {%f}] > maxUsage[{%f}, {%f}]";
     private static final String SERVICE_NAME_VALIDATION_OF_RULE = SERVICE_NAME + "- rule validation: [cpuUsage, memUsage] < [maxCpuUsage, maxMemoryUsage], usage[{%f}, {%f}] < maxUsage[{%f}, {%f}]";
     private static final String SOFTWARE_REJUVENATION_WAITING_TIMEOUT = "Software Rejuvenation: waiting %s minutes for timeout";
-    private static final String RUNNING_SERVICE = "Running " + PFTService.class.getName();
-    private static final String SERVICE_STATUS = "FaultToleranceService is " + FaultToleranceService.status;
     private final SoftwareRejuvenation softwareRejuvenation;
     private final Level level;
     private Instant start;
@@ -59,7 +57,9 @@ public class PFTService extends FaultToleranceService implements Runnable {
     }
 
     public void startService() {
-        FaultToleranceService.proactiveService = FaultToleranceService.scheduledExecutors.scheduleAtFixedRate(this, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
+
+        FaultToleranceService.proactiveService = FaultToleranceService.scheduledExecutors
+                .scheduleAtFixedRate(this, DEFAULT_INITIAL_DELAY, DEFAULT_EXECTUTION_TIME, DEFAULT_TIME_UNIT);
         FaultToleranceService.status = STARTED;
         this.start = Instant.now();
         LoggerUtil.info(SERVICE_NAME_STARTED + ": " + this.getClass().getName());
@@ -71,7 +71,7 @@ public class PFTService extends FaultToleranceService implements Runnable {
     @Override
     public void run() {
 
-        LoggerUtil.info(RUNNING_SERVICE);
+        LoggerUtil.info(RUNNING_SERVICE + this.getClass().getName());
         if (STARTED != FaultToleranceService.status) {
             LoggerUtil.info(SERVICE_STATUS);
             return;
@@ -92,10 +92,13 @@ public class PFTService extends FaultToleranceService implements Runnable {
                 LoggerUtil.info(String.format(SERVICE_NAME_VALIDATION_OF_RULE, cpuUsage, memUsage, maxCpuUsage, maxMemoryUsage));
             }
 
-            final int timeout = this.softwareRejuvenation.getTimeout().getValue();
+            final long timeout = this.softwareRejuvenation.getTimeout().getValue();
             final long lifetime = Duration.between(this.start, Instant.now()).getSeconds();
             if (faultDetected || lifetime >= timeout) {
-                FaultToleranceService.startRecoveryServices(this.level.getModuleId(), this.level.getTaskStartupCommand(), this.softwareRejuvenation);
+                FaultToleranceService.startRecoveryServices(
+                        this.level.getModuleId(),
+                        this.level.getTaskStartupCommand(),
+                        this.softwareRejuvenation);
             } else {
                 LoggerUtil.info(String.format(SOFTWARE_REJUVENATION_WAITING_TIMEOUT, (timeout - lifetime) / 60));
             }

@@ -8,6 +8,7 @@ import static app.commons.enums.SystemEnums.FaultToletancePolicy.PROACTIVE;
 import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
 
 import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -24,11 +25,15 @@ public class FaultToleranceService {
     protected static final String SERVICE_NAME = "Service - Fault Tolerance ";
     protected static final String SERVICE_NAME_STARTED = SERVICE_NAME + "STARTED";
     protected static final String SERVICE_NAME_ALREADY_STARTED = SERVICE_NAME + "ALREADY STARTED";
+    protected static final String RUNNING_SERVICE = "Running ";
+    protected static final String SERVICE_STATUS = "FaultToleranceService is " + FaultToleranceService.status;
     protected static ExecutionStatus status = STOPPED;
     protected static ScheduledExecutorService scheduledExecutors = Executors.newSingleThreadScheduledExecutor();
     protected static ExecutorService threadExecutors = Executors.newSingleThreadExecutor();
     protected static ScheduledFuture<?> proactiveService;
     protected static ScheduledFuture<?> reactiveService;
+    protected static Instant lastCommunication;
+    protected static long latencyMilles;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
@@ -38,12 +43,13 @@ public class FaultToleranceService {
     }
 
     public static ExecutionStatus startDetectionServices(final Level level) {
+
         if (STARTED != FaultToleranceService.status && RECOVERY_MODE != FaultToleranceService.status) {
             try {
-                if (StreamUtil.hasFaultToleranceType(level.getLstTechniques(), PROACTIVE)) {
+                if (StreamUtil.hasFaultTolerancePolicy(level.getLstTechniques(), PROACTIVE)) {
                     new PFTService(level).startService();
                 }
-                if (StreamUtil.hasFaultToleranceType(level.getLstTechniques(), REACTVE)) {
+                if (StreamUtil.hasFaultTolerancePolicy(level.getLstTechniques(), REACTVE)) {
                     new RFTService(level).startService();
                 }
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -57,6 +63,7 @@ public class FaultToleranceService {
     }
 
     public static ExecutionStatus startRecoveryServices(final String moduleId, final String taskStartupCommand, final Technique technique) {
+
         if (RECOVERY_MODE != FaultToleranceService.status) {
             new RecoveryService(moduleId, taskStartupCommand, technique).startService();
         }
@@ -69,4 +76,13 @@ public class FaultToleranceService {
     public static ExecutionStatus getStatus() {
         return FaultToleranceService.status;
     }
+
+    public static void setLastCommunication(final Instant lastCommunication) {
+        FaultToleranceService.lastCommunication = lastCommunication;
+    }
+
+    public static void setLatencyMilles(final long latencyMilles) {
+        FaultToleranceService.latencyMilles = latencyMilles;
+    }
+
 }

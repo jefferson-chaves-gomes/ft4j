@@ -44,7 +44,16 @@ public final class StreamUtil {
                 .count() > 1;
     }
 
-    public static boolean hasFaultToleranceType(final List<Technique> list, final FaultToletancePolicy ftType) {
+    public static <T> boolean hasFaultToleranceTechinique(final List<T> list, final Class<?> cls) {
+        if (list == null) {
+            return false;
+        }
+        return list.stream()
+                .filter(cls::isInstance)
+                .count() > 0;
+    }
+
+    public static boolean hasFaultTolerancePolicy(final List<Technique> list, final FaultToletancePolicy ftType) {
         if (list == null) {
             return false;
         }

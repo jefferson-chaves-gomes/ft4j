@@ -27,10 +27,9 @@ import app.models.base.BaseModel;
 
 public class Level extends BaseModel {
 
-    private static final String YOU_NEED_PASS_THE_TASK_STARTUP_COMMAND = "You need pass the taskStartupCommand";
-
-    private final String taskStartupCommand;
     private String moduleId;
+    private String taskStartupCommand;
+    private Long heartbeatTimeInSeconds;
     private ZooInstance zooInstance;
     private List<Technique> lstTechniques;
 
@@ -38,42 +37,68 @@ public class Level extends BaseModel {
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public Level() {
-        super();
-        this.taskStartupCommand = YOU_NEED_PASS_THE_TASK_STARTUP_COMMAND;
+        this(null);
     }
 
     public Level(final String taskStartupCommand) {
+        this(taskStartupCommand, null);
+    }
+
+    public Level(final String taskStartupCommand, final Long heartbeatTimeInSeconds) {
+        this(taskStartupCommand, null, heartbeatTimeInSeconds, null);
+    }
+
+    public Level(final String taskStartupCommand, final String moduleId, final Long heartbeatTimeInSeconds) {
+        this(taskStartupCommand, moduleId, heartbeatTimeInSeconds, null);
+    }
+
+    public Level(final String taskStartupCommand, final String moduleId, final Long heartbeatTimeInSeconds, final ZooInstance zooInstance) {
         super();
         this.taskStartupCommand = taskStartupCommand;
-    }
-
-    public Level(final String taskStartupCommand, final ZooInstance zooInstance) {
-        this(taskStartupCommand);
+        this.heartbeatTimeInSeconds = heartbeatTimeInSeconds;
+        this.moduleId = moduleId;
         this.zooInstance = zooInstance;
     }
 
-    public Level(final String taskStartupCommand, final List<Technique> lstTechnics, final ZooInstance zooInstance) {
-        this(taskStartupCommand);
-        this.zooInstance = zooInstance;
-        this.lstTechniques = lstTechnics;
-    }
-
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // get/set.
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public boolean addTechnique(final Technique technique) {
-        if (this.getLstTechniques() == null) {
+        if (this.lstTechniques == null) {
             this.lstTechniques = new ArrayList<>();
         }
-        return this.getLstTechniques().add(technique);
+        return this.lstTechniques.add(technique);
     }
 
     public boolean removeTechnique(final Technique technique) {
-        if (this.getLstTechniques() != null) {
-            return this.getLstTechniques().remove(technique);
+        if (this.lstTechniques != null) {
+            return this.lstTechniques.remove(technique);
         }
         return false;
     }
 
-    public List<Technique> getLstTechniques() {
-        return this.lstTechniques;
+    public String getModuleId() {
+        return this.moduleId;
+    }
+
+    public void setModuleId(final String moduleId) {
+        this.moduleId = moduleId;
+    }
+
+    public String getTaskStartupCommand() {
+        return this.taskStartupCommand;
+    }
+
+    public void setTaskStartupCommand(final String taskStartupCommand) {
+        this.taskStartupCommand = taskStartupCommand;
+    }
+
+    public Long getHeartbeatTimeInSeconds() {
+        return this.heartbeatTimeInSeconds;
+    }
+
+    public void setHeartbeatTimeInSeconds(final Long heartbeatTimeInSeconds) {
+        this.heartbeatTimeInSeconds = heartbeatTimeInSeconds;
     }
 
     public ZooInstance getZooInstance() {
@@ -84,16 +109,8 @@ public class Level extends BaseModel {
         this.zooInstance = zooInstance;
     }
 
-    public String getTaskStartupCommand() {
-        return this.taskStartupCommand;
-    }
-
-    public String getModuleId() {
-        return this.moduleId;
-    }
-
-    public void setModuleId(final String moduleId) {
-        this.moduleId = moduleId;
+    public List<Technique> getLstTechniques() {
+        return this.lstTechniques;
     }
 
     public void setLstTechniques(final List<Technique> lstTechniques) {

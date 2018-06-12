@@ -20,12 +20,14 @@
  */
 package app.models;
 
-import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
+import static app.commons.enums.SystemEnums.Priority.NORM_PRIORITY;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TaskResubmission extends Technique {
+import app.commons.enums.SystemEnums.Priority;
+
+public class TaskResubmission extends HeartbeatStrategy {
 
     protected List<CloudInstance> lstInstances;
 
@@ -33,16 +35,28 @@ public class TaskResubmission extends Technique {
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     public TaskResubmission() {
-        super();
+        this(new ArrayList<>());
     }
 
     public TaskResubmission(final List<CloudInstance> lstInstances) {
-        super();
-        this.lstInstances = lstInstances;
+        this(new Timeout(), new AttemptsNumber(), lstInstances);
     }
 
-    public TaskResubmission(final AttemptsNumber attemptsNumber, final DelayBetweenAttempts delayBetweenAttempts, final Timeout timeout) {
-        super(attemptsNumber, delayBetweenAttempts, timeout, REACTVE);
+    public TaskResubmission(final Timeout timeout) {
+        this(timeout, new AttemptsNumber(), new ArrayList<>());
+    }
+
+    public TaskResubmission(final Timeout timeout, final AttemptsNumber attemptsNumber) {
+        this(timeout, attemptsNumber, new ArrayList<>());
+    }
+
+    public TaskResubmission(final Timeout timeout, final AttemptsNumber attemptsNumber, final List<CloudInstance> lstInstances) {
+        this(timeout, attemptsNumber, lstInstances, NORM_PRIORITY);
+    }
+
+    public TaskResubmission(final Timeout timeout, final AttemptsNumber attemptsNumber, final List<CloudInstance> lstInstances, final Priority priority) {
+        super(timeout, attemptsNumber, priority);
+        this.lstInstances = lstInstances;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -50,7 +64,13 @@ public class TaskResubmission extends Technique {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
     public void execute(final String moduleId, final String taskStartupCommand) {
-        // TODO
+
+        super.stopLocal(moduleId);
+        if (this.getLstInstances() != null && !this.getLstInstances().isEmpty()) {
+            // TODO connect to CLOUD INSTANCE and start the task there
+        } else {
+            super.startLocal(taskStartupCommand);
+        }
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -60,21 +80,7 @@ public class TaskResubmission extends Technique {
         return this.lstInstances;
     }
 
-    public void setLstInstances(final List<CloudInstance> lstReplicas) {
-        this.lstInstances = lstReplicas;
-    }
-
-    public boolean addReplica(final CloudInstance replica) {
-        if (this.getLstInstances() == null) {
-            this.setLstInstances(new ArrayList<CloudInstance>());
-        }
-        return this.getLstInstances().add(replica);
-    }
-
-    public boolean removeReplica(final CloudInstance replica) {
-        if (this.getLstInstances() != null) {
-            return this.getLstInstances().remove(replica);
-        }
-        return false;
+    public void setLstInstances(final List<CloudInstance> lstInstances) {
+        this.lstInstances = lstInstances;
     }
 }
