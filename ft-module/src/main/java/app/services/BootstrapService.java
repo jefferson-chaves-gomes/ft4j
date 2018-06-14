@@ -62,7 +62,6 @@ import app.models.Technique;
 
 public class BootstrapService implements FaultToleranceModule {
 
-    private final static String STARTUP_COORDINATOR_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1-exec.jar";
     private static BootstrapService bootstrap;
     private static ExecutorService executor;
     private static CommServiceThread commService;
@@ -87,12 +86,12 @@ public class BootstrapService implements FaultToleranceModule {
     // * @see app.FaultToleranceModule#start()
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
-    public void start(final Level ftLevel) throws SystemException, InterruptedException {
+    public void start(final Level ftLevel, final String startuCoordinatorCommand) throws SystemException, InterruptedException {
 
         this.validate(ftLevel);
         commService = new CommServiceThread(ftLevel);
         if (!commService.callRequest(IMALIVE, true)) {
-            this.startFtCoordinator();
+            this.startFtCoordinator(startuCoordinatorCommand);
         }
         executor.submit(commService);
         this.waitForCommunication(commService);
@@ -192,12 +191,12 @@ public class BootstrapService implements FaultToleranceModule {
         }
     }
 
-    private void startFtCoordinator() throws SystemException, InterruptedException {
+    private void startFtCoordinator(final String startuCoordinatorCommand) throws SystemException, InterruptedException {
 
         CompletableFuture.runAsync(() -> {
             try {
-                LoggerUtil.info(START_FT_COORDINATOR_CALLED + STARTUP_COORDINATOR_COMMAND);
-                RuntimeUtil.execAndGetResponseString(new Command(STARTUP_COORDINATOR_COMMAND));
+                LoggerUtil.info(START_FT_COORDINATOR_CALLED + startuCoordinatorCommand);
+                RuntimeUtil.execAndGetResponseString(new Command(startuCoordinatorCommand));
                 DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
             } catch (IOException | InterruptedException e) {
                 LoggerUtil.error(e);

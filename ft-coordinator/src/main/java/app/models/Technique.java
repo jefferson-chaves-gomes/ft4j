@@ -21,12 +21,14 @@
 package app.models;
 
 import static app.commons.constants.MessageConstants.KILLING_THE_PARTNER_PID;
+import static app.commons.constants.MessageConstants.STARTING_THE_PARTNER_FROM_PATH;
 import static app.commons.constants.MessageConstants.STARTING_THE_PARTNER_WITH_COMMAND;
 import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_KILLED;
 import static app.commons.constants.MessageConstants.THE_PARTNER_WAS_STARTED_AGAIN;
 import static app.commons.enums.SystemEnums.FaultToletancePolicy.REACTVE;
 import static app.commons.enums.SystemEnums.Priority.NORM_PRIORITY;
 
+import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
@@ -104,13 +106,15 @@ public abstract class Technique extends BaseModel {
     protected void startLocal(final String taskStartupCommand) {
 
         try {
+            final String currentPath = System.getProperty("user.dir");
+            LoggerUtil.info(String.format(STARTING_THE_PARTNER_FROM_PATH, currentPath));
             LoggerUtil.info(String.format(STARTING_THE_PARTNER_WITH_COMMAND, taskStartupCommand));
             CompletableFuture.runAsync(() -> {
                 try {
                     if (ResourceMonitorUtil.start(taskStartupCommand)) {
                         LoggerUtil.info(THE_PARTNER_WAS_STARTED_AGAIN);
                     }
-                } catch (final Exception e) {
+                } catch (IOException | InterruptedException e) {
                     LoggerUtil.error(e);
                 }
             });

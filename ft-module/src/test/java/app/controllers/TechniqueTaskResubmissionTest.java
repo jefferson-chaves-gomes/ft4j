@@ -31,7 +31,7 @@ public class TechniqueTaskResubmissionTest extends BaseIntegrationTest {
     @Test
     public void testSoftwareRejuvenation() throws Exception {
 
-        super.ftModule.start(this.ftLevel);
+        super.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
         TimeUnit.SECONDS.sleep(60);
 
         super.ftModule.stop();

@@ -31,7 +31,7 @@ public class TechniqueRetryTest extends BaseIntegrationTest {
     @Test
     public void testRetry() throws Exception {
 
-        super.ftModule.start(this.ftLevel);
+        super.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
         TimeUnit.SECONDS.sleep(60);
 
         super.ftModule.stop();

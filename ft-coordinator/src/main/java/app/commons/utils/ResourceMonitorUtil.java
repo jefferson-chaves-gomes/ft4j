@@ -79,12 +79,8 @@ public final class ResourceMonitorUtil {
         return true;
     }
 
-    public static boolean start(final String startupCommand) {
-        try {
-            RuntimeUtil.exec(new Command(startupCommand));
-        } catch (IOException | InterruptedException e) {
-            return false;
-        }
+    public static boolean start(final String startupCommand) throws IOException, InterruptedException {
+        RuntimeUtil.exec(new Command(startupCommand));
         return true;
     }
 

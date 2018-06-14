@@ -54,6 +54,7 @@
     </properties>
 
     <dependencies>
+    
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -64,21 +65,25 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j</artifactId>
             <version>1.2.7.RELEASE</version>
         </dependency>
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jta-narayana</artifactId>
@@ -87,6 +92,7 @@
 
     <build>
         <plugins>
+        
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -101,10 +107,12 @@
                     </execution>
                 </executions>
             </plugin>
+            
         </plugins>
     </build>
 
     <repositories>
+    
         <repository>
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>
@@ -113,6 +121,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        
         <repository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
@@ -121,9 +130,11 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        
     </repositories>
 
     <pluginRepositories>
+    
         <pluginRepository>
             <id>spring-snapshots</id>
             <name>Spring Snapshots</name>
@@ -132,6 +143,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </pluginRepository>
+        
         <pluginRepository>
             <id>spring-milestones</id>
             <name>Spring Milestones</name>
@@ -140,5 +152,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </pluginRepository>
+        
     </pluginRepositories>
 </project>

@@ -34,7 +34,7 @@ public class CommunicationTest extends BaseIntegrationTest {
     @Test
     public void testStartFtCoordinator() throws Exception {
 
-        super.ftModule.start(this.ftLevel);
+        super.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
         TimeUnit.SECONDS.sleep(20);
 
         super.ftModule.stop();

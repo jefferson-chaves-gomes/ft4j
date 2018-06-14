@@ -37,7 +37,7 @@ public class ArgsInitializationTest extends BaseIntegrationTest {
         this.ftLevel.addTechnique(new Replication(new ArrayList<>()));
         Assert.assertTrue(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.REACTVE));
         Assert.assertFalse(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.PROACTIVE));
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = DuplicateInitializeException.class)
@@ -47,7 +47,7 @@ public class ArgsInitializationTest extends BaseIntegrationTest {
         this.ftLevel.addTechnique(new SoftwareRejuvenation());
         Assert.assertFalse(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.REACTVE));
         Assert.assertTrue(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.PROACTIVE));
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = DuplicateInitializeException.class)
@@ -57,7 +57,7 @@ public class ArgsInitializationTest extends BaseIntegrationTest {
         this.ftLevel.addTechnique(new Retry());
         Assert.assertTrue(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.REACTVE));
         Assert.assertFalse(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.PROACTIVE));
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = DuplicateInitializeException.class)
@@ -67,7 +67,7 @@ public class ArgsInitializationTest extends BaseIntegrationTest {
         this.ftLevel.addTechnique(new TaskResubmission());
         Assert.assertTrue(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.REACTVE));
         Assert.assertFalse(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.PROACTIVE));
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = DuplicateInitializeException.class)
@@ -77,7 +77,7 @@ public class ArgsInitializationTest extends BaseIntegrationTest {
         this.ftLevel.addTechnique(new Replication(this.lstFakeNodes));
         Assert.assertTrue(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.REACTVE));
         Assert.assertFalse(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.PROACTIVE));
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = ArgumentsInitializeException.class)
@@ -85,26 +85,26 @@ public class ArgsInitializationTest extends BaseIntegrationTest {
         this.ftLevel = new Level("only test");
         Assert.assertFalse(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.REACTVE));
         Assert.assertFalse(StreamUtil.hasFaultTolerancePolicy(this.ftLevel.getLstTechniques(), FaultToletancePolicy.PROACTIVE));
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = ArgumentsInitializeException.class)
     public void testArgsInitializeException02() throws InterruptedException, SystemException {
         this.ftLevel = new Level();
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = ArgumentsInitializeException.class)
     public void testArgsInitializeException03() throws InterruptedException, SystemException {
         this.ftLevel = new Level("only test");
         this.ftLevel.addTechnique(new TaskResubmission());
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 
     @Test(expected = ArgumentsInitializeException.class)
     public void testArgsInitializeException04() throws InterruptedException, SystemException {
         this.ftLevel = new Level("only test");
         this.ftLevel.addTechnique(new Retry());
-        this.ftModule.start(this.ftLevel);
+        this.ftModule.start(this.ftLevel, STARTUP_COORDINATOR_COMMAND);
     }
 }

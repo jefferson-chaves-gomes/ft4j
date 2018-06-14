@@ -39,6 +39,7 @@ public final class MessageConstants {
     public static final String TRYING_TO_CONTACT_MODULE_AT_COORDINATOR = "Trying to contact the coordinator";
     public static final String TRYING_TO_REGISTER_MODULE_AT_COORDINATOR = "Trying to register module at coordinator";
     public static final String THE_PARTNER_WAS_STARTED_AGAIN = "The Partner was started again";
+    public static final String STARTING_THE_PARTNER_FROM_PATH = "Starting the Partner from path: %s";
     public static final String STARTING_THE_PARTNER_WITH_COMMAND = "Starting the Partner with command: %s";
     public static final String THE_PARTNER_WAS_KILLED = "The Partner was killed";
     public static final String KILLING_THE_PARTNER_PID = "Killing the Partner - PID: %d";
