@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.2.2" icons="true" automaticImage="PNG" generate-combined-fragments="true">  
+  <object id="1" language="java" name="app.services.BootstrapService" project="ft-module" 
+    file="/ft-module/src/main/java/app/services/BootstrapService.java" binary="false" label="bootstrapService" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="1126" y="0"/>    
+    <execution id="2">      
+      <position height="63" width="122" x="713" y="108"/>    
+    </execution>  
+  </object>  
+  <object id="5" language="java" name="app.services.CommServiceThread" project="ft-module" 
+    file="/ft-module/src/main/java/app/services/CommServiceThread.java" binary="false" label="commServiceThread" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="972" y="0"/>    
+    <execution id="4">      
+      <position height="21" width="143" x="839" y="129"/>    
+    </execution>    
+    <execution id="6">      
+      <position height="63" width="143" x="839" y="177"/>    
+    </execution>    
+    <execution id="9">      
+      <position height="63" width="143" x="839" y="266"/>    
+    </execution>  
+  </object>  
+  <object id="12" language="java" name="app.controllers.CommServiceController" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/app/controllers/CommServiceController.java" binary="false" 
+    label="commServiceController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="119" y="0"/>    
+    <execution id="13">      
+      <position height="63" width="159" x="5" y="113"/>    
+    </execution>    
+    <execution id="8">      
+      <position height="21" width="159" x="5" y="198"/>    
+    </execution>    
+    <execution id="11">      
+      <position height="21" width="159" x="5" y="287"/>    
+    </execution>  
+  </object>  
+  <object id="16" language="java" name="app.services.FaultToleranceService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/app/services/FaultToleranceService.java" binary="false" 
+    label="faultToleranceService" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="446" y="0"/>    
+    <execution id="15">      
+      <position height="21" width="149" x="168" y="134"/>    
+    </execution>    
+    <execution id="17">      
+      <position height="63" width="149" x="168" y="181"/>    
+    </execution>    
+    <execution id="20">      
+      <position height="63" width="149" x="168" y="270"/>    
+    </execution>    
+    <execution id="23">      
+      <position height="63" width="149" x="168" y="357"/>    
+    </execution>    
+    <execution id="26">      
+      <position height="63" width="149" x="168" y="443"/>    
+    </execution>    
+    <execution id="29">      
+      <position height="21" width="149" x="168" y="559"/>    
+    </execution>    
+    <execution id="30">      
+      <position height="21" width="149" x="168" y="662"/>    
+    </execution>    
+    <execution id="31">      
+      <position height="63" width="149" x="168" y="750"/>    
+    </execution>    
+    <execution id="34">      
+      <position height="63" width="149" x="168" y="828"/>    
+    </execution>  
+  </object>  
+  <object id="37" language="java" name="app.services.PFTService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/app/services/PFTService.java" binary="false" label="pftService" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="528" y="0"/>    
+    <execution id="19">      
+      <position height="21" width="87" x="321" y="202"/>    
+    </execution>    
+    <execution id="22">      
+      <position height="21" width="87" x="321" y="291"/>    
+    </execution>    
+    <execution id="38">      
+      <position height="63" width="87" x="321" y="538"/>    
+    </execution>  
+  </object>  
+  <object id="40" language="java" name="app.services.RFTService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/app/services/RFTService.java" binary="false" label="rftService" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="531" y="0"/>    
+    <execution id="25">      
+      <position height="21" width="87" x="412" y="378"/>    
+    </execution>    
+    <execution id="28">      
+      <position height="21" width="87" x="412" y="464"/>    
+    </execution>    
+    <execution id="41">      
+      <position height="63" width="87" x="412" y="641"/>    
+    </execution>  
+  </object>  
+  <object id="43" language="java" name="app.services.RecoveryService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/app/services/RecoveryService.java" binary="false" label="recoveryService" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="743" y="0"/>    
+    <execution id="33">      
+      <position height="21" width="119" x="503" y="771"/>    
+    </execution>    
+    <execution id="36">      
+      <position height="21" width="119" x="503" y="849"/>    
+    </execution>    
+    <execution id="44">      
+      <position height="63" width="119" x="503" y="888"/>    
+    </execution>  
+  </object>  
+  <object id="47" language="java" name="app.models.Technique" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/app/models/Technique.java" binary="false" label="technique" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="813" y="0"/>    
+    <execution id="46">      
+      <position height="21" width="83" x="626" y="909"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="CommServiceThread(app.models.Level)" asynchronous="false">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="7" operation="register(app.models.Level):app.commons.http.Response" asynchronous="false">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </message>  
+  <message id="10" operation="imalive(java.lang.String,long):app.commons.http.Response" asynchronous="false">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="11"/>  
+  </message>  
+  <message id="14" operation="startDetectionServices(app.models.Level):app.commons.enums.SystemEnums.ExecutionStatus" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="15"/>  
+  </message>  
+  <message id="18" operation="PFTService(app.models.Level)" asynchronous="false">    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="19"/>  
+  </message>  
+  <message id="21" operation="startService():void" asynchronous="false">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="22"/>  
+  </message>  
+  <message id="24" operation="RFTService(app.models.Level)" asynchronous="false">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="25"/>  
+  </message>  
+  <message id="27" operation="startService():void" asynchronous="false">    
+    <end type="SOURCE" refId="26"/>    
+    <end type="TARGET" refId="28"/>  
+  </message>  
+  <message id="32" operation="RecoveryService(java.lang.String,java.lang.String,app.models.Technique)" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="31"/>    
+    <end type="TARGET" refId="33"/>  
+  </message>  
+  <message id="35" operation="startService():void" asynchronous="false">    
+    <end type="SOURCE" refId="34"/>    
+    <end type="TARGET" refId="36"/>  
+  </message>  
+  <message id="39" 
+    operation="startRecoveryServices(java.lang.String,java.lang.String,app.models.Technique):app.commons.enums.SystemEnums.ExecutionStatus" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="38"/>    
+    <end type="TARGET" refId="29"/>  
+  </message>  
+  <message id="42" 
+    operation="startRecoveryServices(java.lang.String,java.lang.String,app.models.Technique):app.commons.enums.SystemEnums.ExecutionStatus" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="41"/>    
+    <end type="TARGET" refId="30"/>  
+  </message>  
+  <message id="45" operation="execute(java.lang.String,java.lang.String):void" asynchronous="false">    
+    <end type="SOURCE" refId="44"/>    
+    <end type="TARGET" refId="46"/>  
+  </message>
+</sequence-diagram>
