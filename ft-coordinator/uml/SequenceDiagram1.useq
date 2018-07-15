@@ -40,6 +40,7 @@
       <position height="21" width="143" x="131" y="185"/>    
     </execution>    
     <execution id="19">      
+<<<<<<< HEAD
       <position height="118" width="143" x="131" y="453"/>    
     </execution>    
     <execution id="21">      
@@ -119,5 +120,79 @@
     asynchronous="false">    
     <end type="SOURCE" refId="29"/>    
     <end type="TARGET" refId="32"/>  
+=======
+      <position height="84" width="143" x="131" y="453"/>    
+    </execution>    
+    <execution id="21">      
+      <position height="21" width="143" x="131" y="495"/>    
+    </execution>    
+    <execution id="22">      
+      <position height="105" width="143" x="131" y="559"/>    
+    </execution>    
+    <execution id="25">      
+      <position height="63" width="143" x="131" y="716"/>    
+    </execution>  
+  </object>  
+  <object id="28" language="java" name="FTCoordinator.CommServiceController" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/FTCoordinator/CommServiceController.java" binary="false" 
+    label="commServiceController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="119" y="0"/>    
+    <execution id="24">      
+      <position height="63" width="159" x="278" y="580"/>    
+    </execution>    
+    <execution id="27">      
+      <position height="21" width="159" x="278" y="737"/>    
+    </execution>  
+  </object>  
+  <object id="31" language="java" name="FTCoordinator.FaultToleranceService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/FTCoordinator/FaultToleranceService.java" binary="false" 
+    label="faultToleranceService" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="446" y="0"/>    
+    <execution id="30">      
+      <position height="21" width="149" x="441" y="601"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="validate(app.models.Level):void" asynchronous="false">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="6" operation="CommServiceThread(app.models.Level)" asynchronous="false">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="7"/>  
+  </message>  
+  <message id="9" operation="checkFtCoordinatorAvailability(app.models.Level,java.lang.String):boolean" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
+  </message>  
+  <message id="11" operation="startFtCoordinator(java.lang.String):void" asynchronous="false">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="12"/>  
+  </message>  
+  <message id="14" operation="waitForCommunication(app.services.CommServiceThread):void" asynchronous="false">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="15"/>  
+  </message>  
+  <message id="16" operation="stop():void" asynchronous="false">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="17"/>  
+  </message>  
+  <message id="20" operation="establishCommunication():void" asynchronous="false">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="21"/>  
+  </message>  
+  <message id="23" operation="register(app.models.Level):app.commons.http.Response" asynchronous="false">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="24"/>  
+  </message>  
+  <message id="26" operation="imalive(java.lang.String,long):app.commons.http.Response" asynchronous="false">    
+    <end type="SOURCE" refId="25"/>    
+    <end type="TARGET" refId="27"/>  
+  </message>  
+  <message id="29" operation="start(app.models.Level):app.commons.enums.SystemEnums.ExecutionStatus" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="30"/>  
+>>>>>>> branch 'master' of https://github.com/jefferson-chaves-gomes/ft4j.git
   </message>
 </sequence-diagram>
