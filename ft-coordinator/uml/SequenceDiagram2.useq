@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sequence-diagram version="1.2.2" icons="true" automaticImage="PNG" generate-combined-fragments="true">  
+  <object id="1" language="java" name="FTCoordinator.CommServiceController" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/FTCoordinator/CommServiceController.java" binary="false" 
+    label="commServiceController" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="119" y="0"/>    
+    <execution id="2">      
+      <position height="252" width="159" x="5" y="99"/>    
+    </execution>  
+  </object>  
+  <object id="7" language="java" name="FTCoordinator.FaultToleranceService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/FTCoordinator/FaultToleranceService.java" binary="false" 
+    label="faultToleranceService" type="class" autoSize="true">    
+    <position height="-1" width="-1" x="446" y="0"/>    
+    <execution id="4">      
+      <position height="21" width="149" x="168" y="120"/>    
+    </execution>    
+    <execution id="6">      
+      <position height="174" width="149" x="168" y="156"/>    
+    </execution>    
+    <execution id="16">      
+      <position height="21" width="149" x="168" y="389"/>    
+    </execution>    
+    <execution id="17">      
+      <position height="21" width="149" x="168" y="491"/>    
+    </execution>    
+    <execution id="18">      
+      <position height="144" width="149" x="168" y="566"/>    
+    </execution>  
+  </object>  
+  <object id="23" language="java" name="FTCoordinator.PFTService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/FTCoordinator/PFTService.java" binary="false" label="pftService" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="528" y="0"/>    
+    <execution id="9">      
+      <position height="21" width="87" x="321" y="177"/>    
+    </execution>    
+    <execution id="11">      
+      <position height="21" width="87" x="321" y="215"/>    
+    </execution>    
+    <execution id="24">      
+      <position height="63" width="87" x="321" y="368"/>    
+    </execution>  
+  </object>  
+  <object id="26" language="java" name="FTCoordinator.RFTService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/FTCoordinator/RFTService.java" binary="false" label="rftService" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="531" y="0"/>    
+    <execution id="13">      
+      <position height="21" width="87" x="412" y="254"/>    
+    </execution>    
+    <execution id="15">      
+      <position height="21" width="87" x="412" y="288"/>    
+    </execution>    
+    <execution id="27">      
+      <position height="63" width="87" x="412" y="470"/>    
+    </execution>  
+  </object>  
+  <object id="29" language="java" name="FTCoordinator.RecoveryService" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/FTCoordinator/RecoveryService.java" binary="false" label="recoveryService" 
+    type="class" autoSize="true">    
+    <position height="-1" width="-1" x="743" y="0"/>    
+    <execution id="20">      
+      <position height="21" width="119" x="503" y="587"/>    
+    </execution>    
+    <execution id="22">      
+      <position height="63" width="119" x="503" y="626"/>    
+    </execution>  
+  </object>  
+  <object id="32" language="java" name="app.models.Technique" project="ft-coordinator" 
+    file="/ft-coordinator/src/main/java/app/models/Technique.java" binary="false" label="technique" type="class" 
+    autoSize="true">    
+    <position height="-1" width="-1" x="813" y="0"/>    
+    <execution id="31">      
+      <position height="21" width="83" x="626" y="647"/>    
+    </execution>  
+  </object>  
+  <message id="3" operation="start(app.models.Level):app.commons.enums.SystemEnums.ExecutionStatus" asynchronous="false">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="4"/>  
+  </message>  
+  <message id="5" operation="startDetectionServices(app.models.Level):app.commons.enums.SystemEnums.ExecutionStatus" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </message>  
+  <message id="8" operation="PFTService(app.models.Level)" asynchronous="false">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="9"/>  
+  </message>  
+  <message id="10" operation="startService():void" asynchronous="false">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="11"/>  
+  </message>  
+  <message id="12" operation="RFTService(app.models.Level)" asynchronous="false">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="13"/>  
+  </message>  
+  <message id="14" operation="startService():void" asynchronous="false">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="15"/>  
+  </message>  
+  <message id="19" operation="RecoveryService(java.lang.String,java.lang.String,app.models.Technique)" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="20"/>  
+  </message>  
+  <message id="21" operation="startService():void" asynchronous="false">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="22"/>  
+  </message>  
+  <message id="25" 
+    operation="startRecoveryServices(java.lang.String,java.lang.String,app.models.Technique):app.commons.enums.SystemEnums.ExecutionStatus" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="16"/>  
+  </message>  
+  <message id="28" 
+    operation="startRecoveryServices(java.lang.String,java.lang.String,app.models.Technique):app.commons.enums.SystemEnums.ExecutionStatus" 
+    asynchronous="false">    
+    <end type="SOURCE" refId="27"/>    
+    <end type="TARGET" refId="17"/>  
+  </message>  
+  <message id="30" operation="execute(java.lang.String,java.lang.String):void" asynchronous="false">    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="31"/>  
+  </message>
+</sequence-diagram>
