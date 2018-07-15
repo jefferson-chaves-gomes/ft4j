@@ -86,15 +86,15 @@ public class BootstrapService implements FaultToleranceModule {
     // * @see app.FaultToleranceModule#start()
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     @Override
-    public void start(final Level ftLevel, final String startuCoordinatorCommand) throws SystemException, InterruptedException {
+    public void start(final Level ftLevel, final String startupCoordinatorCommand) throws SystemException, InterruptedException {
 
-        this.validate(ftLevel);
+        validate(ftLevel);
         commService = new CommServiceThread(ftLevel);
-        if (!commService.callRequest(IMALIVE, true)) {
-            this.startFtCoordinator(startuCoordinatorCommand);
+        if (!checkFtCoordinatorAvailability(ftLevel, startupCoordinatorCommand)) {
+            startFtCoordinator(startupCoordinatorCommand);
         }
         executor.submit(commService);
-        this.waitForCommunication(commService);
+        waitForCommunication();
         if (STARTED != commService.getStatus() || !commService.isRegistered()) {
             this.stop();
             throw new SystemException(ERROR_REGISTER_COORDINATOR);
@@ -102,7 +102,14 @@ public class BootstrapService implements FaultToleranceModule {
         LoggerUtil.info(FT_MODULE_INITIALIZED_SUCCESSFULLY);
     }
 
-    private void waitForCommunication(final CommServiceThread commService) throws InterruptedException {
+    private static boolean checkFtCoordinatorAvailability(final Level ftLevel, final String startupCoordinatorCommand) throws SystemException, InterruptedException {
+        if (!commService.callRequest(IMALIVE, true)) {
+            return false;
+        }
+        return true;
+    }
+
+    private static void waitForCommunication() throws InterruptedException {
 
         int attemptsNumber = 0;
         while (STARTED != commService.getStatus() && attemptsNumber++ < DEFAULT_VALUE) {
@@ -147,14 +154,14 @@ public class BootstrapService implements FaultToleranceModule {
         return executor.isShutdown() && executor.isTerminated();
     }
 
-    private void validate(final Level ftLevel) throws SystemException {
+    private static void validate(final Level ftLevel) throws SystemException {
 
         final List<Technique> lstTechnics = ftLevel.getLstTechniques();
-        this.validateDuplications(lstTechnics);
-        this.validateArgsInitialization(ftLevel);
+        validateDuplications(lstTechnics);
+        validateArgsInitialization(ftLevel);
     }
 
-    private void validateArgsInitialization(final Level level) throws ArgumentsInitializeException, ReplicationInitializeException {
+    private static void validateArgsInitialization(final Level level) throws ArgumentsInitializeException, ReplicationInitializeException {
 
         if (level.getLstTechniques() == null || level.getLstTechniques().isEmpty()) {
             throw new ArgumentsInitializeException();
@@ -181,7 +188,7 @@ public class BootstrapService implements FaultToleranceModule {
         }
     }
 
-    private void validateDuplications(final List<Technique> lstTechnics) throws DuplicateInitializeException {
+    private static void validateDuplications(final List<Technique> lstTechnics) throws DuplicateInitializeException {
 
         if (StreamUtil.hasDuplicates(lstTechnics, SoftwareRejuvenation.class)
                 || StreamUtil.hasDuplicates(lstTechnics, Retry.class)
@@ -191,7 +198,7 @@ public class BootstrapService implements FaultToleranceModule {
         }
     }
 
-    private void startFtCoordinator(final String startuCoordinatorCommand) throws SystemException, InterruptedException {
+    private static void startFtCoordinator(final String startuCoordinatorCommand) throws SystemException, InterruptedException {
 
         CompletableFuture.runAsync(() -> {
             try {

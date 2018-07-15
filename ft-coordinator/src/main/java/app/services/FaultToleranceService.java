@@ -42,7 +42,11 @@ public class FaultToleranceService {
         super();
     }
 
-    public static ExecutionStatus startDetectionServices(final Level level) {
+    public static ExecutionStatus start(final Level level) {
+        return startDetectionServices(level);
+    }
+
+    private static ExecutionStatus startDetectionServices(final Level level) {
 
         if (STARTED != FaultToleranceService.status && RECOVERY_MODE != FaultToleranceService.status) {
             try {

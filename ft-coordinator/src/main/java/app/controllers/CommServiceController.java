@@ -33,7 +33,6 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-import java.lang.management.ManagementFactory;
 import java.time.Instant;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
@@ -65,12 +64,6 @@ public class CommServiceController implements CommService {
             @PathVariable(value = "moduleId") final String moduleId,
             @PathVariable(value = "latencyMilles") final long latencyMilles) {
 
-        LoggerUtil.info(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
-        LoggerUtil.info(" imalive called for: " + moduleId);
-        LoggerUtil.info(" imalive latency: " + latencyMilles);
-        LoggerUtil.info(" my PID is: " + ManagementFactory.getRuntimeMXBean().getName());
-        LoggerUtil.info(" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ");
-
         FaultToleranceService.setLastCommunication(Instant.now());
         FaultToleranceService.setLatencyMilles(latencyMilles);
         return new Response(OK, moduleId);
@@ -89,7 +82,7 @@ public class CommServiceController implements CommService {
         FaultToleranceService.setLastCommunication(Instant.now());
         final ExecutionStatus serviceStatus = FaultToleranceService.getStatus();
         if (STARTED != serviceStatus && RECOVERY_MODE != serviceStatus) {
-            FaultToleranceService.startDetectionServices(level);
+            FaultToleranceService.start(level);
         }
         return FaultToleranceService.getStatus() != STARTED
                 ? new Response(INTERNAL_SERVER_ERROR, COULD_NOT_INITIALIZE_FAULT_TOLERANCE_SERVICES)
