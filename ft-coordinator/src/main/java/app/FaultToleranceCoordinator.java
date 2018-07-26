@@ -30,11 +30,13 @@ public class FaultToleranceCoordinator {
     public static FaultToleranceProperties properties;
 
     @Autowired
+    @SuppressWarnings("static-method")
     public void setFaultToleranceProperties(final FaultToleranceProperties props) {
         properties = props;
     }
 
     public static void main(final String[] args) {
+
         SpringApplication.run(FaultToleranceCoordinator.class, args);
     }
 }

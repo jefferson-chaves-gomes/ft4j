@@ -78,7 +78,7 @@ public class ControllersRestTemplateTest {
     public void retryPassingLatency() throws Exception {
 
         this.level.addTechnique(new Retry(new Timeout(1L, TimeUnit.SECONDS)));
-        this.register(this.level);
+        this.register();
         long fakeLatency = 1;
         for (int i = 0; i < 5; i++) {
             final Instant start = Instant.now();
@@ -97,7 +97,7 @@ public class ControllersRestTemplateTest {
     public void softwareRejuvenation() throws Exception {
 
         this.level.addTechnique(new SoftwareRejuvenation(new Timeout(30L, TimeUnit.SECONDS), 97, 90));
-        this.register(this.level);
+        this.register();
         TimeUnit.SECONDS.sleep(35);
         System.out.println("this line should not be displayed... the SoftwareRejuvenation technique must kill the process before that... ensure this by log checking");
     }
@@ -106,7 +106,7 @@ public class ControllersRestTemplateTest {
     public void retry() throws Exception {
 
         this.level.addTechnique(new Retry(new Timeout(1L, TimeUnit.SECONDS)));
-        this.register(this.level);
+        this.register();
         long fakeLatency = 1;
         for (int i = 0; i < 15; i++) {
             this.imalive();
@@ -119,7 +119,7 @@ public class ControllersRestTemplateTest {
     public void taskResubmission() throws Exception {
 
         this.level.addTechnique(new TaskResubmission(new Timeout(1L, TimeUnit.SECONDS)));
-        this.register(this.level);
+        this.register();
         long fakeLatency = 1;
         for (int i = 0; i < 15; i++) {
             this.imalive();
@@ -128,7 +128,7 @@ public class ControllersRestTemplateTest {
         System.out.println("this line should not be displayed... the TaskResubmission technique must kill the process before that... ensure this by log checking");
     }
 
-    private void register(final Level level) {
+    private void register() {
 
         final String path = REGISTER;
         final String url = String.format(BASE_URL, this.port, path);
