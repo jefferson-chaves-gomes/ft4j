@@ -17,11 +17,9 @@ import app.models.Replication;
 import app.models.Retry;
 import app.models.SoftwareRejuvenation;
 import app.models.TaskResubmission;
-import app.services.BootstrapService;
 
 public class ArgsInitializationTest extends BaseIntegrationTest {
 
-    private final FaultToleranceModule ftModule = BootstrapService.getInstance();
     private Level ftLevel;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

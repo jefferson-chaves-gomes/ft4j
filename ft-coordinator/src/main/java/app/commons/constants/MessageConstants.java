@@ -32,6 +32,7 @@ public final class MessageConstants {
     public static final String ERROR_TASKS_INTERRUPTED = "Tasks interrupted";
     public static final String START_FT_COORDINATOR_CALLED = "startFtCoordinator() called: ";
     public static final String WAITING_START_FT_COORDINATOR_START = "Waiting startFtCoordinator() start...";
+    public static final String FT_COORDINATOR_START_OUTPUT = "FTCoordinator start output: \n ********************************************* %s \n ********************************************* \n";
     public static final String ATTEMPT_TO_SHUTDOWN_COORDINATOR = "Attempt to shutdown the FTCoordinator";
     public static final String ATTEMPT_TO_SHUTDOWN_EXECUTOR = "Attempt to shutdown scheduledExecutors";
     public static final String ATTEMPT_TO_SHUTDOWN_FT_DETECTION_EXECUTORS = "Attempt to shutdown the Fault Tolerance Detection Executors";

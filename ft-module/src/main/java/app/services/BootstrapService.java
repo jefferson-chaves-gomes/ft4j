@@ -25,6 +25,7 @@ import static app.commons.constants.MessageConstants.ATTEMPT_TO_SHUTDOWN_EXECUTO
 import static app.commons.constants.MessageConstants.CANCEL_NON_FINISHED_TASKS;
 import static app.commons.constants.MessageConstants.ERROR_REGISTER_COORDINATOR;
 import static app.commons.constants.MessageConstants.ERROR_TASKS_INTERRUPTED;
+import static app.commons.constants.MessageConstants.FT_COORDINATOR_START_OUTPUT;
 import static app.commons.constants.MessageConstants.FT_MODULE_INITIALIZED_SUCCESSFULLY;
 import static app.commons.constants.MessageConstants.SHUTDOWN_FINISHED;
 import static app.commons.constants.MessageConstants.START_FT_COORDINATOR_CALLED;
@@ -203,7 +204,8 @@ public class BootstrapService implements FaultToleranceModule {
         CompletableFuture.runAsync(() -> {
             try {
                 LoggerUtil.info(START_FT_COORDINATOR_CALLED + startuCoordinatorCommand);
-                RuntimeUtil.execAndGetResponseString(new Command(startuCoordinatorCommand));
+                final String response = RuntimeUtil.execAndGetResponseString(new Command(startuCoordinatorCommand));
+                LoggerUtil.info(String.format(FT_COORDINATOR_START_OUTPUT, response));
                 DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
             } catch (IOException | InterruptedException e) {
                 LoggerUtil.error(e);
