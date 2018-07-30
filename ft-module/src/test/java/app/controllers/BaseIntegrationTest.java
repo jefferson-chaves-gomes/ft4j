@@ -11,7 +11,7 @@ import app.services.BootstrapService;
 
 public class BaseIntegrationTest {
 
-    protected static final String STARTUP_COORDINATOR_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1-exec.jar";
+    protected static final String STARTUP_COORDINATOR_COMMAND = "java -jar ../ft-coordinator/target/ft-coordinator-0.0.1-exec.jar --server.port=7777";
     protected static final int ZOO_PORT = 2181;
     protected static final String ZOO_IP = "0.0.0.0";
     protected static final String RUNTIME_MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();

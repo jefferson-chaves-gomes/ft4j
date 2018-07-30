@@ -63,6 +63,8 @@ import app.models.Technique;
 
 public class BootstrapService implements FaultToleranceModule {
 
+    private static final String SERVER_PORT = "server.port";
+    private static final int DEFAULT_COORDINATOR_PORT = 7777;
     private static BootstrapService bootstrap;
     private static ExecutorService executor;
     private static CommServiceThread commService;
@@ -90,7 +92,7 @@ public class BootstrapService implements FaultToleranceModule {
     public void start(final Level ftLevel, final String startupCoordinatorCommand) throws SystemException, InterruptedException {
 
         validate(ftLevel);
-        commService = new CommServiceThread(ftLevel);
+        commService = new CommServiceThread(ftLevel, getPort(startupCoordinatorCommand));
         if (!checkFtCoordinatorAvailability(ftLevel, startupCoordinatorCommand)) {
             startFtCoordinator(startupCoordinatorCommand);
         }
@@ -103,7 +105,17 @@ public class BootstrapService implements FaultToleranceModule {
         LoggerUtil.info(FT_MODULE_INITIALIZED_SUCCESSFULLY);
     }
 
+    private static int getPort(final String startupCoordinatorCommand) {
+
+        if (startupCoordinatorCommand.contains(SERVER_PORT)) {
+            final String port = startupCoordinatorCommand.substring(startupCoordinatorCommand.indexOf(SERVER_PORT));
+            return Integer.parseInt(port.substring(port.indexOf("=") + 1));
+        }
+        return DEFAULT_COORDINATOR_PORT;
+    }
+
     private static boolean checkFtCoordinatorAvailability(final Level ftLevel, final String startupCoordinatorCommand) throws SystemException, InterruptedException {
+
         if (!commService.callRequest(IMALIVE, true)) {
             return false;
         }

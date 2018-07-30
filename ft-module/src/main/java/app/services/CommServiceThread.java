@@ -48,7 +48,6 @@ import app.models.Level;
 
 public class CommServiceThread implements Runnable {
 
-    private static final int PORT = 7777;
     private static final String BASE_URL = "http://localhost:%s%s";
     private static final String RUNTIME_MODULE_ID = ManagementFactory.getRuntimeMXBean().getName();
     private static Long latencyMilles = 0L;
@@ -56,13 +55,15 @@ public class CommServiceThread implements Runnable {
     private Level level;
     private ExecutionStatus status = STOPPED;
     private boolean registered;
+    private final int port;
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // Constructors.
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    public CommServiceThread(final Level ftLevel) {
+    public CommServiceThread(final Level ftLevel, final int port) {
         super();
         this.level = ftLevel;
+        this.port = port;
     }
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,21 +140,21 @@ public class CommServiceThread implements Runnable {
     }
 
     private boolean register() {
-        final String url = String.format(BASE_URL, PORT, REGISTER);
+        final String url = String.format(BASE_URL, this.port, REGISTER);
         final ResponseEntity<Response> response = this.restTemplate.postForEntity(url, this.level, Response.class);
         return response.getBody().getStatus() == CREATED;
     }
 
     private boolean imalive() {
         final String path = IMALIVE.replace(MODULE_ID, RUNTIME_MODULE_ID).replace(LATENCY_MILLES, latencyMilles.toString());
-        final String url = String.format(BASE_URL, PORT, path);
+        final String url = String.format(BASE_URL, this.port, path);
         final Response result = this.restTemplate.getForObject(url, Response.class);
         return result.getStatus() == OK;
     }
 
     private boolean shutdown() {
         final String path = SHUTDOWN.replace(MODULE_ID, RUNTIME_MODULE_ID);
-        final String url = String.format(BASE_URL, PORT, path);
+        final String url = String.format(BASE_URL, this.port, path);
         final Response result = this.restTemplate.getForObject(url, Response.class);
         if (result.getStatus() == OK) {
             this.status = STOPPED;
