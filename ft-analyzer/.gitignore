@@ -1,5 +1,6 @@
 /target/
-
-/ft-coordinator/.springBeans
+/.settings/
 /.classpath
 /.project
+/logs/
+*.DS_Store
