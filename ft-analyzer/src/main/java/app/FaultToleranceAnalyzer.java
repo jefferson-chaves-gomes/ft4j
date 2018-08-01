@@ -30,14 +30,19 @@ import app.threads.AnalyzerThread;
 @SpringBootApplication
 public class FaultToleranceAnalyzer {
 
+    private static String baseUrl = "http://localhost:9000/imalive";
+
     public static void main(final String[] args) {
 
+        if (args != null && args.length > 0) {
+            baseUrl = args[0];
+        }
         SpringApplication.run(FaultToleranceAnalyzer.class, args);
     }
 
     @EventListener(ApplicationReadyEvent.class)
     public static void init() {
 
-        new AnalyzerThread("http://localhost:9000/imalive").start();
+        new AnalyzerThread(baseUrl).start();
     }
 }
