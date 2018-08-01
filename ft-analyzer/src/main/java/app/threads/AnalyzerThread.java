@@ -42,7 +42,7 @@ public class AnalyzerThread extends Thread {
     private static final String CSV_RESULTS = "\n%d,%d,%d,%d,%d,%f,%f,%f\n\n";
     private static final int FAILURE = 1;
     private static final int SUCCESS = 0;
-    private static final int TEST_TIME = 1;
+    private static final int TEST_TIME = 3;
     private static final RestTemplate restTemplate = new RestTemplate();
 
     private String baseUrl;
@@ -80,10 +80,10 @@ public class AnalyzerThread extends Thread {
         LoggerUtil.info("Starting ft-analyzer...");
         LoggerUtil.info(LOG_SEPARATOR);
 
-        final Instant test1h = Instant.now().plus(TEST_TIME, ChronoUnit.HOURS);
-        final Instant test2h = Instant.now().plus(TEST_TIME * 2, ChronoUnit.HOURS);
-        final Instant test4h = Instant.now().plus(TEST_TIME * 3, ChronoUnit.HOURS);
-        final Instant test8h = Instant.now().plus(TEST_TIME * 4, ChronoUnit.HOURS);
+        final Instant test1h = Instant.now().plus(TEST_TIME, ChronoUnit.MINUTES);
+        final Instant test2h = Instant.now().plus(TEST_TIME * 2, ChronoUnit.MINUTES);
+        final Instant test4h = Instant.now().plus(TEST_TIME * 3, ChronoUnit.MINUTES);
+        final Instant test8h = Instant.now().plus(TEST_TIME * 4, ChronoUnit.MINUTES);
 
         String areYouAlive = "false";
         do {
@@ -94,7 +94,6 @@ public class AnalyzerThread extends Thread {
                 areYouAlive = restTemplate.getForObject(this.baseUrl, String.class);
             } catch (final Exception e) {
                 areYouAlive = "false";
-                LoggerUtil.info("Exception throwed ----> " + e.getLocalizedMessage());
             }
             final Instant end = Instant.now();
 
@@ -113,6 +112,7 @@ public class AnalyzerThread extends Thread {
             } else {
                 if (this.responseStatus == SUCCESS) {
                     this.failureCount++;
+                    LoggerUtil.info("Failure Detected - Number: " + this.failureCount);
                 }
                 this.responseStatus = FAILURE;
                 this.totalUnavailableTime += requestTime;
