@@ -65,6 +65,7 @@ public class BootstrapService implements FaultToleranceModule {
 
     private static final String SERVER_PORT = "server.port";
     private static final int DEFAULT_COORDINATOR_PORT = 7777;
+    private static final int MAX_ATTEMPTS_NUMBER = 5;
     private static BootstrapService bootstrap;
     private static ExecutorService executor;
     private static CommServiceThread commService;
@@ -125,12 +126,12 @@ public class BootstrapService implements FaultToleranceModule {
     private static void waitForCommunication() throws InterruptedException {
 
         int attemptsNumber = 0;
-        while (STARTED != commService.getStatus() && attemptsNumber++ < DEFAULT_VALUE) {
+        while (STARTED != commService.getStatus() && attemptsNumber++ < MAX_ATTEMPTS_NUMBER) {
             LoggerUtil.info(TRYING_TO_CONTACT_MODULE_AT_COORDINATOR);
             DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
         }
         attemptsNumber = 0;
-        while (!commService.isRegistered() && attemptsNumber++ < DEFAULT_VALUE) {
+        while (!commService.isRegistered() && attemptsNumber++ < MAX_ATTEMPTS_NUMBER) {
             LoggerUtil.info(TRYING_TO_REGISTER_MODULE_AT_COORDINATOR);
             DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE);
         }
@@ -224,6 +225,6 @@ public class BootstrapService implements FaultToleranceModule {
             }
         });
         LoggerUtil.info(WAITING_START_FT_COORDINATOR_START);
-        DEFAULT_TIME_UNIT.sleep(DEFAULT_VALUE * 3);
+        DEFAULT_TIME_UNIT.sleep(MAX_ATTEMPTS_NUMBER * 3);
     }
 }

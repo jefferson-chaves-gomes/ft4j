@@ -42,7 +42,7 @@ public class AnalyzerThread extends Thread {
     private static final String CSV_RESULTS = "\n%d,%d,%d,%d,%d,%f,%f,%f\n\n";
     private static final int FAILURE = 1;
     private static final int SUCCESS = 0;
-    private static final int TEST_TIME = 3;
+    private static final int TEST_TIME = 1;
     private static final RestTemplate restTemplate = new RestTemplate();
 
     private String baseUrl;
@@ -51,7 +51,7 @@ public class AnalyzerThread extends Thread {
     private long totalRequests = 0;
     private long totalSuccessfulRequests = 0;
     private long failureCount = 0;
-    private long responseStatus = 0;
+    private long responseStatus = SUCCESS;
     private boolean isAfterTest1h = false;
     private boolean isAfterTest2h = false;
     private boolean isAfterTest4h = false;
@@ -80,10 +80,12 @@ public class AnalyzerThread extends Thread {
         LoggerUtil.info("Starting ft-analyzer...");
         LoggerUtil.info(LOG_SEPARATOR);
 
-        final Instant test1h = Instant.now().plus(TEST_TIME, ChronoUnit.MINUTES);
-        final Instant test2h = Instant.now().plus(TEST_TIME * 2, ChronoUnit.MINUTES);
-        final Instant test4h = Instant.now().plus(TEST_TIME * 3, ChronoUnit.MINUTES);
-        final Instant test8h = Instant.now().plus(TEST_TIME * 4, ChronoUnit.MINUTES);
+        final Instant test1h = Instant.now().plus(TEST_TIME, ChronoUnit.HOURS);
+        final Instant test2h = Instant.now().plus(TEST_TIME * 2, ChronoUnit.HOURS);
+        final Instant test4h = Instant.now().plus(TEST_TIME * 3, ChronoUnit.HOURS);
+        final Instant test8h = Instant.now().plus(TEST_TIME * 4, ChronoUnit.HOURS);
+
+        this.startFaultInjection();
 
         String areYouAlive = "false";
         do {
@@ -106,6 +108,9 @@ public class AnalyzerThread extends Thread {
             }
 
             if (Boolean.valueOf(areYouAlive)) {
+                if (this.responseStatus == FAILURE) {
+                    this.startFaultInjection();
+                }
                 this.responseStatus = SUCCESS;
                 this.totalAvailableTime += requestTime;
                 this.totalSuccessfulRequests++;
@@ -127,15 +132,21 @@ public class AnalyzerThread extends Thread {
                 this.logAnalysis("02 hour");
             } else if (!this.isAfterTest4h && test4h.compareTo(now) <= 0) {
                 this.isAfterTest4h = true;
-                this.logAnalysis("04 hour");
+                this.logAnalysis("03 hour");
             } else if (!this.isAfterTest8h && test8h.compareTo(now) <= 0) {
                 this.isAfterTest8h = true;
-                this.logAnalysis("08 hour");
+                this.logAnalysis("04 hour");
             }
 
         } while (Instant.now().compareTo(test8h) <= 0);
 
         System.exit(0);
+    }
+
+    private void startFaultInjection() {
+        LoggerUtil.info("Starting FaultInjection....");
+        final String startFaultInjection = restTemplate.getForObject(this.baseUrl.replace("imalive", "startFaultInjection"), String.class);
+        LoggerUtil.info(startFaultInjection);
     }
 
     private void logAnalysis(final String time) {
