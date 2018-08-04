@@ -78,6 +78,7 @@ public class AnalyzerThread extends Thread {
         LoggerUtil.info(BREAK_LINE);
         LoggerUtil.info(LOG_SEPARATOR);
         LoggerUtil.info("Starting ft-analyzer...");
+        LoggerUtil.info("Cheking URL: " + this.baseUrl);
         LoggerUtil.info(LOG_SEPARATOR);
 
         final Instant test1h = Instant.now().plus(TEST_TIME, ChronoUnit.HOURS);
