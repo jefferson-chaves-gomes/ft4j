@@ -1,0 +1,8 @@
+
+
+java -jar ft-analyzer-0.0.1-SNAPSHOT-exec-gcp-feder-5555.jar http://104.196.36.64:8080/imalive &
+java -jar ft-analyzer-0.0.1-SNAPSHOT-exec-gcp-app-5554.jar http://35.231.193.72:9000/imalive &
+java -jar ft-analyzer-0.0.1-SNAPSHOT-exec-aws-feder-5553.jar http://54.173.48.17:8080/imalive &
+java -jar ft-analyzer-0.0.1-SNAPSHOT-exec-aws-app-5552.jar http://54.236.218.130:9000/imalive &
+
+lsof -Pi :9000,7775,7777,8080,8282,8484,5555,5554,5553,5552 |grep LISTEN
